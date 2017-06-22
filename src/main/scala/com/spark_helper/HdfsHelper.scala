@@ -30,7 +30,7 @@ import com.typesafe.config.ConfigFactory
 
 import scala.collection.JavaConversions._
 
-/** A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API [org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html)).
+/** A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).
   *
   * The goal is to remove the maximum of highly used low-level code from your
   * spark job and replace it with methods fully tested whose name is

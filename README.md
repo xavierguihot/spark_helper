@@ -3,16 +3,16 @@
 
 Version: 1.0.0
 
-API Scaladoc: [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper)
+API Scaladoc: [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper$)
 
 This library contains a bunch of low-level basic methods for data processing
 with Scala Spark. This is a bunch of 5 modules:
 
-* [HdfsHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.HdfsHelper): Wrapper around apache Hadoop FileSystem API ([org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html)) for file manipulations on hdfs.
-* [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper): Hdfs file manipulations through the Spark API.
-* [DateHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.DateHelper): Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for dates manipulations.
-* [FieldChecker](http://xavierguihot.github.io/spark_helper/#com.spark_helper.FieldChecker): Validation for stringified fields
-* [Monitor](http://xavierguihot.github.io/spark_helper/#com.spark_helper.monitoring.Monitor): Spark custom monitoring/logger and kpi validator
+* [HdfsHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.HdfsHelper$): Wrapper around apache Hadoop FileSystem API ([org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html)) for file manipulations on hdfs.
+* [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper$): Hdfs file manipulations through the Spark API.
+* [DateHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.DateHelper$): Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for dates manipulations.
+* [FieldChecker](http://xavierguihot.github.io/spark_helper/#com.spark_helper.FieldChecker$): Validation for stringified fields
+* [Monitor](http://xavierguihot.github.io/spark_helper/#com.spark_helper.monitoring.Monitor$): Spark custom monitoring/logger and kpi validator
 
 The goal is to remove the maximum of highly used and highly duplicated low-level
 code from the spark job code and replace it with methods fully tested whose
@@ -23,7 +23,7 @@ names are self-explanatory and readable.
 
 ### HdfsHelper:
 
-The full list of methods is available at [HdfsHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.HdfsHelper).
+The full list of methods is available at [HdfsHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.HdfsHelper$).
 
 Contains basic file-related methods mostly based on hdfs apache Hadoop
 FileSystem API [org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html).
@@ -43,7 +43,7 @@ A few exemples:
 
 ### SparkHelper:
 
-The full list of methods is available at [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper).
+The full list of methods is available at [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper$).
 
 Contains basic file/RRD-related methods based on the Spark APIs.
 
@@ -59,7 +59,7 @@ A few exemples:
 
 ### DateHelper:
 
-The full list of methods is available at [DateHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.DateHelper).
+The full list of methods is available at [DateHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.DateHelper$).
 
 Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for dates manipulations.
 
@@ -75,7 +75,7 @@ A few exemples:
 
 ### FieldChecker
 
-The full list of methods is available at [FieldChecker](http://xavierguihot.github.io/spark_helper/#com.spark_helper.FieldChecker).
+The full list of methods is available at [FieldChecker](http://xavierguihot.github.io/spark_helper/#com.spark_helper.FieldChecker$).
 
 Validation (before cast) for stringified fields:
 

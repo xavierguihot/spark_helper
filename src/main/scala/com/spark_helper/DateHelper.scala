@@ -6,7 +6,7 @@ import org.joda.time.Days
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 
-/** A facility which deals with usual date needs (wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/)).
+/** A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).
   *
   * The goal is to remove the maximum of highly used low-level code from your
   * spark job and replace it with methods fully tested whose name is
