@@ -1,0 +1,7 @@
+*.jar
+
+project/project
+project/target
+target
+
+*.crc
