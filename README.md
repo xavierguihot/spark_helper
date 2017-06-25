@@ -1,3 +1,7 @@
+
+# SparkHelper [![Build Status](https://travis-ci.org/XavierGuihot/spark_helper.svg?branch=master)](https://travis-ci.org/XavierGuihot/spark_helper)
+
+
 ## Overview
 
 
