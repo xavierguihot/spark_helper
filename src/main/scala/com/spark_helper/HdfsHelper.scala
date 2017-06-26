@@ -68,7 +68,7 @@ object HdfsHelper extends Serializable {
 
 		if (fileSystem.exists(fileToDelete)) {
 
-			if(!fileSystem.isFile(fileToDelete))
+			if (!fileSystem.isFile(fileToDelete))
 				throw new IllegalArgumentException(
 					"To delete a folder, prefer using the deleteFolder() method."
 				)

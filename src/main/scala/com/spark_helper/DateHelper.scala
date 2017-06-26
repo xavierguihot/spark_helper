@@ -47,7 +47,7 @@ object DateHelper extends Serializable {
 		firstDate: String, lastDate: String, format: String = "yyyyMMdd"
 	): List[String] = {
 
-		val formatter = DateTimeFormat.forPattern(format)
+		val formatter = DateTimeFormat.forPattern(format).withZone(DateTimeZone.UTC)
 
 		jodaDaysBetween(
 			formatter.parseDateTime(firstDate),
@@ -317,8 +317,10 @@ object DateHelper extends Serializable {
 		firstDate: String, lastDate: String, format: String = "yyyyMMdd"
 	): Int = {
 		Days.daysBetween(
-			DateTimeFormat.forPattern(format).parseDateTime(firstDate),
-			DateTimeFormat.forPattern(format).parseDateTime(lastDate)
+			DateTimeFormat.forPattern(format)
+				.withZone(DateTimeZone.UTC).parseDateTime(firstDate),
+			DateTimeFormat.forPattern(format)
+				.withZone(DateTimeZone.UTC).parseDateTime(lastDate)
 		).getDays()
 	}
 
