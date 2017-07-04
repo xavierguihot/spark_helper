@@ -20,6 +20,8 @@ libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.5"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 
+libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "1.6.1_0.6.0" % "test"
+
 parallelExecution in Test := false
 
 assemblyMergeStrategy in assembly := {

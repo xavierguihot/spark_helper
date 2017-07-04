@@ -1,10 +1,6 @@
 package com.spark_helper
 
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
-
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
+import com.holdenkarau.spark.testing.SharedSparkContext
 
 import org.scalatest.FunSuite
 
@@ -13,20 +9,13 @@ import org.scalatest.FunSuite
   * @author Xavier Guihot
   * @since 2017-02
   */
-class SparkHelperTest extends FunSuite {
-
-	Logger.getLogger("org").setLevel(Level.OFF)
-	Logger.getLogger("akka").setLevel(Level.OFF)
+class SparkHelperTest extends FunSuite with SharedSparkContext {
 
 	test("Save as Single Text File") {
 
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
-
 		// 1: Without an intermediate working dir:
 
-		var repartitionedDataToStore = sparkContext.parallelize(Array(
+		var repartitionedDataToStore = sc.parallelize(Array(
 			"data_a", "data_b", "data_c"
 		)).repartition(3)
 
@@ -35,7 +24,7 @@ class SparkHelperTest extends FunSuite {
 			repartitionedDataToStore, "src/test/resources/single_text_file.txt"
 		)
 
-		var singleFileStoredData = sparkContext.textFile(
+		var singleFileStoredData = sc.textFile(
 			"src/test/resources/single_text_file.txt"
 		).collect().sorted
 		assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
@@ -46,7 +35,7 @@ class SparkHelperTest extends FunSuite {
 		// Notice as well that we test by moving the single file in a folder
 		// which doesn't exists.
 
-		repartitionedDataToStore = sparkContext.parallelize(Array(
+		repartitionedDataToStore = sc.parallelize(Array(
 			"data_a", "data_b", "data_c"
 		)).repartition(3)
 
@@ -58,22 +47,16 @@ class SparkHelperTest extends FunSuite {
 		)
 		assert(HdfsHelper.fileExists("src/test/resources/folder/single_text_file.txt"))
 
-		singleFileStoredData = sparkContext.textFile(
+		singleFileStoredData = sc.textFile(
 			"src/test/resources/folder/single_text_file.txt"
 		).collect().sorted
 		assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
 
 		HdfsHelper.deleteFolder("src/test/resources/folder")
 		HdfsHelper.deleteFolder("src/test/resources/tmp")
-
-		sparkContext.stop()
 	}
 
 	test("Read Text File with Specific Record Delimiter") {
-
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
 
 		// 1: Let's read a file where a record begins with a line begining with
 		// 3 and other lines begining by 4:
@@ -94,7 +77,7 @@ class SparkHelperTest extends FunSuite {
 		)
 
 		var computedRecords = SparkHelper.textFileWithDelimiter(
-			"src/test/resources/some_weird_format.txt", sparkContext, "\n3"
+			"src/test/resources/some_weird_format.txt", sc, "\n3"
 		).collect()
 
 		var expectedRecords = Array(
@@ -134,7 +117,7 @@ class SparkHelperTest extends FunSuite {
 		)
 
 		computedRecords = SparkHelper.textFileWithDelimiter(
-			"src/test/resources/some_basic_xml.xml", sparkContext, "<Customer>\n"
+			"src/test/resources/some_basic_xml.xml", sc, "<Customer>\n"
 		).collect()
 
 		expectedRecords = Array(
@@ -153,19 +136,13 @@ class SparkHelperTest extends FunSuite {
 		assert(computedRecords === expectedRecords)
 
 		HdfsHelper.deleteFile("src/test/resources/some_basic_xml.xml")
-
-		sparkContext.stop()
 	}
 
 	test("Save as Text File by Key") {
 
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
-
 		HdfsHelper.deleteFolder("src/test/resources/key_value_storage")
 
-		val someKeyValueRdd = sparkContext.parallelize[(String, String)](
+		val someKeyValueRdd = sc.parallelize[(String, String)](
 			Array(
 				("key_1", "value_a"),
 				("key_1", "value_b"),
@@ -191,52 +168,40 @@ class SparkHelperTest extends FunSuite {
 		val expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
 		assert(genratedKeyFiles === expectedKeyFiles)
 
-		val valuesForKey1 = sparkContext.textFile(
+		val valuesForKey1 = sc.textFile(
 			"src/test/resources/key_value_storage/key_1"
 		).collect().sorted
 		assert(valuesForKey1 === Array("value_a", "value_b"))
 
-		val valuesForKey2 = sparkContext.textFile(
+		val valuesForKey2 = sc.textFile(
 			"src/test/resources/key_value_storage/key_2"
 		).collect().sorted
 		assert(valuesForKey2 === Array("value_b", "value_c", "value_d"))
 
-		val valuesForKey3 = sparkContext.textFile(
+		val valuesForKey3 = sc.textFile(
 			"src/test/resources/key_value_storage/key_3"
 		).collect().sorted
 		assert(valuesForKey3 === Array("value_a", "value_b"))
 
 		HdfsHelper.deleteFolder("src/test/resources/key_value_storage")
-
-		sparkContext.stop()
 	}
 
 	test("Decrease Coalescence Level") {
-
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
 
 		HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_input")
 		HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")
 
 		// Let's create the folder with high level of coalescence (3 files):
 		SparkHelper.saveAsSingleTextFile(
-			sparkContext.parallelize[String](Array(
-				"data_1_a", "data_1_b", "data_1_c"
-			)),
+			sc.parallelize[String](Array("data_1_a", "data_1_b", "data_1_c")),
 			"src/test/resources/re_coalescence_test_input/input_file_1"
 		)
 		SparkHelper.saveAsSingleTextFile(
-			sparkContext.parallelize[String](Array(
-				"data_2_a", "data_2_b"
-			)),
+			sc.parallelize[String](Array("data_2_a", "data_2_b")),
 			"src/test/resources/re_coalescence_test_input/input_file_2"
 		)
 		SparkHelper.saveAsSingleTextFile(
-			sparkContext.parallelize[String](Array(
-				"data_3_a", "data_3_b", "data_3_c"
-			)),
+			sc.parallelize[String](Array("data_3_a", "data_3_b", "data_3_c")),
 			"src/test/resources/re_coalescence_test_input/input_file_3"
 		)
 
@@ -244,7 +209,7 @@ class SparkHelperTest extends FunSuite {
 		SparkHelper.decreaseCoalescence(
 			"src/test/resources/re_coalescence_test_input",
 			"src/test/resources/re_coalescence_test_output",
-			2, sparkContext
+			2, sc
 		)
 
 		// And we check we have two files in output:
@@ -255,7 +220,7 @@ class SparkHelperTest extends FunSuite {
 		assert(outputFileList === expectedFileList)
 
 		// And that all input data is in the output:
-		val outputData = sparkContext.textFile(
+		val outputData = sc.textFile(
 			"src/test/resources/re_coalescence_test_output"
 		).collect.sorted
 		val expectedOutputData = Array(
@@ -265,7 +230,5 @@ class SparkHelperTest extends FunSuite {
 		assert(outputData === expectedOutputData)
 
 		HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")
-
-		sparkContext.stop()
 	}
 }

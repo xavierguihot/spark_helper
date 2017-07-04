@@ -3,13 +3,9 @@ package com.spark_helper.monitoring
 import com.spark_helper.DateHelper
 import com.spark_helper.HdfsHelper
 
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
+import com.holdenkarau.spark.testing.SharedSparkContext
 
 import java.security.InvalidParameterException
-
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
 
 import org.scalatest.FunSuite
 
@@ -18,10 +14,7 @@ import org.scalatest.FunSuite
   * @author Xavier Guihot
   * @since 2017-02
   */
-class MonitorTest extends FunSuite {
-
-	Logger.getLogger("org").setLevel(Level.OFF)
-	Logger.getLogger("akka").setLevel(Level.OFF)
+class MonitorTest extends FunSuite with SharedSparkContext {
 
 	test("Basic Monitoring Testing") {
 
@@ -189,10 +182,6 @@ class MonitorTest extends FunSuite {
 
 	test("Save Report") {
 
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
-
 		// We remove previous data:
 		HdfsHelper.deleteFolder("src/test/resources/logs")
 
@@ -204,7 +193,7 @@ class MonitorTest extends FunSuite {
 
 		monitor.saveReport("src/test/resources/logs")
 
-		val reportStoredLines = sparkContext.textFile(
+		val reportStoredLines = sc.textFile(
 			"src/test/resources/logs/*.log.success"
 		).collect().toList.mkString("\n")
 		val extectedReport = (
@@ -217,8 +206,6 @@ class MonitorTest extends FunSuite {
 			"[..:..] Duration: 00:00:00"
 		)
 		assert(removeTimeStamps(reportStoredLines) === extectedReport)
-
-		sparkContext.stop()
 	}
 
 	test("Save Report with Purge") {

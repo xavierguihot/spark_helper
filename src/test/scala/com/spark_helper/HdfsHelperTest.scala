@@ -1,10 +1,6 @@
 package com.spark_helper
 
-import org.apache.spark.SparkContext
-import org.apache.spark.SparkConf
-
-import org.apache.log4j.Logger
-import org.apache.log4j.Level
+import com.holdenkarau.spark.testing.SharedSparkContext
 
 import java.io.IOException
 
@@ -15,10 +11,7 @@ import org.scalatest.FunSuite
   * @author Xavier Guihot
   * @since 2017-02
   */
-class HdfsHelperTest extends FunSuite {
-
-	Logger.getLogger("org").setLevel(Level.OFF)
-	Logger.getLogger("akka").setLevel(Level.OFF)
+class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
 	test("Delete File/Folder") {
 
@@ -102,10 +95,6 @@ class HdfsHelperTest extends FunSuite {
 
 	test("Save Text in HDFS File with the FileSystem API instead of the Spark API") {
 
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
-
 		HdfsHelper.deleteFile("src/test/resources/folder/small_file.txt")
 
 		val contentToStore = "Hello World\nWhatever"
@@ -116,15 +105,13 @@ class HdfsHelperTest extends FunSuite {
 
 		assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
 
-		val storedContent = sparkContext.textFile(
+		val storedContent = sc.textFile(
 			"src/test/resources/folder/small_file.txt"
 		).collect().sorted.mkString("\n")
 
 		assert(storedContent === contentToStore)
 
 		HdfsHelper.deleteFolder("src/test/resources/folder")
-
-		sparkContext.stop()
 	}
 
 	test("List File Names in Hdfs Folder") {
@@ -190,10 +177,6 @@ class HdfsHelperTest extends FunSuite {
 
 	test("Move File") {
 
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
-
 		// Let's remove possible previous stuff:
 		HdfsHelper.deleteFile("src/test/resources/some_file.txt")
 		HdfsHelper.deleteFile("src/test/resources/renamed_file.txt")
@@ -257,22 +240,14 @@ class HdfsHelperTest extends FunSuite {
 		assert(!HdfsHelper.fileExists("src/test/resources/some_file.txt"))
 		assert(HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
 
-		val newContent = sparkContext.textFile(
-			"src/test/resources/renamed_file.txt"
-		).collect
+		val newContent = sc.textFile("src/test/resources/renamed_file.txt").collect
 
 		assert(Array("whatever") === newContent)
 
 		HdfsHelper.deleteFile("src/test/resources/renamed_file.txt")
-
-		sparkContext.stop()
 	}
 
 	test("Move Folder") {
-
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
 
 		// Let's remove possible previous stuff:
 		HdfsHelper.deleteFolder("src/test/resources/some_folder_to_move")
@@ -318,22 +293,14 @@ class HdfsHelperTest extends FunSuite {
 		assert(HdfsHelper.fileExists("src/test/resources/renamed_folder/file_1.txt"))
 		assert(HdfsHelper.fileExists("src/test/resources/renamed_folder/file_2.txt"))
 
-		val newContent = sparkContext.textFile(
-			"src/test/resources/renamed_folder"
-		).collect().sorted
+		val newContent = sc.textFile("src/test/resources/renamed_folder").collect().sorted
 
 		assert(newContent === Array("something", "whatever"))
 
 		HdfsHelper.deleteFolder("src/test/resources/renamed_folder")
-
-		sparkContext.stop()
 	}
 
 	test("Append Header and Footer to File") {
-
-		val sparkContext = new SparkContext(
-			new SparkConf().setAppName("Spark").setMaster("local[2]")
-		)
 
 		// 1: Without the tmp/working folder:
 
@@ -349,7 +316,7 @@ class HdfsHelperTest extends FunSuite {
 			"src/test/resources/header_footer_file.txt", "my_header", "my_footer"
 		)
 
-		var newContent = sparkContext.textFile(
+		var newContent = sc.textFile(
 			"src/test/resources/header_footer_file.txt"
 		).collect.mkString("\n")
 		var expectedNewContent = (
@@ -379,7 +346,7 @@ class HdfsHelperTest extends FunSuite {
 		assert(HdfsHelper.folderExists("src/test/resources/header_footer_tmp"))
 		assert(!HdfsHelper.fileExists("src/test/resources/header_footer_tmp/xml.tmp"))
 
-		newContent = sparkContext.textFile(
+		newContent = sc.textFile(
 			"src/test/resources/header_footer_file.txt"
 		).collect.mkString("\n")
 		expectedNewContent = (
@@ -393,8 +360,6 @@ class HdfsHelperTest extends FunSuite {
 
 		HdfsHelper.deleteFile("src/test/resources/header_footer_file.txt")
 		HdfsHelper.deleteFolder("src/test/resources/header_footer_tmp")
-
-		sparkContext.stop()
 	}
 
 	test("Validate Xml Hdfs File with Xsd") {
