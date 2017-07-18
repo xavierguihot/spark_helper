@@ -251,6 +251,25 @@ footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to ad
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#compressFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compressFile(inputPath:String,compressionCodec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec],deleteInputFile:Boolean):AnyVal"></a>
+      <a id="compressFile(String,Class[_&lt;:CompressionCodec],Boolean):AnyVal"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compressFile</span><span class="params">(<span name="inputPath">inputPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="compressionCodec">compressionCodec: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="org.apache.hadoop.io.compress.CompressionCodec">CompressionCodec</span>]</span>, <span name="deleteInputFile">deleteInputFile: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Compresses an Hdfs file to the given codec, without changing the lines order.</p><div class="fullcomment"><div class="comment cmt"><p>Compresses an Hdfs file to the given codec, without changing the lines order.</p><p>For instance, after producing an xml for which the order matters, one
+don't want to use sparkContext.saveAsTextFile with a compression codec
+due to the resulting compressed file in which lines would be unordered.</p><p>Here is an example, where hdfs/path/to/uncompressed_file.txt will be
+compressed and renamed hdfs/path/to/uncompressed_file.txt.gz:</p><pre>HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])</pre></div><dl class="paramcmts block"><dt class="param">inputPath</dt><dd class="cmt"><p>the path of the file on hdfs to compress</p></dd><dt class="param">compressionCodec</dt><dd class="cmt"><p>the type of compression to use (for instance
+classOf[BZip2Codec] or classOf[GzipCodec])).</p></dd><dt class="param">deleteInputFile</dt><dd class="cmt"><p>if the input file is deleted after its
+compression.
+</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createFolder(hdfsPath:String):Boolean"></a>
       <a id="createFolder(String):Boolean"></a>

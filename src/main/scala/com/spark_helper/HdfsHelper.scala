@@ -4,6 +4,10 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.FileSystem
 import org.apache.hadoop.fs.FileUtil
 import org.apache.hadoop.fs.Path
+import org.apache.hadoop.io.compress.CompressionCodec
+import org.apache.hadoop.io.compress.CompressionCodecFactory
+import org.apache.hadoop.io.compress.GzipCodec
+import org.apache.hadoop.io.compress.BZip2Codec
 import org.apache.hadoop.io.IOUtils
 
 import org.joda.time.DateTime
@@ -561,6 +565,61 @@ object HdfsHelper extends Serializable {
 		)
 
 		try { XML.load(reader) } finally { reader.close() }
+	}
+
+	/** Compresses an Hdfs file to the given codec, without changing the lines order.
+	  *
+	  * For instance, after producing an xml for which the order matters, one
+	  * don't want to use sparkContext.saveAsTextFile with a compression codec
+	  * due to the resulting compressed file in which lines would be unordered.
+	  *
+	  * Here is an example, where hdfs/path/to/uncompressed_file.txt will be
+	  * compressed and renamed hdfs/path/to/uncompressed_file.txt.gz:
+	  *
+	  * {{{ HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec]) }}}
+	  *
+	  * @param inputPath the path of the file on hdfs to compress
+	  * @param compressionCodec the type of compression to use (for instance
+	  * classOf[BZip2Codec] or classOf[GzipCodec])).
+	  * @param deleteInputFile if the input file is deleted after its
+	  * compression.
+	  */
+	def compressFile(
+		inputPath: String, compressionCodec: Class[_ <: CompressionCodec],
+		deleteInputFile: Boolean = true
+	) = {
+
+		val fileSystem = FileSystem.get(new Configuration())
+
+		val ClassOfGzip = classOf[GzipCodec]
+		val ClassOfBZip2 = classOf[BZip2Codec]
+
+		val outputPath = compressionCodec match {
+			case ClassOfGzip => inputPath + ".gz"
+			case ClassOfBZip2 => inputPath + ".bz2"
+		}
+
+		val inputStream = fileSystem.open(new Path(inputPath))
+		val outputStream = fileSystem.create(new Path(outputPath))
+
+		// The compression code:
+		val codec = new CompressionCodecFactory(new Configuration()).getCodec(
+			new Path(outputPath)
+		)
+		// We include the compression codec to the output stream:
+		val compressedOutputStream = codec.createOutputStream(outputStream)
+
+		try {
+			IOUtils.copyBytes(
+				inputStream, compressedOutputStream, new Configuration(), false
+			)
+		} finally {
+			inputStream.close()
+			compressedOutputStream.close();
+		}
+
+		if (deleteInputFile)
+			deleteFile(inputPath)
 	}
 
 	/** Internal implementation of the addition to a file of header and footer.
