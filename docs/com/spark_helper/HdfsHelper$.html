@@ -270,6 +270,24 @@ compressed and renamed hdfs/path/to/uncompressed_file.txt.gz:</p><pre>HdfsHelper
 classOf[BZip2Codec] or classOf[GzipCodec])).</p></dd><dt class="param">deleteInputFile</dt><dd class="cmt"><p>if the input file is deleted after its
 compression.
 </p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#createEmptyHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createEmptyHdfsFile(filePath:String):Unit"></a>
+      <a id="createEmptyHdfsFile(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createEmptyHdfsFile</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Creates an empty file on hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an empty file on hdfs.</p><p>Might be usefull for token files. For instance a file which is only used
+as a timestamp token of the last update of a processus, or a file which
+blocks the execution of an other instance of the same job, ...</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre><p>In case this is used as a timestamp container, you can then use the
+following methods to retrieve its timestamp:</p><pre><span class="kw">val</span> fileAge = HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"/some/hdfs/file/path.token"</span>)
+<span class="kw">val</span> lastModificationDate = HdfsHelper.getFolderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create
+</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createFolder(hdfsPath:String):Boolean"></a>
       <a id="createFolder(String):Boolean"></a>
@@ -801,9 +819,8 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).
       </span>
       </h4>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
-enough.
-</p></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string  to write in the file (you can provide a
-string with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content
+enough.</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
+with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content
 </p></dd></dl></div>
     </li></ol>
             </div>

@@ -93,6 +93,23 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 		HdfsHelper.deleteFolder("src/test/resources/folder_to_check")
 	}
 
+	test("Create an empty File on Hdfs") {
+
+		HdfsHelper.deleteFile("src/test/resources/empty_file.token")
+
+		HdfsHelper.createEmptyHdfsFile("src/test/resources/empty_file.token")
+
+		assert(HdfsHelper.fileExists("src/test/resources/empty_file.token"))
+
+		val tokenContent = sc.textFile(
+			"src/test/resources/empty_file.token"
+		).collect().sorted.mkString("\n")
+
+		assert(tokenContent === "")
+
+		HdfsHelper.deleteFile("src/test/resources/empty_file.token")
+	}
+
 	test("Save Text in HDFS File with the FileSystem API instead of the Spark API") {
 
 		HdfsHelper.deleteFile("src/test/resources/folder/small_file.txt")

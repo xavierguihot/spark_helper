@@ -238,13 +238,41 @@ object HdfsHelper extends Serializable {
 		fileSystem.rename(folderToRename, new Path(newPath))
 	}
 
+	/** Creates an empty file on hdfs.
+	  *
+	  * Might be usefull for token files. For instance a file which is only used
+	  * as a timestamp token of the last update of a processus, or a file which
+	  * blocks the execution of an other instance of the same job, ...
+	  *
+	  * Overwrites the file is it already existed.
+	  *
+	  * {{{ HdfsHelper.createEmptyHdfsFile("/some/hdfs/file/path.token") }}}
+	  *
+	  * In case this is used as a timestamp container, you can then use the
+	  * following methods to retrieve its timestamp:
+	  * {{{
+	  * val fileAge = HdfsHelper.getNbrOfDaysSinceFileWasLastModified("/some/hdfs/file/path.token")
+	  * val lastModificationDate = HdfsHelper.getFolderModificationDate("/some/hdfs/file/path.token")
+	  * }}}
+	  *
+	  * @param filePath the path of the empty file to create
+	  */
+	def createEmptyHdfsFile(filePath: String) = {
+		val emptyFile = FileSystem.get(new Configuration()).create(new Path(filePath))
+		emptyFile.close()
+	}
+
 	/** Saves text in a file when content is too small to really require an RDD.
 	  *
 	  * Please only consider this way of storing data when the data set is small
 	  * enough.
 	  *
-	  * @param content the string  to write in the file (you can provide a
-	  * string with \n in order to write several lines).
+	  * Overwrites the file is it already existed.
+	  *
+	  * {{{ HdfsHelper.writeToHdfsFile("some\nrelatively small\ntext", "/some/hdfs/file/path.txt") }}}
+	  *
+	  * @param content the string to write in the file (you can provide a string
+	  * with \n in order to write several lines).
 	  * @param filePath the path of the file in which to write the content
 	  */
 	def writeToHdfsFile(content: String, filePath: String) = {
