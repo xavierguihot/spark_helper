@@ -118,9 +118,9 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 		var monitor = new Monitor()
 		var success = monitor.updateByKpisValidation(
 			List(
-				new Test("pctOfWhatever", 0.06f, "inferior to", 0.1f, "pct"),
-				new Test("pctOfSomethingElse", 0.27f, "superior to", 0.3f, "pct"),
-				new Test("someNbr", 1235f, "equal to", 1235f, "nbr")
+				new Test("pctOfWhatever", 0.06d, "inferior to", 0.1d, "pct"),
+				new Test("pctOfSomethingElse", 0.27d, "superior to", 0.3d, "pct"),
+				new Test("someNbr", 1235d, "equal to", 1235d, "nbr")
 			),
 			"Tests for whatever"
 		)
@@ -150,7 +150,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 		// 2: Single test:
 		monitor = new Monitor()
 		success = monitor.updateByKpiValidation(
-			new Test("someNbr", 55e6f, "superior to", 50e6f, "nbr"),
+			new Test("someNbr", 55e6d, "superior to", 50e6d, "nbr"),
 			"Tests for whatever"
 		)
 
@@ -171,7 +171,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 
 	test("Incorrect User Inputs for Test Objects") {
 		val messageThrown = intercept[InvalidParameterException] {
-			new Test("pctOfWhatever", 0.06f, "skdjbv", 0.1f, "pct")
+			new Test("pctOfWhatever", 0.06d, "skdjbv", 0.1d, "pct")
 		}
 		val expectedMessage = (
 			"The threshold type can only be \"superior to\", " +

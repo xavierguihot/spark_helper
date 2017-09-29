@@ -37,8 +37,8 @@ import java.lang.Math.abs
   * @param kpiType the type of KPI ("pct" or "nbr")
   */
 class Test(
-	description: String, kpiValue: Float, thresholdType: String,
-	appliedThreshold: Float, kpiType: String
+	description: String, kpiValue: Double, thresholdType: String,
+	appliedThreshold: Double, kpiType: String
 ) {
 
 	// Let's check user inputs are correct:

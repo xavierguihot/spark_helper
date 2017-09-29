@@ -1,6 +1,6 @@
 name := "spark_helper"
 
-version := "1.0.3"
+version := "1.0.4"
 
 scalaVersion := "2.10.4"
 
