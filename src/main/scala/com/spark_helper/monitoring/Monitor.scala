@@ -188,7 +188,12 @@ class Monitor(
 
 		lastReportUpdate = now
 
-		report += "[" + before + "-" + now + "]" + " " + text + "\n"
+		val update = "[" + before + "-" + now + "]" + " " + text
+
+		// We also print the update to also have them within yarn logs:
+		println("MONITOR: " + update)
+
+		report += update + "\n"
 	}
 
 	/** Updates the report with some text and a success.
@@ -269,16 +274,20 @@ class Monitor(
 		// possible diagnostic, we set the monitoring as failed:
 		success = false
 
+		var update = ""
+
 		if (taskDescription != "")
-			updateReport(taskDescription + ": failed")
+			update += taskDescription + ": failed\n"
 
 		if (diagnostic != "")
-			report += "\tDiagnostic: " + diagnostic + "\n"
+			update += "\tDiagnostic: " + diagnostic + "\n"
 
-		report += (
+		update += (
 			"\t\t" + error.toString() + "\n" +
 			error.getStackTrace.map(line => "\t\t" + line).mkString("\n") + "\n"
 		)
+
+		updateReport(update)
 
 		false
 	}
@@ -332,14 +341,18 @@ class Monitor(
 		if (!testsAreValid)
 			success = false
 
+		var update = ""
+
 		// A title in the report for the kpi validation:
 		if (testSuitName != "") {
 			val validation = if (testsAreValid) "success" else "failed"
-			updateReport(testSuitName + ": " + validation)
+			update += testSuitName + ": " + validation + "\n"
 		}
 
 		// The kpi report is added to the report:
-		report += tests.map(_.stringify).mkString("\n") + "\n"
+		update += tests.map(_.stringify).mkString("\n")
+
+		updateReport(update)
 
 		testsAreValid
 	}
