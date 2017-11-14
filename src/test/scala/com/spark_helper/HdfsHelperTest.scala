@@ -112,6 +112,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
 	test("Save Text in HDFS File with the FileSystem API instead of the Spark API") {
 
+		// 1: Stores using a "\n"-joined string:
+
 		HdfsHelper.deleteFile("src/test/resources/folder/small_file.txt")
 
 		val contentToStore = "Hello World\nWhatever"
@@ -122,11 +124,31 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
 		assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
 
-		val storedContent = sc.textFile(
+		var storedContent = sc.textFile(
 			"src/test/resources/folder/small_file.txt"
 		).collect().sorted.mkString("\n")
 
 		assert(storedContent === contentToStore)
+
+		HdfsHelper.deleteFolder("src/test/resources/folder")
+
+		// 2: Stores using a list of strings to be "\n"-joined:
+
+		HdfsHelper.deleteFile("src/test/resources/folder/small_file.txt")
+
+		val listToStore = List("Hello World", "Whatever")
+
+		HdfsHelper.writeToHdfsFile(
+			listToStore, "src/test/resources/folder/small_file.txt"
+		)
+
+		assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
+
+		storedContent = sc.textFile(
+			"src/test/resources/folder/small_file.txt"
+		).collect().sorted.mkString("\n")
+
+		assert(storedContent === listToStore.mkString("\n"))
 
 		HdfsHelper.deleteFolder("src/test/resources/folder")
 	}

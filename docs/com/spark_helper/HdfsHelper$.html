@@ -252,15 +252,15 @@ footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to ad
               
         </dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#compressFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="compressFile(inputPath:String,compressionCodec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec],deleteInputFile:Boolean):AnyVal"></a>
-      <a id="compressFile(String,Class[_&lt;:CompressionCodec],Boolean):AnyVal"></a>
+      <a id="compressFile(inputPath:String,compressionCodec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec],deleteInputFile:Boolean):Unit"></a>
+      <a id="compressFile(String,Class[_&lt;:CompressionCodec],Boolean):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">compressFile</span><span class="params">(<span name="inputPath">inputPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="compressionCodec">compressionCodec: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="org.apache.hadoop.io.compress.CompressionCodec">CompressionCodec</span>]</span>, <span name="deleteInputFile">deleteInputFile: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+        <span class="name">compressFile</span><span class="params">(<span name="inputPath">inputPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="compressionCodec">compressionCodec: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="org.apache.hadoop.io.compress.CompressionCodec">CompressionCodec</span>]</span>, <span name="deleteInputFile">deleteInputFile: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Compresses an Hdfs file to the given codec, without changing the lines order.</p><div class="fullcomment"><div class="comment cmt"><p>Compresses an Hdfs file to the given codec, without changing the lines order.</p><p>For instance, after producing an xml for which the order matters, one
@@ -289,45 +289,45 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
 <span class="kw">val</span> lastModificationDate = HdfsHelper.getFolderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create
 </p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="createFolder(hdfsPath:String):Boolean"></a>
-      <a id="createFolder(String):Boolean"></a>
+      <a id="createFolder(hdfsPath:String):Unit"></a>
+      <a id="createFolder(String):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">createFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">createFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Creates a folder on HDFS.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a folder on HDFS.</p><p>Doesn't throw an exception if the folder to create already exists.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder to create
 </p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#deleteFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deleteFile(hdfsPath:String):AnyVal"></a>
-      <a id="deleteFile(String):AnyVal"></a>
+      <a id="deleteFile(hdfsPath:String):Unit"></a>
+      <a id="deleteFile(String):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteFile</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+        <span class="name">deleteFile</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Deletes a file on HDFS.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes a file on HDFS.</p><p>Doesn't throw an exception if the file to delete doesn't exist.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file to delete
 </p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#deleteFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="deleteFolder(hdfsPath:String):AnyVal"></a>
-      <a id="deleteFolder(String):AnyVal"></a>
+      <a id="deleteFolder(hdfsPath:String):Unit"></a>
+      <a id="deleteFolder(String):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">deleteFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.AnyVal">AnyVal</span></span>
+        <span class="name">deleteFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Deletes a folder on HDFS.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes a folder on HDFS.</p><p>Doesn't throw an exception if the folder to delete doesn't exist.
@@ -630,15 +630,15 @@ API.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the xml file on hdfs</p></dd><dt>returns</dt><dd class="cmt"><p>the scala.xml.Elem object
 </p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#moveFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="moveFile(oldPath:String,newPath:String,overwrite:Boolean):Boolean"></a>
-      <a id="moveFile(String,String,Boolean):Boolean"></a>
+      <a id="moveFile(oldPath:String,newPath:String,overwrite:Boolean):Unit"></a>
+      <a id="moveFile(String,String,Boolean):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">moveFile</span><span class="params">(<span name="oldPath">oldPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newPath">newPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="overwrite">overwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">moveFile</span><span class="params">(<span name="oldPath">oldPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newPath">newPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="overwrite">overwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Moves/renames a file.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a file.</p><p>Throws an IOException if the value of the parameter overwrite is false
@@ -648,15 +648,15 @@ intermediate folders not yet created.
 destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt">classOf[IOException]<p>
 </p></span></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#moveFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="moveFolder(oldPath:String,newPath:String,overwrite:Boolean):Boolean"></a>
-      <a id="moveFolder(String,String,Boolean):Boolean"></a>
+      <a id="moveFolder(oldPath:String,newPath:String,overwrite:Boolean):Unit"></a>
+      <a id="moveFolder(String,String,Boolean):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">moveFolder</span><span class="params">(<span name="oldPath">oldPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newPath">newPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="overwrite">overwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">moveFolder</span><span class="params">(<span name="oldPath">oldPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newPath">newPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="overwrite">overwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4>
       <p class="shortcomment cmt">Moves/renames a folder.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a folder.</p><p>Throws an IOException if the value of the parameter overwrite is false
@@ -806,6 +806,23 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#writeToHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="writeToHdfsFile(content:Seq[String],filePath:String):Unit"></a>
+      <a id="writeToHdfsFile(Seq[String],String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">writeToHdfsFile</span><span class="params">(<span name="content">content: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
+enough.</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+HdfsHelper.writeToHdfsFile(<span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the array of strings to write in the file as one line per
+string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content
+</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#writeToHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="writeToHdfsFile(content:String,filePath:String):Unit"></a>
       <a id="writeToHdfsFile(String,String):Unit"></a>

@@ -91,7 +91,17 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 	}
 
 	test("Add Error Stack Trace to Report") {
+
 		val monitor = new Monitor()
+
+		// Explanation to someone running tests and seeing an error stack trace
+		// even though tests are actually successfull:
+		println(
+			"READ ME: The following stack trace is NOT a test failure. This " +
+			"is the logging of the tested stack trace error as it would " +
+			"appear in yarn logs."
+		)
+
 		try {
 			"a".toInt
 		} catch {

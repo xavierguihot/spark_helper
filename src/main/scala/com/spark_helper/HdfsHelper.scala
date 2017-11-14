@@ -64,7 +64,7 @@ object HdfsHelper extends Serializable {
 	  *
 	  * @param hdfsPath the path of the file to delete
 	  */
-	def deleteFile(hdfsPath: String) = {
+	def deleteFile(hdfsPath: String): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
@@ -88,7 +88,7 @@ object HdfsHelper extends Serializable {
 	  *
 	  * @param hdfsPath the path of the folder to delete
 	  */
-	def deleteFolder(hdfsPath: String) = {
+	def deleteFolder(hdfsPath: String): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
@@ -112,7 +112,7 @@ object HdfsHelper extends Serializable {
 	  *
 	  * @param hdfsPath the path of the folder to create
 	  */
-	def createFolder(hdfsPath: String) = {
+	def createFolder(hdfsPath: String): Unit = {
 		FileSystem.get(new Configuration()).mkdirs(new Path(hdfsPath))
 	}
 
@@ -168,7 +168,9 @@ object HdfsHelper extends Serializable {
 	  * destination.
 	  * @throws classOf[IOException]
 	  */
-	def moveFile(oldPath: String, newPath: String, overwrite: Boolean = false) = {
+	def moveFile(
+		oldPath: String, newPath: String, overwrite: Boolean = false
+	): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
@@ -210,7 +212,9 @@ object HdfsHelper extends Serializable {
 	  * destination.
 	  * @throws classOf[IOException]
 	  */
-	def moveFolder(oldPath: String, newPath: String, overwrite: Boolean = false) = {
+	def moveFolder(
+		oldPath: String, newPath: String, overwrite: Boolean = false
+	): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
@@ -257,7 +261,7 @@ object HdfsHelper extends Serializable {
 	  *
 	  * @param filePath the path of the empty file to create
 	  */
-	def createEmptyHdfsFile(filePath: String) = {
+	def createEmptyHdfsFile(filePath: String): Unit = {
 		val emptyFile = FileSystem.get(new Configuration()).create(new Path(filePath))
 		emptyFile.close()
 	}
@@ -275,10 +279,30 @@ object HdfsHelper extends Serializable {
 	  * with \n in order to write several lines).
 	  * @param filePath the path of the file in which to write the content
 	  */
-	def writeToHdfsFile(content: String, filePath: String) = {
+	def writeToHdfsFile(content: String, filePath: String): Unit = {
 		val outputFile = FileSystem.get(new Configuration()).create(new Path(filePath))
 		outputFile.write(content.getBytes("UTF-8"))
 		outputFile.close()
+	}
+
+	/** Saves text in a file when content is too small to really require an RDD.
+	  *
+	  * Please only consider this way of storing data when the data set is small
+	  * enough.
+	  *
+	  * Overwrites the file is it already existed.
+	  *
+	  * {{{
+	  * HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+	  * HdfsHelper.writeToHdfsFile(List("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+	  * }}}
+	  *
+	  * @param content the array of strings to write in the file as one line per
+	  * string (this takes care of joining strings with "\n"s).
+	  * @param filePath the path of the file in which to write the content
+	  */
+	def writeToHdfsFile(content: Seq[String], filePath: String): Unit = {
+		writeToHdfsFile(content.mkString("\n"), filePath)
 	}
 
 	/** Lists file names in the specified hdfs folder.
@@ -443,7 +467,7 @@ object HdfsHelper extends Serializable {
 	def appendHeaderAndFooter(
 		filePath: String, header: String, footer: String,
 		workingFolderPath: String = ""
-	) = {
+	): Unit = {
 		appendHeaderAndFooterInternal(
 			filePath, Some(header), Some(footer), workingFolderPath
 		)
@@ -466,7 +490,7 @@ object HdfsHelper extends Serializable {
 	  */
 	def appendHeader(
 		filePath: String, header: String, workingFolderPath: String = ""
-	) = {
+	): Unit = {
 		appendHeaderAndFooterInternal(
 			filePath, Some(header), None, workingFolderPath
 		)
@@ -486,7 +510,7 @@ object HdfsHelper extends Serializable {
 	  */
 	def appendFooter(
 		filePath: String, footer: String, workingFolderPath: String = ""
-	) = {
+	): Unit = {
 		appendHeaderAndFooterInternal(
 			filePath, None, Some(footer), workingFolderPath
 		)
@@ -521,7 +545,7 @@ object HdfsHelper extends Serializable {
 	  * your resources folder (src/main/resources) and then get it as an URL
 	  * with getClass.getResource("/my_file.xsd").
 	  */
-	def validateHdfsXmlWithXsd(hdfsXmlPath: String, xsdFile: URL) = {
+	def validateHdfsXmlWithXsd(hdfsXmlPath: String, xsdFile: URL): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
@@ -615,7 +639,7 @@ object HdfsHelper extends Serializable {
 	def compressFile(
 		inputPath: String, compressionCodec: Class[_ <: CompressionCodec],
 		deleteInputFile: Boolean = true
-	) = {
+	): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
@@ -661,7 +685,7 @@ object HdfsHelper extends Serializable {
 	private def appendHeaderAndFooterInternal(
 		filePath: String, header: Option[String], footer: Option[String],
 		workingFolderPath: String
-	) = {
+	): Unit = {
 
 		val fileSystem = FileSystem.get(new Configuration())
 
