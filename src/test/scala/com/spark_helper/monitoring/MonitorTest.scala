@@ -90,6 +90,32 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 		assert(!monitor.isSuccess())
 	}
 
+	test("Check current.ongoing Live Monitoring") {
+
+		// We remove previous data:
+		HdfsHelper.deleteFolder("src/test/resources/logs")
+
+		val monitor = new Monitor(
+			"My Processing", "xguihot@gmail.com",
+			"Documentation: https://github.com/xavierguihot/spark_helper",
+			logFolder = "src/test/resources/logs"
+		)
+		monitor.updateReport("Doing something: success")
+
+		val reportStoredLines = sc.textFile(
+			"src/test/resources/logs/current.ongoing"
+		).collect().toList.mkString("\n")
+		val extectedReport = (
+			"					My Processing\n" +
+			"\n" +
+			"Point of contact: xguihot@gmail.com\n" +
+			"Documentation: https://github.com/xavierguihot/spark_helper\n" +
+			"[..:..] Begining\n" +
+			"[..:..-..:..] Doing something: success"
+		)
+		assert(removeTimeStamps(reportStoredLines) === extectedReport)
+	}
+
 	test("Add Error Stack Trace to Report") {
 
 		val monitor = new Monitor()

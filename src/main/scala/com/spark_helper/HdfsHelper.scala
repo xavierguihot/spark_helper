@@ -271,7 +271,7 @@ object HdfsHelper extends Serializable {
 	  * Please only consider this way of storing data when the data set is small
 	  * enough.
 	  *
-	  * Overwrites the file is it already existed.
+	  * Overwrites the file if already existing.
 	  *
 	  * {{{ HdfsHelper.writeToHdfsFile("some\nrelatively small\ntext", "/some/hdfs/file/path.txt") }}}
 	  *

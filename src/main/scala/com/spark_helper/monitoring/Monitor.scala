@@ -124,6 +124,14 @@ import java.lang.Throwable
   * (actions/transformations) but rather from the orchestration of the
   * pipelines.
   *
+  * When instantiating the Monitor object with the optional parameter
+  * "logFolder", then you don't need to wait for the end of your job (your call
+  * to saveReport()) to be able to look at what's going on. With this option
+  * filled, any report update will directly be saved in the file
+  * logFolder/current.ongoing. This way, you can have a live idea of what's
+  * going on with your job and even if your job is forced-killed, you'll have
+  * the possibility to easily have a look at what happened.
+  *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
   *
@@ -147,14 +155,19 @@ import java.lang.Throwable
   * @param pointOfContact (optional) the persons in charge of the job
   * @param additionalInfo (optional) anything you want written at the begining
   * of your report.
+  * @param logFolder (optional) the folder in which this report is stored
   */
 class Monitor(
 	reportTitle: String = "", pointOfContact: String = "",
-	additionalInfo: String = ""
+	additionalInfo: String = "", logFolder: String = ""
 ) {
 
 	private var success = true
-	private var report = initiateReport()
+	private var report = ""
+
+	// Let's initiate the report with parameters given while instantiating the
+	// Monitor object:
+	initiateReport()
 
 	private val begining = Calendar.getInstance().getTimeInMillis()
 
@@ -181,20 +194,7 @@ class Monitor(
 	  *
 	  * @param text the text to append to the report
 	  */
-	def updateReport(text: String) = {
-
-		val before = lastReportUpdate
-		val now = DateHelper.now("HH:mm")
-
-		lastReportUpdate = now
-
-		val update = "[" + before + "-" + now + "]" + " " + text
-
-		// We also print the update to also have them within yarn logs:
-		println("MONITOR: " + update)
-
-		report += update + "\n"
-	}
+	def updateReport(text: String): Unit = updateReport(text, true)
 
 	/** Updates the report with some text and a success.
 	  *
@@ -416,7 +416,7 @@ class Monitor(
 	  */
 	def saveReport(
 		logFolder: String, purgeLogs: Boolean = false, purgeWindow: Int = 7
-	) = {
+	): Unit = {
 
 		// We add the job duration to the report:
 		val finalReport = report + (
@@ -444,11 +444,14 @@ class Monitor(
 			logFolder + "/current" + validationFileExtension
 		)
 
+		// And if we "live loged", then we remove the "current.ongoing" file:
+		HdfsHelper.deleteFile(logFolder + "/current.ongoing")
+
 		if (purgeLogs)
 			purgeOutdatedLogs(logFolder, purgeWindow)
 	}
 
-	private def initiateReport(): String = {
+	private def initiateReport(): Unit = {
 
 		var initialReport = ""
 
@@ -459,10 +462,34 @@ class Monitor(
 		if (additionalInfo != "")
 			initialReport += additionalInfo + "\n"
 
-		initialReport + DateHelper.now("[HH:mm]") + " Begining\n"
+		initialReport += DateHelper.now("[HH:mm]") + " Begining"
+
+		updateReport(initialReport, false)
 	}
 
-	private def purgeOutdatedLogs(logFolder: String, purgeWindow: Int) = {
+	private def updateReport(text: String, withTimestamp: Boolean): Unit = {
+
+		val before = lastReportUpdate
+		val now = DateHelper.now("HH:mm")
+
+		lastReportUpdate = now
+
+		val update =
+			if (withTimestamp) "[" + before + "-" + now + "]" + " " + text
+			else text
+
+		report += update + "\n"
+
+		// We print the update to also have it within yarn logs:
+		println("MONITOR: " + update)
+
+		// And if the logFolder parameter was used to instantiate the Monitor
+		// object, we also update live the log file:
+		if (!logFolder.isEmpty)
+			HdfsHelper.writeToHdfsFile(report, logFolder + "/current.ongoing")
+	}
+
+	private def purgeOutdatedLogs(logFolder: String, purgeWindow: Int): Unit = {
 
 		val nDaysAgo = DateHelper.nDaysBefore(purgeWindow, "yyyyMMdd")
 

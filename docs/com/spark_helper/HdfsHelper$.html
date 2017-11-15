@@ -836,7 +836,7 @@ string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt cl
       </span>
       </h4>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
-enough.</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
+enough.</p><p>Overwrites the file if already existing.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
 with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content
 </p></dd></dl></div>
     </li></ol>

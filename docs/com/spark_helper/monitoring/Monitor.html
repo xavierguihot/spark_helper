@@ -119,7 +119,13 @@ logs of your spark job can be a pain. Or in order when the poduction job
 fails to send the report of the error by email. Or simply to keep track of
 historical kpis, processing times, ...</p><p>This is not supposed to be updated from within a Spark pipeline
 (actions/transformations) but rather from the orchestration of the
-pipelines.</p><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+pipelines.</p><p>When instantiating the Monitor object with the optional parameter
+&quot;logFolder&quot;, then you don't need to wait for the end of your job (your call
+to saveReport()) to be able to look at what's going on. With this option
+filled, any report update will directly be saved in the file
+logFolder/current.ongoing. This way, you can have a live idea of what's
+going on with your job and even if your job is forced-killed, you'll have
+the possibility to easily have a look at what happened.</p><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02
 </p></dd></dl><div class="toggleContainer block">
@@ -163,7 +169,7 @@ pipelines.</p><p>Source <a href="https://github.com/xavierguihot/spark_helper/bl
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.spark_helper.monitoring.Monitor#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(reportTitle:String,pointOfContact:String,additionalInfo:String):com.spark_helper.monitoring.Monitor"></a>
+      <a id="&lt;init&gt;(reportTitle:String,pointOfContact:String,additionalInfo:String,logFolder:String):com.spark_helper.monitoring.Monitor"></a>
       <a id="&lt;init&gt;:Monitor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -171,7 +177,7 @@ pipelines.</p><p>Source <a href="https://github.com/xavierguihot/spark_helper/bl
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Monitor</span><span class="params">(<span name="reportTitle">reportTitle: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="pointOfContact">pointOfContact: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="additionalInfo">additionalInfo: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span>
+        <span class="name">Monitor</span><span class="params">(<span name="reportTitle">reportTitle: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="pointOfContact">pointOfContact: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="additionalInfo">additionalInfo: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>, <span name="logFolder">logFolder: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Creates a Monitor object.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a Monitor object.</p><p>Creating the Monitor object like this:</p><pre><span class="kw">new</span> Monitor(<span class="lit">"My Spark Job Title"</span>, <span class="lit">"someone@box.com"</span>, <span class="lit">"Whatever pretty descritpion."</span>)</pre><p>will result in the report to start like this:</p><pre>My Spark Job Title
@@ -179,7 +185,7 @@ pipelines.</p><p>Source <a href="https://github.com/xavierguihot/spark_helper/bl
 Point of contact: someone@box.com
 Whatever pretty descritpion.
 [..:..] Begining</pre></div><dl class="paramcmts block"><dt class="param">reportTitle</dt><dd class="cmt"><p>(optional) what's outputed as a first line of the report</p></dd><dt class="param">pointOfContact</dt><dd class="cmt"><p>(optional) the persons in charge of the job</p></dd><dt class="param">additionalInfo</dt><dd class="cmt"><p>(optional) anything you want written at the begining
-of your report.
+of your report.</p></dd><dt class="param">logFolder</dt><dd class="cmt"><p>(optional) the folder in which this report is stored
 </p></dd></dl></div>
     </li></ol>
             </div>
