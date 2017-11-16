@@ -453,6 +453,16 @@ class Monitor(
 
 	private def initiateReport(): Unit = {
 
+		// If there was a current.success or a current.failed in the log folder
+		// remaining from the previous run, we delete it:
+
+		if (!logFolder.isEmpty) {
+			HdfsHelper.deleteFile(logFolder + "/current.success")
+			HdfsHelper.deleteFile(logFolder + "/current.failed")
+		}
+
+		// And we initiate the report with it's title and basic infos:
+
 		var initialReport = ""
 
 		if (reportTitle != "")
