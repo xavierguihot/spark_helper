@@ -111,7 +111,12 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 			"Point of contact: xguihot@gmail.com\n" +
 			"Documentation: https://github.com/xavierguihot/spark_helper\n" +
 			"[..:..] Begining\n" +
-			"[..:..-..:..] Doing something: success"
+			"[..:..-..:..] Doing something: success\n" +
+			"\n" +
+			"WARNING: Do not base yourself on this file to check if your " +
+			"job is still running. This file might persist if your job " +
+			"has been killed and thus couldn't reach your call to the " +
+			"saveReport() method."
 		)
 		assert(removeTimeStamps(reportStoredLines) === extectedReport)
 	}

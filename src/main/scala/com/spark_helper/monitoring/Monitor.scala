@@ -498,7 +498,7 @@ class Monitor(
 		if (!logFolder.isEmpty) {
 
 			val ongoingReport = (
-				report + "\n\n" +
+				report + "\n" +
 				"WARNING: Do not base yourself on this file to check if your " +
 				"job is still running. This file might persist if your job " +
 				"has been killed and thus couldn't reach your call to the " +
