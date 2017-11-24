@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.0.8
+Version: 1.0.9
 
 API Scaladoc: [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -21,6 +21,8 @@ with Scala Spark. This is a bunch of 5 modules:
 The goal is to remove the maximum of highly used and highly duplicated low-level
 code from the spark job code and replace it with methods fully tested whose
 names are self-explanatory and readable.
+
+Compatible with Spark 2.
 
 
 ## Using spark_helper:
@@ -112,7 +114,7 @@ for a cool exemple.
 
 With sbt, just add this one line to your build.sbt:
 
-	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.8" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.8/spark_helper-1.0.8.jar"
+	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.9" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.9/spark_helper-1.0.9.jar"
 
 
 ## Building the project:
