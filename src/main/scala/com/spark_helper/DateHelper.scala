@@ -159,9 +159,14 @@ object DateHelper extends Serializable {
 	  * }}}
 	  *
 	  * @param format (default = "yyyyMMdd_HHmm") the format for the current date
+	  * @param utc (default false) whether it's the "local now" or the "utc now"
 	  * @return today's date under the requested format
 	  */
-	def now(format: String = "yyyyMMdd_HHmm"): String = nDaysBefore(0, format)
+	def now(format: String = "yyyyMMdd_HHmm", utc: Boolean = false): String = {
+		DateTimeFormat.forPattern(format).print(
+			if (utc) new DateTime().withZone(DateTimeZone.UTC) else new DateTime()
+		)
+	}
 
 	/** Returns today's date/time under the requested format.
 	  *
