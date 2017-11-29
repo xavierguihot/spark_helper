@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>DateHelper - com.spark_helper.DateHelper</title>
@@ -9,6 +8,11 @@
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -24,9 +28,15 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../lib/object_big.png" />
+        <img alt="Object" src="../../lib/object_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="com">com</a>.<a href="package.html" class="extype" name="com.spark_helper">spark_helper</a></p>
-        <h1>DateHelper</h1>
+        <h1>DateHelper</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.spark_helper">package spark_helper</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -47,8 +57,7 @@ assert(DateHelper.yesterday() == <span class="lit">"20170309"</span>) <span clas
 assert(DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170327"</span>)
 assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10:24"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/DateHelper.scala">DateHelper</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02
-</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -61,7 +70,7 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -74,9 +83,8 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -95,19 +103,6 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
         <div id="values" class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -118,8 +113,12 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -131,22 +130,13 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -157,8 +147,12 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -170,7 +164,11 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -183,7 +181,11 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -202,10 +204,13 @@ assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10
       <span class="symbol">
         <span class="name">currentTimestamp</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@currentTimestamp():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the current local timestamp.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the current local timestamp.</p><pre>assert(DateHelper.currentTimestamp() == <span class="lit">"1493105229736"</span>)</pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the current timestamps (nbr of millis since 1970-01-01) in the
-local computer's zone.
-</p></dd></dl></div>
+local computer's zone.</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#currentUtcTimestamp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="currentUtcTimestamp():String"></a>
       <a id="currentUtcTimestamp():String"></a>
@@ -217,9 +222,12 @@ local computer's zone.
       <span class="symbol">
         <span class="name">currentUtcTimestamp</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Returns the current UTC timestamp.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the current UTC timestamp.</p><pre>assert(DateHelper.currentUtcTimestamp() == <span class="lit">"1493105229736"</span>)</pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the current UTC timestamps (nbr of millis since 1970-01-01).
-</p></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@currentUtcTimestamp():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the current UTC timestamp.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the current UTC timestamp.</p><pre>assert(DateHelper.currentUtcTimestamp() == <span class="lit">"1493105229736"</span>)</pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the current UTC timestamps (nbr of millis since 1970-01-01).</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#daysBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="daysBetween(firstDate:String,lastDate:String,format:String):List[String]"></a>
       <a id="daysBetween(String,String,String):List[String]"></a>
@@ -231,11 +239,14 @@ local computer's zone.
       <span class="symbol">
         <span class="name">daysBetween</span><span class="params">(<span name="firstDate">firstDate: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="lastDate">lastDate: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@daysBetween(firstDate:String,lastDate:String,format:String):List[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Finds the list of dates between the two given dates.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the list of dates between the two given dates.</p><pre>assert(DateHelper.daysBetween(<span class="lit">"20161230"</span>, <span class="lit">"20170101"</span>) == <span class="std">List</span>(<span class="lit">"20161230"</span>, <span class="lit">"20161231"</span>, <span class="lit">"20170101"</span>))</pre></div><dl class="paramcmts block"><dt class="param">firstDate</dt><dd class="cmt"><p>the first date (in the given format)</p></dd><dt class="param">lastDate</dt><dd class="cmt"><p>the last date (in the given format)</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format to use for firstDate and
 lastDate and for the returned list of dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of dates between firstDate and lastDate in the given
-format.
-</p></dd></dl></div>
+format.</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -247,7 +258,11 @@ format.
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -260,7 +275,11 @@ format.
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -273,7 +292,11 @@ format.
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -292,7 +315,11 @@ format.
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#getDateFromTimestamp" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getDateFromTimestamp(timestamp:Long,format:String):String"></a>
@@ -305,11 +332,14 @@ format.
       <span class="symbol">
         <span class="name">getDateFromTimestamp</span><span class="params">(<span name="timestamp">timestamp: <span class="extype" name="scala.Long">Long</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@getDateFromTimestamp(timestamp:Long,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the date associated to the given UTC timestamp.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the date associated to the given UTC timestamp.</p><pre>assert(DateHelper.getDateFromTimestamp(<span class="num">1496074819</span>L) == <span class="lit">"20170529"</span>)
 assert(DateHelper.getDateFromTimestamp(<span class="num">1496074819</span>L, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170529"</span>)</pre></div><dl class="paramcmts block"><dt class="param">timestamp</dt><dd class="cmt"><p>the UTC timestamps (nbr of millis since 1970-01-01) for
-which to get the associated date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided dates</p></dd><dt>returns</dt><dd class="cmt"><p>the associated date under the requested format
-</p></dd></dl></div>
+which to get the associated date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided dates</p></dd><dt>returns</dt><dd class="cmt"><p>the associated date under the requested format</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -321,7 +351,11 @@ which to get the associated date.</p></dd><dt class="param">format</dt><dd class
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -334,7 +368,11 @@ which to get the associated date.</p></dd><dt class="param">format</dt><dd class
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#jodaDaysBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="jodaDaysBetween(jodaFirstDate:org.joda.time.DateTime,jodaLastDate:org.joda.time.DateTime):List[org.joda.time.DateTime]"></a>
@@ -347,12 +385,15 @@ which to get the associated date.</p></dd><dt class="param">format</dt><dd class
       <span class="symbol">
         <span class="name">jodaDaysBetween</span><span class="params">(<span name="jodaFirstDate">jodaFirstDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>, <span name="jodaLastDate">jodaLastDate: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@jodaDaysBetween(jodaFirstDate:org.joda.time.DateTime,jodaLastDate:org.joda.time.DateTime):List[org.joda.time.DateTime]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Finds the list of dates between the two given dates.</p><div class="fullcomment"><div class="comment cmt"><p>Finds the list of dates between the two given dates.</p><p>Sometimes we might want to do additional filtering/operations on the
 returned list of dates and thus prefer getting a list of Joda DateTime
 objects instead of String dates.
-</p></div><dl class="paramcmts block"><dt class="param">jodaFirstDate</dt><dd class="cmt"><p>the joda DateTime first date</p></dd><dt class="param">jodaLastDate</dt><dd class="cmt"><p>the joda DateTime last date</p></dd><dt>returns</dt><dd class="cmt"><p>the list of joda DateTime between jodaFirstDate and jodaLastDate
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">jodaFirstDate</dt><dd class="cmt"><p>the joda DateTime first date</p></dd><dt class="param">jodaLastDate</dt><dd class="cmt"><p>the joda DateTime last date</p></dd><dt>returns</dt><dd class="cmt"><p>the list of joda DateTime between jodaFirstDate and jodaLastDate</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nDaysAfterDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nDaysAfterDate(nbrOfDaysAfter:Int,date:String,format:String):String"></a>
       <a id="nDaysAfterDate(Int,String,String):String"></a>
@@ -364,14 +405,17 @@ objects instead of String dates.
       <span class="symbol">
         <span class="name">nDaysAfterDate</span><span class="params">(<span name="nbrOfDaysAfter">nbrOfDaysAfter: <span class="extype" name="scala.Int">Int</span></span>, <span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@nDaysAfterDate(nbrOfDaysAfter:Int,date:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns which date it will be x days after the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it will be x days after the given date.</p><p>If the given date is &quot;20170122&quot; and we request the date it will be 3
 days after, we'll return &quot;20170125&quot;.</p><pre>assert(DateHelper.nDaysBeforeDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)
 assert(DateHelper.nDaysBeforeDate(<span class="num">5</span>, <span class="lit">"170305"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysAfter</dt><dd class="cmt"><p>the nbr of days after the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the
 date for nbrOfDaysAfter days after.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
 returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysAfter after date under the
-requested format.
-</p></dd></dl></div>
+requested format.</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nDaysBefore" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nDaysBefore(nbrOfDaysBefore:Int,format:String):String"></a>
       <a id="nDaysBefore(Int,String):String"></a>
@@ -383,13 +427,16 @@ requested format.
       <span class="symbol">
         <span class="name">nDaysBefore</span><span class="params">(<span name="nbrOfDaysBefore">nbrOfDaysBefore: <span class="extype" name="scala.Int">Int</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@nDaysBefore(nbrOfDaysBefore:Int,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns which date it was x days before today under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it was x days before today under the requested format.</p><p>If we're &quot;20170125&quot; and we request for 3 days before, we'll return
 &quot;20170122&quot;.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.nDaysBefore(<span class="num">3</span>) == <span class="lit">"20170307"</span>)
 assert(DateHelper.nDaysBefore(<span class="num">5</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170305"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysBefore</dt><dd class="cmt"><p>the nbr of days before today</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the returned date</p></dd><dt>returns</dt><dd class="cmt"><p>today's date minus the nbrOfDaysBefore under the requested
-format.
-</p></dd></dl></div>
+format.</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nDaysBeforeDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nDaysBeforeDate(nbrOfDaysBefore:Int,date:String,format:String):String"></a>
       <a id="nDaysBeforeDate(Int,String,String):String"></a>
@@ -401,14 +448,17 @@ format.
       <span class="symbol">
         <span class="name">nDaysBeforeDate</span><span class="params">(<span name="nbrOfDaysBefore">nbrOfDaysBefore: <span class="extype" name="scala.Int">Int</span></span>, <span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@nDaysBeforeDate(nbrOfDaysBefore:Int,date:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns which date it was x days before the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it was x days before the given date.</p><p>If the given date is &quot;20170125&quot; and we request the date it was 3 days
 before, we'll return &quot;20170122&quot;.</p><pre>assert(DateHelper.nDaysBeforeDate(<span class="num">3</span>, <span class="lit">"20170310"</span>) == <span class="lit">"20170307"</span>)
 assert(DateHelper.nDaysBeforeDate(<span class="num">5</span>, <span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170305"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysBefore</dt><dd class="cmt"><p>the nbr of days before the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the
 date for nbrOfDaysBefore days before.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
 returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysBefore before date under the
-requested format.
-</p></dd></dl></div>
+requested format.</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nbrOfDaysBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nbrOfDaysBetween(firstDate:String,lastDate:String,format:String):Int"></a>
       <a id="nbrOfDaysBetween(String,String,String):Int"></a>
@@ -420,13 +470,16 @@ requested format.
       <span class="symbol">
         <span class="name">nbrOfDaysBetween</span><span class="params">(<span name="firstDate">firstDate: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="lastDate">lastDate: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@nbrOfDaysBetween(firstDate:String,lastDate:String,format:String):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the nbr of days between the two given dates.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the nbr of days between the two given dates.</p><pre>assert(DateHelper.nbrOfDaysBetween(<span class="lit">"20170327"</span>, <span class="lit">"20170327"</span>) == <span class="num">0</span>)
 assert(DateHelper.nbrOfDaysBetween(<span class="lit">"20170327"</span>, <span class="lit">"20170401"</span>) == <span class="num">5</span>)</pre><p>This expects the first date to be before the last date.
 </p></div><dl class="paramcmts block"><dt class="param">firstDate</dt><dd class="cmt"><p>the first date of the range for which to egt the nbr of
 days.</p></dd><dt class="param">lastDate</dt><dd class="cmt"><p>the last date of the range for which to egt the nbr of
-days.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided dates</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days between the two given dates
-</p></dd></dl></div>
+days.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided dates</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days between the two given dates</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nbrOfDaysSince" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nbrOfDaysSince(date:String,format:String):Int"></a>
       <a id="nbrOfDaysSince(String,String):Int"></a>
@@ -438,11 +491,14 @@ days.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;y
       <span class="symbol">
         <span class="name">nbrOfDaysSince</span><span class="params">(<span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@nbrOfDaysSince(date:String,format:String):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the nbr of days between today and the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the nbr of days between today and the given date.</p><pre><span class="cmt">// If today is "20170327":</span>
 assert(DateHelper.nbrOfDaysSince(<span class="lit">"20170310"</span>) == <span class="num">17</span>)
-assert(DateHelper.nbrOfDaysSince(<span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="num">17</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date for which to find the nbr of days of diff with today</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided date</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days between today and the given date
-</p></dd></dl></div>
+assert(DateHelper.nbrOfDaysSince(<span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="num">17</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date for which to find the nbr of days of diff with today</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided date</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days between today and the given date</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -454,7 +510,11 @@ assert(DateHelper.nbrOfDaysSince(<span class="lit">"170310"</span>, <span class=
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nextDay" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nextDay(date:String,format:String):String"></a>
@@ -467,12 +527,15 @@ assert(DateHelper.nbrOfDaysSince(<span class="lit">"170310"</span>, <span class=
       <span class="symbol">
         <span class="name">nextDay</span><span class="params">(<span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@nextDay(date:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns for a date the date one day latter.</p><div class="fullcomment"><div class="comment cmt"><p>Returns for a date the date one day latter.</p><pre><span class="cmt">// If the given date is "20170310":</span>
 assert(DateHelper.nextDay(<span class="lit">"20170310"</span>) == <span class="lit">"20170311"</span>)
 assert(DateHelper.nextDay(<span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170311"</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date for which to find the date of the day after</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided and the
-returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day after the given date
-</p></dd></dl></div>
+returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day after the given date</p></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <a id="notify():Unit"></a>
@@ -484,7 +547,11 @@ returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day a
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -497,24 +564,31 @@ returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day a
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#now" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="now(format:String):String"></a>
-      <a id="now(String):String"></a>
+      <a id="now(format:String,utc:Boolean):String"></a>
+      <a id="now(String,Boolean):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">now</span><span class="params">(<span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd_HHmm&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">now</span><span class="params">(<span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd_HHmm&quot;</span></span>, <span name="utc">utc: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@now(format:String,utc:Boolean):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns today's date/time under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns today's date/time under the requested format.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.now() == <span class="lit">"20170310_1047"</span>)
-assert(DateHelper.now(<span class="lit">"yyyyMMdd"</span>) == <span class="lit">"20170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd_HHmm&quot;) the format for the current date</p></dd><dt>returns</dt><dd class="cmt"><p>today's date under the requested format
-</p></dd></dl></div>
+assert(DateHelper.now(<span class="lit">"yyyyMMdd"</span>) == <span class="lit">"20170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd_HHmm&quot;) the format for the current date</p></dd><dt class="param">utc</dt><dd class="cmt"><p>(default false) whether it's the &quot;local now&quot; or the &quot;utc now&quot;</p></dd><dt>returns</dt><dd class="cmt"><p>today's date under the requested format</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#previousDay" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="previousDay(date:String,format:String):String"></a>
       <a id="previousDay(String,String):String"></a>
@@ -526,12 +600,15 @@ assert(DateHelper.now(<span class="lit">"yyyyMMdd"</span>) == <span class="lit">
       <span class="symbol">
         <span class="name">previousDay</span><span class="params">(<span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@previousDay(date:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns for a date the date one day before.</p><div class="fullcomment"><div class="comment cmt"><p>Returns for a date the date one day before.</p><pre><span class="cmt">// If the given date is "20170310":</span>
 assert(DateHelper.previousDay(<span class="lit">"20170310"</span>) == <span class="lit">"20170309"</span>)
 assert(DateHelper.previousDay(<span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170309"</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date for which to find the date of the day before</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided and the
-returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day before the given date
-</p></dd></dl></div>
+returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day before the given date</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#reformatDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reformatDate(date:String,inputFormat:String,outputFormat:String):String"></a>
       <a id="reformatDate(String,String,String):String"></a>
@@ -543,9 +620,12 @@ returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day b
       <span class="symbol">
         <span class="name">reformatDate</span><span class="params">(<span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="inputFormat">inputFormat: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="outputFormat">outputFormat: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Reformats a date from one format to another.</p><div class="fullcomment"><div class="comment cmt"><p>Reformats a date from one format to another.</p><pre>assert(DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170327"</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date to reformat</p></dd><dt class="param">inputFormat</dt><dd class="cmt"><p>the format in which the date to reformat is provided</p></dd><dt class="param">outputFormat</dt><dd class="cmt"><p>the format in which to format the provided date</p></dd><dt>returns</dt><dd class="cmt"><p>the date under the new format
-</p></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@reformatDate(date:String,inputFormat:String,outputFormat:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Reformats a date from one format to another.</p><div class="fullcomment"><div class="comment cmt"><p>Reformats a date from one format to another.</p><pre>assert(DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170327"</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date to reformat</p></dd><dt class="param">inputFormat</dt><dd class="cmt"><p>the format in which the date to reformat is provided</p></dd><dt class="param">outputFormat</dt><dd class="cmt"><p>the format in which to format the provided date</p></dd><dt>returns</dt><dd class="cmt"><p>the date under the new format</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -557,7 +637,11 @@ returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day b
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -570,7 +654,11 @@ returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day b
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#today" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="today(format:String):String"></a>
@@ -583,11 +671,14 @@ returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of the day b
       <span class="symbol">
         <span class="name">today</span><span class="params">(<span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@today(format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns today's date/time under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns today's date/time under the requested format.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.today() == <span class="lit">"20170310"</span>)
-assert(DateHelper.today(<span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the current date</p></dd><dt>returns</dt><dd class="cmt"><p>today's date under the requested format
-</p></dd></dl></div>
+assert(DateHelper.today(<span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the current date</p></dd><dt>returns</dt><dd class="cmt"><p>today's date under the requested format</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#twoDaysAgo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="twoDaysAgo(format:String):String"></a>
       <a id="twoDaysAgo(String):String"></a>
@@ -599,12 +690,15 @@ assert(DateHelper.today(<span class="lit">"yyMMdd"</span>) == <span class="lit">
       <span class="symbol">
         <span class="name">twoDaysAgo</span><span class="params">(<span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@twoDaysAgo(format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns which date it was 2 days before today under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it was 2 days before today under the requested format.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.twoDaysAgo() == <span class="lit">"20170308"</span>)
 assert(DateHelper.twoDaysAgo(<span class="lit">"yyMMdd"</span>) == <span class="lit">"170308"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format in which to output the
-date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two days ago under the requested format
-</p></dd></dl></div>
+date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two days ago under the requested format</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -616,7 +710,11 @@ date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two 
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -635,7 +733,11 @@ date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two 
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -654,7 +756,11 @@ date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two 
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -673,12 +779,15 @@ date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two 
       <span class="symbol">
         <span class="name">yesterday</span><span class="params">(<span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@yesterday(format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns yesterday's date/time under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns yesterday's date/time under the requested format.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.yesterday() == <span class="lit">"20170309"</span>)
 assert(DateHelper.yesterday(<span class="lit">"yyMMdd"</span>) == <span class="lit">"170309"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format in which to output the
-date of yesterday</p></dd><dt>returns</dt><dd class="cmt"><p>yesterday's date under the requested format
-</p></dd></dl></div>
+date of yesterday</p></dd><dt>returns</dt><dd class="cmt"><p>yesterday's date under the requested format</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -712,6 +821,7 @@ date of yesterday</p></dd><dt>returns</dt><dd class="cmt"><p>yesterday's date un
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>

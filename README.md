@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.0.9
+Version: 1.0.10
 
 API Scaladoc: [SparkHelper](http://xavierguihot.github.io/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -114,7 +114,7 @@ for a cool exemple.
 
 With sbt, just add this one line to your build.sbt:
 
-	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.9" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.9/spark_helper-1.0.9.jar"
+	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.10" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.10/spark_helper-1.0.10.jar"
 
 
 ## Building the project:

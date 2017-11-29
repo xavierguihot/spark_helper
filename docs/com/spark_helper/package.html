@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>spark_helper - com.spark_helper</title>
@@ -9,6 +8,11 @@
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -24,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../lib/package_big.png" />
+        <img alt="Package" src="../../lib/package_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="com">com</a></p>
-        <h1>spark_helper</h1>
+        <h1>spark_helper</h1><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -62,7 +70,7 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="com.spark_helper.DateHelper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.spark_helper.DateHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="DateHelper"></a>
       <a id="DateHelper:DateHelper"></a>
       <h4 class="signature">
@@ -73,9 +81,21 @@
       <span class="symbol">
         <a href="DateHelper$.html"><span class="name">DateHelper</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</a></p>
-    </li><li name="com.spark_helper.FieldChecker" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package@DateHelper" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
+spark job and replace it with methods fully tested whose name is
+self-explanatory/readable.</p><p>A few exemples:</p><pre>assert(DateHelper.daysBetween(<span class="lit">"20161230"</span>, <span class="lit">"20170101"</span>) == <span class="std">List</span>(<span class="lit">"20161230"</span>, <span class="lit">"20161231"</span>, <span class="lit">"20170101"</span>))
+assert(DateHelper.today() == <span class="lit">"20170310"</span>) <span class="cmt">// If today's "20170310"</span>
+assert(DateHelper.yesterday() == <span class="lit">"20170309"</span>) <span class="cmt">// If today's "20170310"</span>
+assert(DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170327"</span>)
+assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10:24"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/DateHelper.scala">DateHelper</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+    </li><li name="com.spark_helper.FieldChecker" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="FieldChecker"></a>
       <a id="FieldChecker:FieldChecker"></a>
       <h4 class="signature">
@@ -86,9 +106,22 @@
       <span class="symbol">
         <a href="FieldChecker$.html"><span class="name">FieldChecker</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A facility which validates a value for a specific type of field.</p>
-    </li><li name="com.spark_helper.HdfsHelper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package@FieldChecker" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A facility which validates a value for a specific type of field.</p><div class="fullcomment"><div class="comment cmt"><p>A facility which validates a value for a specific type of field.</p><p>For instance this allows to validate that a stringified integer is an
+integer or that a date is under yyyyMMdd format or again that an airport is
+a 3 upper case string:</p><p>A few exemples:</p><pre>assert(FieldChecker.isInteger(<span class="lit">"15"</span>))
+assert(!FieldChecker.isInteger(<span class="lit">"1.5"</span>))
+assert(FieldChecker.isInteger(<span class="lit">"-1"</span>))
+assert(FieldChecker.isStrictlyPositiveInteger(<span class="lit">"123"</span>))
+assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"20170333"</span>))
+assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/FieldChecker.scala">FieldChecker</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HdfsHelper"></a>
       <a id="HdfsHelper:HdfsHelper"></a>
       <h4 class="signature">
@@ -99,9 +132,21 @@
       <span class="symbol">
         <a href="HdfsHelper$.html"><span class="name">HdfsHelper</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</a></p>
-    </li><li name="com.spark_helper.SparkHelper" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package@HdfsHelper" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
+spark job and replace it with methods fully tested whose name is
+self-explanatory/readable.</p><p>A few exemples:</p><pre>HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
+assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))
+assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
+assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
+HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SparkHelper"></a>
       <a id="SparkHelper:SparkHelper"></a>
       <h4 class="signature">
@@ -112,8 +157,20 @@
       <span class="symbol">
         <a href="SparkHelper$.html"><span class="name">SparkHelper</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A facility to deal with RDD/file manipulations based on the Spark API.</p>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package@SparkHelper" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A facility to deal with RDD/file manipulations based on the Spark API.</p><div class="fullcomment"><div class="comment cmt"><p>A facility to deal with RDD/file manipulations based on the Spark API.</p><p>The goal is to remove the maximum of highly used low-level code from your
+spark job and replace it with methods fully tested whose name is
+self-explanatory/readable.</p><p>A few exemples:</p><pre><span class="cmt">// Same as SparkContext.saveAsTextFile, but the result is a single file:</span>
+SparkHelper.saveAsSingleTextFile(myOutputRDD, <span class="lit">"/my/output/file/path.txt"</span>)
+<span class="cmt">// Same as SparkContext.textFile, but instead of reading one record per line,</span>
+<span class="cmt">// it reads records spread over several lines:</span>
+SparkHelper.textFileWithDelimiter(<span class="lit">"/my/input/folder/path"</span>, sparkContext, <span class="lit">"---\n"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
     </li><li name="com.spark_helper.monitoring" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="monitoring"></a>
       <a id="monitoring:monitoring"></a>
@@ -125,7 +182,11 @@
       <span class="symbol">
         <a href="monitoring/package.html"><span class="name">monitoring</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package@monitoring" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       
     </li></ol>
             </div>
@@ -152,6 +213,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>

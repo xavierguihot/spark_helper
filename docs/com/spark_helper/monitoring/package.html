@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>monitoring - com.spark_helper.monitoring</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -24,9 +28,13 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../lib/package_big.png" />
+        <img alt="Package" src="../../../lib/package_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="com">com</a>.<a href="../package.html" class="extype" name="com.spark_helper">spark_helper</a></p>
-        <h1>monitoring</h1>
+        <h1>monitoring</h1><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -58,7 +66,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.spark_helper.monitoring.Monitor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.spark_helper.monitoring.Monitor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MonitorextendsAnyRef"></a>
       <a id="Monitor:Monitor"></a>
       <h4 class="signature">
@@ -69,9 +77,101 @@
       <span class="symbol">
         <a href="Monitor.html"><span class="name">Monitor</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A facility used to monitor a Spak job.</p>
-    </li><li name="com.spark_helper.monitoring.Test" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@MonitorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A facility used to monitor a Spak job.</p><div class="fullcomment"><div class="comment cmt"><p>A facility used to monitor a Spak job.</p><p>It's a simple logger/report that you update during your job. It contains a
+report (a simple string) that you can update and a success boolean which can
+be updated to give a success status on your job. At the end of your job
+you'll have the possibility to store the report in hdfs.</p><p>Let's go through a simple Spark job example monitored with this Monitor
+facility:</p><pre><span class="kw">val</span> sparkContext = <span class="kw">new</span> SparkContext(<span class="kw">new</span> SparkConf())
+<span class="kw">val</span> monitor = <span class="kw">new</span> Monitor(<span class="lit">"My Simple Job"</span>)
+
+<span class="kw">try</span> {
+
+	<span class="cmt">// Let's perform a spark pipeline which might goes wrong:</span>
+	<span class="kw">val</span> processedData = sparkContext.textFile(<span class="lit">"/my/hdfs/input/path"</span>).map(<span class="kw">do</span> whatever)
+
+	<span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
+	<span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
+		<span class="std">List</span>(
+			<span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
+			<span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
+		),
+		<span class="lit">"My pipeline descirption"</span>
+	)
+
+	<span class="kw">if</span> (outputIsValid)
+		processedData.saveAsTextFile(<span class="lit">"wherever/folder"</span>)
+
+} <span class="kw">catch</span> {
+	<span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span> {
+		monitor.updateReportWithError(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+	}
+	<span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span> {
+		monitor.updateReportWithError(e, <span class="lit">"My pipeline descirption"</span>)
+	}
+}
+
+<span class="kw">if</span> (monitor.isSuccess()) {
+	<span class="kw">val</span> doMore = <span class="lit">"Let's do more stuff!"</span>
+	monitor.updateReport(<span class="lit">"My second pipeline description: success"</span>)
+}
+
+<span class="cmt">// At the end of the different steps of the job, we can store the report in HDFS:</span>
+monitor.saveReport(<span class="lit">"/my/hdfs/functionnal/logs/folder"</span>)
+
+<span class="cmt">// At the end of your job, if you considered your job isn't successfull, then crash it!:</span>
+<span class="kw">if</span> (!monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception()</pre><p>If we were to read the stored report after this simple pipeline, here are
+some possible scenarios:</p><p>First scenario, problem with the input of the job:</p><pre>					My Simple Job
+
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
+	Diagnostic: No input data!
+		org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+		at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+		at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+		...
+[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>					My Simple Job
+
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
+		java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
+		java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
+		java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
+		...
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>					My Simple Job
+
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
+	KPI: Nbr of output records
+		Value: <span class="num">14669071.0</span>
+		Must be superior to <span class="num">10000000.0</span>
+		Validated: <span class="kw">true</span>
+	KPI: <span class="std">Some</span> pct of invalid output
+		Value: <span class="num">0.06</span>%
+		Must be inferior to <span class="num">3.0</span>%
+		Validated: <span class="kw">true</span>
+[<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
+[<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>One of the good things of this facility is the catching of spark exceptions
+and it's storage within a log file. This makes it a lot easier to quickly
+find what went wrong than having to find back and scroll yarn logs.</p><p>It comes in handy in production environments for which locating the yarn
+logs of your spark job can be a pain. Or in order when the poduction job
+fails to send the report of the error by email. Or simply to keep track of
+historical kpis, processing times, ...</p><p>This is not supposed to be updated from within a Spark pipeline
+(actions/transformations) but rather from the orchestration of the
+pipelines.</p><p>When instantiating the Monitor object with the optional parameter
+&quot;logFolder&quot;, then you don't need to wait for the end of your job (your call
+to saveReport()) to be able to look at what's going on. With this option
+filled, any report update will directly be saved in the file
+logFolder/current.ongoing. This way, you can have a live idea of what's
+going on with your job and even if your job is forced-killed, you'll have
+the possibility to easily have a look at what happened.</p><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+    </li><li name="com.spark_helper.monitoring.Test" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="TestextendsAnyRef"></a>
       <a id="Test:Test"></a>
       <h4 class="signature">
@@ -82,8 +182,15 @@
       <span class="symbol">
         <a href="Test.html"><span class="name">Test</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">A class which represents a KPI to validate.</p>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@TestextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A class which represents a KPI to validate.</p><div class="fullcomment"><div class="comment cmt"><p>A class which represents a KPI to validate.</p><p>This is intended to be used as parameter of Monitor.updateByKpiValidation
+and Monitor.updateByKpisValidation methods.</p><p>Some exemples of Test objects:</p><pre><span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>)
+<span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>f, <span class="lit">"superior to"</span>, <span class="num">0.3</span>f, <span class="lit">"pct"</span>)
+<span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>f, <span class="lit">"equal to"</span>, <span class="num">1235</span>f, <span class="lit">"nbr"</span>)</pre></div><dl class="attributes block"> <dt>Since</dt><dd><p>2016-12</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -113,6 +220,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
+
+
     </body>
       </html>

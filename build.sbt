@@ -1,6 +1,6 @@
 name := "spark_helper"
 
-version := "1.0.9"
+version := "1.0.10"
 
 scalaVersion := "2.11.8"
 
@@ -30,3 +30,7 @@ assemblyMergeStrategy in assembly := {
 	case PathList("META-INF", xs @ _*) => MergeStrategy.discard
 	case x => MergeStrategy.first
 }
+
+scalacOptions in (Compile, doc) ++= Seq(
+	"-no-link-warnings" // Suppresses problems with Scaladoc @throws links
+)

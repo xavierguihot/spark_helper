@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>FieldChecker - com.spark_helper.FieldChecker</title>
@@ -9,6 +8,11 @@
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -24,9 +28,15 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../lib/object_big.png" />
+        <img alt="Object" src="../../lib/object_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="com">com</a>.<a href="package.html" class="extype" name="com.spark_helper">spark_helper</a></p>
-        <h1>FieldChecker</h1>
+        <h1>FieldChecker</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.spark_helper">package spark_helper</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -48,8 +58,7 @@ assert(FieldChecker.isStrictlyPositiveInteger(<span class="lit">"123"</span>))
 assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"20170333"</span>))
 assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/FieldChecker.scala">FieldChecker</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02
-</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -62,7 +71,7 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -75,9 +84,8 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -96,19 +104,6 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
         <div id="values" class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -119,8 +114,12 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -132,22 +131,13 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -158,8 +148,12 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -171,7 +165,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -184,7 +182,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -203,7 +205,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -216,7 +222,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -229,7 +239,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -248,7 +262,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -261,7 +279,11 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isAirlineCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isAirlineCode(stringValue:String):Boolean"></a>
@@ -274,14 +296,17 @@ assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Sour
       <span class="symbol">
         <span class="name">isAirlineCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isAirlineCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 2-upper-chars airline code.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 2-upper-chars airline code.</p><pre>assert(FieldChecker.isAirlineCode(<span class="lit">"AF"</span>))
 assert(FieldChecker.isAirlineCode(<span class="lit">"BA"</span>))
 assert(FieldChecker.isAirlineCode(<span class="lit">"AA "</span>))
 assert(!FieldChecker.isAirlineCode(<span class="lit">""</span>))
 assert(!FieldChecker.isAirlineCode(<span class="lit">"Af"</span>))
-assert(!FieldChecker.isAirlineCode(<span class="lit">"AFS"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the airline code</p></dd><dt>returns</dt><dd class="cmt"><p>if the airline code looks like an airline code
-</p></dd></dl></div>
+assert(!FieldChecker.isAirlineCode(<span class="lit">"AFS"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the airline code</p></dd><dt>returns</dt><dd class="cmt"><p>if the airline code looks like an airline code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isAirportCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isAirportCode(stringValue:String):Boolean"></a>
       <a id="isAirportCode(String):Boolean"></a>
@@ -293,14 +318,17 @@ assert(!FieldChecker.isAirlineCode(<span class="lit">"AFS"</span>))</pre></div><
       <span class="symbol">
         <span class="name">isAirportCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isAirportCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 3-upper-chars airport code.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 3-upper-chars airport code.</p><pre>assert(FieldChecker.isAirportCode(<span class="lit">"ORY"</span>))
 assert(FieldChecker.isAirportCode(<span class="lit">"NYC "</span>))
 assert(!FieldChecker.isAirportCode(<span class="lit">""</span>))
 assert(!FieldChecker.isAirportCode(<span class="lit">"ORd"</span>))
 assert(!FieldChecker.isAirportCode(<span class="lit">"FR"</span>))
-assert(!FieldChecker.isAirportCode(<span class="lit">"ORYD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the airport code</p></dd><dt>returns</dt><dd class="cmt"><p>if the airport code looks like an airport code
-</p></dd></dl></div>
+assert(!FieldChecker.isAirportCode(<span class="lit">"ORYD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the airport code</p></dd><dt>returns</dt><dd class="cmt"><p>if the airport code looks like an airport code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isCityCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isCityCode(stringValue:String):Boolean"></a>
       <a id="isCityCode(String):Boolean"></a>
@@ -312,14 +340,17 @@ assert(!FieldChecker.isAirportCode(<span class="lit">"ORYD"</span>))</pre></div>
       <span class="symbol">
         <span class="name">isCityCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isCityCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 3-upper-chars city code.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 3-upper-chars city code.</p><pre>assert(FieldChecker.isAirportCode(<span class="lit">"PAR"</span>))
 assert(FieldChecker.isAirportCode(<span class="lit">"NCE "</span>))
 assert(!FieldChecker.isAirportCode(<span class="lit">""</span>))
 assert(!FieldChecker.isAirportCode(<span class="lit">"ORd"</span>))
 assert(!FieldChecker.isAirportCode(<span class="lit">"FR"</span>))
-assert(!FieldChecker.isAirportCode(<span class="lit">"ORYD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the city code</p></dd><dt>returns</dt><dd class="cmt"><p>if the city code looks like a city code
-</p></dd></dl></div>
+assert(!FieldChecker.isAirportCode(<span class="lit">"ORYD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the city code</p></dd><dt>returns</dt><dd class="cmt"><p>if the city code looks like a city code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isClassCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isClassCode(stringValue:String):Boolean"></a>
       <a id="isClassCode(String):Boolean"></a>
@@ -331,13 +362,16 @@ assert(!FieldChecker.isAirportCode(<span class="lit">"ORYD"</span>))</pre></div>
       <span class="symbol">
         <span class="name">isClassCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isClassCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 1-upper-chars cabin/rbd code.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 1-upper-chars cabin/rbd code.</p><pre>assert(FieldChecker.isClassCode(<span class="lit">"Y"</span>))
 assert(FieldChecker.isClassCode(<span class="lit">"S "</span>))
 assert(!FieldChecker.isClassCode(<span class="lit">""</span>))
 assert(!FieldChecker.isClassCode(<span class="lit">"s"</span>))
-assert(!FieldChecker.isClassCode(<span class="lit">"SS"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the cabin/rbd code</p></dd><dt>returns</dt><dd class="cmt"><p>if the cabin/rbd code looks like a cabin/rbd code
-</p></dd></dl></div>
+assert(!FieldChecker.isClassCode(<span class="lit">"SS"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the cabin/rbd code</p></dd><dt>returns</dt><dd class="cmt"><p>if the cabin/rbd code looks like a cabin/rbd code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isCountryCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isCountryCode(stringValue:String):Boolean"></a>
       <a id="isCountryCode(String):Boolean"></a>
@@ -349,13 +383,16 @@ assert(!FieldChecker.isClassCode(<span class="lit">"SS"</span>))</pre></div><dl 
       <span class="symbol">
         <span class="name">isCountryCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isCountryCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 2-upper-chars country code.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 2-upper-chars country code.</p><pre>assert(FieldChecker.isCountryCode(<span class="lit">"FR"</span>))
 assert(FieldChecker.isCountryCode(<span class="lit">"US "</span>))
 assert(!FieldChecker.isCountryCode(<span class="lit">""</span>))
 assert(!FieldChecker.isCountryCode(<span class="lit">"Us"</span>))
-assert(!FieldChecker.isCountryCode(<span class="lit">"USD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the country code</p></dd><dt>returns</dt><dd class="cmt"><p>if the country code looks like a country code
-</p></dd></dl></div>
+assert(!FieldChecker.isCountryCode(<span class="lit">"USD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the country code</p></dd><dt>returns</dt><dd class="cmt"><p>if the country code looks like a country code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isCurrencyCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isCurrencyCode(stringValue:String):Boolean"></a>
       <a id="isCurrencyCode(String):Boolean"></a>
@@ -367,14 +404,17 @@ assert(!FieldChecker.isCountryCode(<span class="lit">"USD"</span>))</pre></div><
       <span class="symbol">
         <span class="name">isCurrencyCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isCurrencyCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 3-upper-chars currency code.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 3-upper-chars currency code.</p><pre>assert(FieldChecker.isCurrencyCode(<span class="lit">"EUR"</span>))
 assert(FieldChecker.isCurrencyCode(<span class="lit">"USD "</span>))
 assert(!FieldChecker.isCurrencyCode(<span class="lit">"EUr"</span>))
 assert(!FieldChecker.isCurrencyCode(<span class="lit">""</span>))
 assert(!FieldChecker.isCurrencyCode(<span class="lit">"EU"</span>))
-assert(!FieldChecker.isCurrencyCode(<span class="lit">"EURD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the currency code</p></dd><dt>returns</dt><dd class="cmt"><p>if the currency code looks like a currency code
-</p></dd></dl></div>
+assert(!FieldChecker.isCurrencyCode(<span class="lit">"EURD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the currency code</p></dd><dt>returns</dt><dd class="cmt"><p>if the currency code looks like a currency code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isDateCompliantWithFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDateCompliantWithFormat(stringValue:String,format:String):Boolean"></a>
       <a id="isDateCompliantWithFormat(String,String):Boolean"></a>
@@ -386,7 +426,11 @@ assert(!FieldChecker.isCurrencyCode(<span class="lit">"EURD"</span>))</pre></div
       <span class="symbol">
         <span class="name">isDateCompliantWithFormat</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isDateCompliantWithFormat(stringValue:String,format:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string date is under the provided format.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string date is under the provided format.</p><pre>assert(FieldChecker.isDateCompliantWithFormat(<span class="lit">"20170302"</span>, <span class="lit">"yyyyMMdd"</span>))
 assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"20170333"</span>, <span class="lit">"yyyyMMdd"</span>))
 assert(FieldChecker.isDateCompliantWithFormat(<span class="lit">"20170228"</span>, <span class="lit">"yyyyMMdd"</span>))
@@ -394,8 +438,7 @@ assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"20170229"</spa
 assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"170228"</span>, <span class="lit">"yyyyMMdd"</span>))
 assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">""</span>, <span class="lit">"yyyyMMdd"</span>))
 assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"a"</span>, <span class="lit">"yyyyMMdd"</span>))
-assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"24JAN17"</span>, <span class="lit">"yyyyMMdd"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified date</p></dd><dt>returns</dt><dd class="cmt"><p>if the provided date is under the provided format
-</p></dd></dl></div>
+assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"24JAN17"</span>, <span class="lit">"yyyyMMdd"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified date</p></dd><dt>returns</dt><dd class="cmt"><p>if the provided date is under the provided format</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isFloat(stringValue:String):Boolean"></a>
       <a id="isFloat(String):Boolean"></a>
@@ -407,15 +450,18 @@ assert(!FieldChecker.isDateCompliantWithFormat(<span class="lit">"24JAN17"</span
       <span class="symbol">
         <span class="name">isFloat</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isFloat(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a float.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a float.</p><pre>assert(!FieldChecker.isFloat(<span class="lit">""</span>))
 assert(!FieldChecker.isFloat(<span class="lit">"sdc"</span>))
 assert(FieldChecker.isFloat(<span class="lit">"0"</span>))
 assert(FieldChecker.isFloat(<span class="lit">"15"</span>))
 assert(FieldChecker.isFloat(<span class="lit">"-1"</span>))
 assert(FieldChecker.isFloat(<span class="lit">"-1.5"</span>))
-assert(FieldChecker.isFloat(<span class="lit">"1.5"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified float</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified float is an float
-</p></dd></dl></div>
+assert(FieldChecker.isFloat(<span class="lit">"1.5"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified float</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified float is an float</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isHHmmTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isHHmmTime(stringValue:String):Boolean"></a>
       <a id="isHHmmTime(String):Boolean"></a>
@@ -427,7 +473,11 @@ assert(FieldChecker.isFloat(<span class="lit">"1.5"</span>))</pre></div><dl clas
       <span class="symbol">
         <span class="name">isHHmmTime</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isHHmmTime(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a HHmm time.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a HHmm time.</p><pre>assert(FieldChecker.isHHmmTime(<span class="lit">"1224"</span>))
 assert(FieldChecker.isHHmmTime(<span class="lit">"0023"</span>))
 assert(!FieldChecker.isHHmmTime(<span class="lit">"2405"</span>))
@@ -435,8 +485,7 @@ assert(!FieldChecker.isHHmmTime(<span class="lit">"12:24"</span>))
 assert(!FieldChecker.isHHmmTime(<span class="lit">"23"</span>))
 assert(!FieldChecker.isHHmmTime(<span class="lit">""</span>))
 assert(!FieldChecker.isHHmmTime(<span class="lit">"a"</span>))
-assert(!FieldChecker.isHHmmTime(<span class="lit">"24JAN17"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified HHmm time</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified HHmm time is a HHmm time
-</p></dd></dl></div>
+assert(!FieldChecker.isHHmmTime(<span class="lit">"24JAN17"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified HHmm time</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified HHmm time is a HHmm time</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -448,7 +497,11 @@ assert(!FieldChecker.isHHmmTime(<span class="lit">"24JAN17"</span>))</pre></div>
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isInteger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInteger(stringValue:String):Boolean"></a>
@@ -461,7 +514,11 @@ assert(!FieldChecker.isHHmmTime(<span class="lit">"24JAN17"</span>))</pre></div>
       <span class="symbol">
         <span class="name">isInteger</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isInteger(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is an integer.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is an integer.</p><pre>assert(!FieldChecker.isInteger(<span class="lit">""</span>))
 assert(!FieldChecker.isInteger(<span class="lit">"sdc"</span>))
 assert(FieldChecker.isInteger(<span class="lit">"0"</span>))
@@ -469,8 +526,7 @@ assert(FieldChecker.isInteger(<span class="lit">"15"</span>))
 assert(FieldChecker.isInteger(<span class="lit">"-1"</span>))
 assert(!FieldChecker.isInteger(<span class="lit">"-1.5"</span>))
 assert(!FieldChecker.isInteger(<span class="lit">"1.5"</span>))
-assert(FieldChecker.isInteger(<span class="lit">"0452"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified integer</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified integer is an integer
-</p></dd></dl></div>
+assert(FieldChecker.isInteger(<span class="lit">"0452"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified integer</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified integer is an integer</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isLocationCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isLocationCode(stringValue:String):Boolean"></a>
       <a id="isLocationCode(String):Boolean"></a>
@@ -482,14 +538,17 @@ assert(FieldChecker.isInteger(<span class="lit">"0452"</span>))</pre></div><dl c
       <span class="symbol">
         <span class="name">isLocationCode</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isLocationCode(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a 3-upper-chars (city/airport code).</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a 3-upper-chars (city/airport code).</p><pre>assert(FieldChecker.isLocationCode(<span class="lit">"ORY"</span>))
 assert(FieldChecker.isLocationCode(<span class="lit">"NYC "</span>))
 assert(!FieldChecker.isLocationCode(<span class="lit">""</span>))
 assert(!FieldChecker.isLocationCode(<span class="lit">"ORd"</span>))
 assert(!FieldChecker.isLocationCode(<span class="lit">"FR"</span>))
-assert(!FieldChecker.isLocationCode(<span class="lit">"ORYD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the airport or city code</p></dd><dt>returns</dt><dd class="cmt"><p>if the airport or city code looks like a location code
-</p></dd></dl></div>
+assert(!FieldChecker.isLocationCode(<span class="lit">"ORYD"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the airport or city code</p></dd><dt>returns</dt><dd class="cmt"><p>if the airport or city code looks like a location code</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isPositiveFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isPositiveFloat(stringValue:String):Boolean"></a>
       <a id="isPositiveFloat(String):Boolean"></a>
@@ -501,15 +560,18 @@ assert(!FieldChecker.isLocationCode(<span class="lit">"ORYD"</span>))</pre></div
       <span class="symbol">
         <span class="name">isPositiveFloat</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isPositiveFloat(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a positive float.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a positive float.</p><pre>assert(!FieldChecker.isPositiveFloat(<span class="lit">""</span>))
 assert(!FieldChecker.isPositiveFloat(<span class="lit">"sdc"</span>))
 assert(FieldChecker.isPositiveFloat(<span class="lit">"0"</span>))
 assert(FieldChecker.isPositiveFloat(<span class="lit">"15"</span>))
 assert(!FieldChecker.isPositiveFloat(<span class="lit">"-1"</span>))
 assert(!FieldChecker.isPositiveFloat(<span class="lit">"-1.5"</span>))
-assert(FieldChecker.isPositiveFloat(<span class="lit">"1.5"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified positive float</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified positive float is a positive float
-</p></dd></dl></div>
+assert(FieldChecker.isPositiveFloat(<span class="lit">"1.5"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified positive float</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified positive float is a positive float</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isPositiveInteger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isPositiveInteger(stringValue:String):Boolean"></a>
       <a id="isPositiveInteger(String):Boolean"></a>
@@ -521,7 +583,11 @@ assert(FieldChecker.isPositiveFloat(<span class="lit">"1.5"</span>))</pre></div>
       <span class="symbol">
         <span class="name">isPositiveInteger</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isPositiveInteger(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is an positive integer.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is an positive integer.</p><pre>assert(!FieldChecker.isPositiveInteger(<span class="lit">""</span>))
 assert(!FieldChecker.isPositiveInteger(<span class="lit">"sdc"</span>))
 assert(FieldChecker.isPositiveInteger(<span class="lit">"0"</span>))
@@ -529,8 +595,7 @@ assert(FieldChecker.isPositiveInteger(<span class="lit">"15"</span>))
 assert(!FieldChecker.isPositiveInteger(<span class="lit">"-1"</span>))
 assert(!FieldChecker.isPositiveInteger(<span class="lit">"-1.5"</span>))
 assert(!FieldChecker.isPositiveInteger(<span class="lit">"1.5"</span>))
-assert(FieldChecker.isPositiveInteger(<span class="lit">"0452"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified positive integer</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified positive integer is a positive integer
-</p></dd></dl></div>
+assert(FieldChecker.isPositiveInteger(<span class="lit">"0452"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified positive integer</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified positive integer is a positive integer</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isStrictlyPositiveFloat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isStrictlyPositiveFloat(stringValue:String):Boolean"></a>
       <a id="isStrictlyPositiveFloat(String):Boolean"></a>
@@ -542,7 +607,11 @@ assert(FieldChecker.isPositiveInteger(<span class="lit">"0452"</span>))</pre></d
       <span class="symbol">
         <span class="name">isStrictlyPositiveFloat</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isStrictlyPositiveFloat(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a strictly positive float.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a strictly positive float.</p><pre>assert(!FieldChecker.isStrictlyPositiveFloat(<span class="lit">""</span>))
 assert(!FieldChecker.isStrictlyPositiveFloat(<span class="lit">"sdc"</span>))
 assert(!FieldChecker.isStrictlyPositiveFloat(<span class="lit">"0"</span>))
@@ -550,8 +619,7 @@ assert(FieldChecker.isStrictlyPositiveFloat(<span class="lit">"15"</span>))
 assert(!FieldChecker.isStrictlyPositiveFloat(<span class="lit">"-1"</span>))
 assert(!FieldChecker.isStrictlyPositiveFloat(<span class="lit">"-1.5"</span>))
 assert(FieldChecker.isStrictlyPositiveFloat(<span class="lit">"1.5"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified strictly positive float</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified strictly positive float is a strictly
-positive float.
-</p></dd></dl></div>
+positive float.</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isStrictlyPositiveInteger" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isStrictlyPositiveInteger(stringValue:String):Boolean"></a>
       <a id="isStrictlyPositiveInteger(String):Boolean"></a>
@@ -563,7 +631,11 @@ positive float.
       <span class="symbol">
         <span class="name">isStrictlyPositiveInteger</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isStrictlyPositiveInteger(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a strictly positive integer.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a strictly positive integer.</p><pre>assert(!FieldChecker.isStrictlyPositiveInteger(<span class="lit">""</span>))
 assert(!FieldChecker.isStrictlyPositiveInteger(<span class="lit">"sdc"</span>))
 assert(!FieldChecker.isStrictlyPositiveInteger(<span class="lit">"0"</span>))
@@ -573,8 +645,7 @@ assert(!FieldChecker.isStrictlyPositiveInteger(<span class="lit">"-1"</span>))
 assert(!FieldChecker.isStrictlyPositiveInteger(<span class="lit">"-1.5"</span>))
 assert(!FieldChecker.isStrictlyPositiveInteger(<span class="lit">"1.5"</span>))
 assert(FieldChecker.isStrictlyPositiveInteger(<span class="lit">"0452"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified strictly positive integer</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified strictly positive integer is a strictly
-positive integer.
-</p></dd></dl></div>
+positive integer.</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isYyMMddDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isYyMMddDate(stringValue:String):Boolean"></a>
       <a id="isYyMMddDate(String):Boolean"></a>
@@ -586,7 +657,11 @@ positive integer.
       <span class="symbol">
         <span class="name">isYyMMddDate</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isYyMMddDate(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a yyMMdd date.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a yyMMdd date.</p><pre>assert(FieldChecker.isYyMMddDate(<span class="lit">"170302"</span>))
 assert(!FieldChecker.isYyMMddDate(<span class="lit">"170333"</span>))
 assert(FieldChecker.isYyMMddDate(<span class="lit">"170228"</span>))
@@ -594,8 +669,7 @@ assert(!FieldChecker.isYyMMddDate(<span class="lit">"170229"</span>))
 assert(!FieldChecker.isYyMMddDate(<span class="lit">"20170228"</span>))
 assert(!FieldChecker.isYyMMddDate(<span class="lit">""</span>))
 assert(!FieldChecker.isYyMMddDate(<span class="lit">"a"</span>))
-assert(!FieldChecker.isYyMMddDate(<span class="lit">"24JAN17"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified yyMMdd date</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified yyMMdd date is a yyMMdd date
-</p></dd></dl></div>
+assert(!FieldChecker.isYyMMddDate(<span class="lit">"24JAN17"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified yyMMdd date</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified yyMMdd date is a yyMMdd date</p></dd></dl></div>
     </li><li name="com.spark_helper.FieldChecker#isYyyyMMddDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isYyyyMMddDate(stringValue:String):Boolean"></a>
       <a id="isYyyyMMddDate(String):Boolean"></a>
@@ -607,7 +681,11 @@ assert(!FieldChecker.isYyMMddDate(<span class="lit">"24JAN17"</span>))</pre></di
       <span class="symbol">
         <span class="name">isYyyyMMddDate</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@isYyyyMMddDate(stringValue:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates a string is a yyyyMMdd date.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string is a yyyyMMdd date.</p><pre>assert(FieldChecker.isYyyyMMddDate(<span class="lit">"20170302"</span>))
 assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"20170333"</span>))
 assert(FieldChecker.isYyyyMMddDate(<span class="lit">"20170228"</span>))
@@ -615,8 +693,7 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"20170229"</span>))
 assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"170228"</span>))
 assert(!FieldChecker.isYyyyMMddDate(<span class="lit">""</span>))
 assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"a"</span>))
-assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified yyyyMMdd date</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified yyyyMMdd date is a yyyyMMdd date
-</p></dd></dl></div>
+assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified yyyyMMdd date</p></dd><dt>returns</dt><dd class="cmt"><p>if the stringified yyyyMMdd date is a yyyyMMdd date</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -628,7 +705,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -641,7 +722,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -654,7 +739,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -667,7 +756,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -680,7 +773,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -693,7 +790,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -712,7 +813,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -731,7 +836,11 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.FieldChecker$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -772,6 +881,7 @@ assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"24JAN17"</span>))</pre></
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>

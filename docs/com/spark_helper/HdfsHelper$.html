@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>HdfsHelper - com.spark_helper.HdfsHelper</title>
@@ -9,6 +8,11 @@
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
@@ -24,9 +28,15 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../lib/object_big.png" />
+        <img alt="Object" src="../../lib/object_big.png" />
         <p id="owner"><a href="../package.html" class="extype" name="com">com</a>.<a href="package.html" class="extype" name="com.spark_helper">spark_helper</a></p>
-        <h1>HdfsHelper</h1>
+        <h1>HdfsHelper</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.spark_helper">package spark_helper</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -47,8 +57,7 @@ assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.t
 assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
 HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02
-</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -61,7 +70,7 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -74,9 +83,8 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -95,19 +103,6 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
         <div id="values" class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -118,8 +113,12 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
       <span class="symbol">
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -131,22 +130,13 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
       <span class="symbol">
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -157,8 +147,12 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
       <span class="symbol">
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendFooter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendFooter(filePath:String,footer:String,workingFolderPath:String):Unit"></a>
       <a id="appendFooter(String,String,String):Unit"></a>
@@ -170,14 +164,17 @@ HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</
       <span class="symbol">
         <span class="name">appendFooter</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="footer">footer: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="workingFolderPath">workingFolderPath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@appendFooter(filePath:String,footer:String,workingFolderPath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Appends a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a footer to a file.</p><p>If the workingFolderPath parameter is provided, then the processing is
 done in a working/tmp folder and then only, the final file is moved
 to its final real location. This way, in case of cluster instability,
 i.e. in case the Spark job is interupted, this avoids having a temporary
 or corrupted file in output.
-</p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the footer</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the footer</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendHeader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendHeader(filePath:String,header:String,workingFolderPath:String):Unit"></a>
       <a id="appendHeader(String,String,String):Unit"></a>
@@ -189,15 +186,18 @@ or corrupted file in output.
       <span class="symbol">
         <span class="name">appendHeader</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="header">header: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="workingFolderPath">workingFolderPath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@appendHeader(filePath:String,header:String,workingFolderPath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Appends a header to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header to a file.</p><p>Usefull when creating a csv file with spark and you need to add a header
 describing the different fields.</p><p>If the workingFolderPath parameter is provided, then the processing is
 done in a working/tmp folder and then only, the final file is moved
 to its final real location. This way, in case of cluster instability,
 i.e. in case the Spark job is interupted, this avoids having a temporary
 or corrupted file in output.
-</p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendHeaderAndFooter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendHeaderAndFooter(filePath:String,header:String,footer:String,workingFolderPath:String):Unit"></a>
       <a id="appendHeaderAndFooter(String,String,String,String):Unit"></a>
@@ -209,7 +209,11 @@ or corrupted file in output.
       <span class="symbol">
         <span class="name">appendHeaderAndFooter</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="header">header: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="footer">footer: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="workingFolderPath">workingFolderPath: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@appendHeaderAndFooter(filePath:String,header:String,footer:String,workingFolderPath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Appends a header and a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header and a footer to a file.</p><p>Usefull when creating an xml file with spark and you need to add top
 level tags.</p><p>If the workingFolderPath parameter is provided, then the processing is
 done in a working/tmp folder and then only, the final file is moved
@@ -217,8 +221,7 @@ to its final real location. This way, in case of cluster instability,
 i.e. in case the Spark job is interupted, this avoids having a temporary
 or corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header and the
-footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen
-</p></dd></dl></div>
+footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -230,7 +233,11 @@ footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to ad
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -243,7 +250,11 @@ footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to ad
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -262,14 +273,17 @@ footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to ad
       <span class="symbol">
         <span class="name">compressFile</span><span class="params">(<span name="inputPath">inputPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="compressionCodec">compressionCodec: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="org.apache.hadoop.io.compress.CompressionCodec">CompressionCodec</span>]</span>, <span name="deleteInputFile">deleteInputFile: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@compressFile(inputPath:String,compressionCodec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec],deleteInputFile:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Compresses an Hdfs file to the given codec, without changing the lines order.</p><div class="fullcomment"><div class="comment cmt"><p>Compresses an Hdfs file to the given codec, without changing the lines order.</p><p>For instance, after producing an xml for which the order matters, one
 don't want to use sparkContext.saveAsTextFile with a compression codec
 due to the resulting compressed file in which lines would be unordered.</p><p>Here is an example, where hdfs/path/to/uncompressed_file.txt will be
 compressed and renamed hdfs/path/to/uncompressed_file.txt.gz:</p><pre>HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])</pre></div><dl class="paramcmts block"><dt class="param">inputPath</dt><dd class="cmt"><p>the path of the file on hdfs to compress</p></dd><dt class="param">compressionCodec</dt><dd class="cmt"><p>the type of compression to use (for instance
 classOf[BZip2Codec] or classOf[GzipCodec])).</p></dd><dt class="param">deleteInputFile</dt><dd class="cmt"><p>if the input file is deleted after its
-compression.
-</p></dd></dl></div>
+compression.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createEmptyHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createEmptyHdfsFile(filePath:String):Unit"></a>
       <a id="createEmptyHdfsFile(String):Unit"></a>
@@ -281,13 +295,16 @@ compression.
       <span class="symbol">
         <span class="name">createEmptyHdfsFile</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@createEmptyHdfsFile(filePath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Creates an empty file on hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an empty file on hdfs.</p><p>Might be usefull for token files. For instance a file which is only used
 as a timestamp token of the last update of a processus, or a file which
 blocks the execution of an other instance of the same job, ...</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre><p>In case this is used as a timestamp container, you can then use the
 following methods to retrieve its timestamp:</p><pre><span class="kw">val</span> fileAge = HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"/some/hdfs/file/path.token"</span>)
-<span class="kw">val</span> lastModificationDate = HdfsHelper.getFolderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create
-</p></dd></dl></div>
+<span class="kw">val</span> lastModificationDate = HdfsHelper.getFolderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createFolder(hdfsPath:String):Unit"></a>
       <a id="createFolder(String):Unit"></a>
@@ -299,10 +316,13 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">createFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@createFolder(hdfsPath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Creates a folder on HDFS.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a folder on HDFS.</p><p>Doesn't throw an exception if the folder to create already exists.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder to create
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder to create</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#deleteFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="deleteFile(hdfsPath:String):Unit"></a>
       <a id="deleteFile(String):Unit"></a>
@@ -314,10 +334,13 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">deleteFile</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@deleteFile(hdfsPath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Deletes a file on HDFS.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes a file on HDFS.</p><p>Doesn't throw an exception if the file to delete doesn't exist.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file to delete
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file to delete</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#deleteFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="deleteFolder(hdfsPath:String):Unit"></a>
       <a id="deleteFolder(String):Unit"></a>
@@ -329,10 +352,13 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">deleteFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@deleteFolder(hdfsPath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Deletes a folder on HDFS.</p><div class="fullcomment"><div class="comment cmt"><p>Deletes a folder on HDFS.</p><p>Doesn't throw an exception if the folder to delete doesn't exist.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder to delete
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder to delete</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -344,7 +370,11 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -357,7 +387,11 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#fileExists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fileExists(hdfsPath:String):Boolean"></a>
@@ -370,10 +404,13 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">fileExists</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@fileExists(hdfsPath:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Checks if the file exists.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the file exists.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which we check if it exists</p></dd><dt>returns</dt><dd class="cmt"><p>if the file exists
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which we check if it exists</p></dd><dt>returns</dt><dd class="cmt"><p>if the file exists</p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -385,7 +422,11 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -404,10 +445,13 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">folderExists</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@folderExists(hdfsPath:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Checks if the folder exists.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the folder exists.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which we check if it exists</p></dd><dt>returns</dt><dd class="cmt"><p>if the folder exists
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which we check if it exists</p></dd><dt>returns</dt><dd class="cmt"><p>if the folder exists</p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -419,7 +463,11 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#getFileModificationDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getFileModificationDate(hdfsPath:String,format:String):String"></a>
@@ -432,12 +480,15 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       <span class="symbol">
         <span class="name">getFileModificationDate</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFileModificationDate(hdfsPath:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the stringified date of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given file.</p><pre>assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
 modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
 modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given file,
-under the provided format.
-</p></dd></dl></div>
+under the provided format.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#getFileModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getFileModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
       <a id="getFileModificationDateTime(String):DateTime"></a>
@@ -449,11 +500,14 @@ under the provided format.
       <span class="symbol">
         <span class="name">getFileModificationDateTime</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFileModificationDateTime(hdfsPath:String):org.joda.time.DateTime" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the joda DateTime of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the joda DateTime of the last modification of the given file.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given file
-</p></dd></dl></div>
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given file</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#getFolderModificationDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getFolderModificationDate(hdfsPath:String,format:String):String"></a>
       <a id="getFolderModificationDate(String,String):String"></a>
@@ -465,12 +519,15 @@ modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime 
       <span class="symbol">
         <span class="name">getFolderModificationDate</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFolderModificationDate(hdfsPath:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the stringified date of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given folder.</p><pre>assert(HdfsHelper.getFolderModificationDate(<span class="lit">"my/hdfs/filder"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
 modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
 modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given
-folder, under the provided format.
-</p></dd></dl></div>
+folder, under the provided format.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#getFolderModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getFolderModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
       <a id="getFolderModificationDateTime(String):DateTime"></a>
@@ -482,11 +539,14 @@ folder, under the provided format.
       <span class="symbol">
         <span class="name">getFolderModificationDateTime</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFolderModificationDateTime(hdfsPath:String):org.joda.time.DateTime" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the joda DateTime of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the joda DateTime of the last modification of the given folder.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given folder
-</p></dd></dl></div>
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given folder</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#getNbrOfDaysSinceFileWasLastModified" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getNbrOfDaysSinceFileWasLastModified(hdfsPath:String):Int"></a>
       <a id="getNbrOfDaysSinceFileWasLastModified(String):Int"></a>
@@ -498,10 +558,13 @@ modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime 
       <span class="symbol">
         <span class="name">getNbrOfDaysSinceFileWasLastModified</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@getNbrOfDaysSinceFileWasLastModified(hdfsPath:String):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Returns the nbr of days since the given file has been last modified.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the nbr of days since the given file has been last modified.</p><pre>assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which we want the nbr of days
-since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days since the given file has been last modified
-</p></dd></dl></div>
+since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days since the given file has been last modified</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -513,7 +576,11 @@ since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr 
       <span class="symbol">
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#isHdfsXmlCompliantWithXsd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isHdfsXmlCompliantWithXsd(hdfsXmlPath:String,xsdFile:java.net.URL):Boolean"></a>
@@ -526,13 +593,16 @@ since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr 
       <span class="symbol">
         <span class="name">isHdfsXmlCompliantWithXsd</span><span class="params">(<span name="hdfsXmlPath">hdfsXmlPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="xsdFile">xsdFile: <span class="extype" name="java.net.URL">URL</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@isHdfsXmlCompliantWithXsd(hdfsXmlPath:String,xsdFile:java.net.URL):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates an XML file on hdfs in regard to the given XSD.</p><div class="fullcomment"><div class="comment cmt"><p>Validates an XML file on hdfs in regard to the given XSD.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the file on hdfs for which to validate
 the compliance with the given xsd.</p></dd><dt class="param">xsdFile</dt><dd class="cmt"><p>the xsd file. The easiest is to put your xsd file within
 your resources folder (src/main/resources) and then get it as an URL
-with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd class="cmt"><p>if the xml is compliant with the xsd
-</p></dd></dl></div>
+with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd class="cmt"><p>if the xml is compliant with the xsd</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -544,7 +614,11 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd
       <span class="symbol">
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#listFileNamesInFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="listFileNamesInFolder(hdfsPath:String,recursive:Boolean,onlyName:Boolean):List[String]"></a>
@@ -557,11 +631,14 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd
       <span class="symbol">
         <span class="name">listFileNamesInFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="recursive">recursive: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="onlyName">onlyName: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@listFileNamesInFolder(hdfsPath:String,recursive:Boolean,onlyName:Boolean):List[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Lists file names in the specified hdfs folder.</p><div class="fullcomment"><div class="comment cmt"><p>Lists file names in the specified hdfs folder.</p><pre>assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to list file names</p></dd><dt class="param">recursive</dt><dd class="cmt"><p>(default = false) if true, list files in subfolders as
 well.</p></dd><dt class="param">onlyName</dt><dd class="cmt"><p>(default = true) if false, list paths instead of only
-name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names in the specified folder
-</p></dd></dl></div>
+name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names in the specified folder</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#listFolderNamesInFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="listFolderNamesInFolder(hdfsPath:String):List[String]"></a>
       <a id="listFolderNamesInFolder(String):List[String]"></a>
@@ -573,9 +650,12 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
       <span class="symbol">
         <span class="name">listFolderNamesInFolder</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Lists folder names in the specified hdfs folder.</p><div class="fullcomment"><div class="comment cmt"><p>Lists folder names in the specified hdfs folder.</p><pre>assert(HdfsHelper.listFolderNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"folder_1"</span>, <span class="lit">"folder_2"</span>))</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to list folder names</p></dd><dt>returns</dt><dd class="cmt"><p>the list of folder names in the specified folder
-</p></dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@listFolderNamesInFolder(hdfsPath:String):List[String]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lists folder names in the specified hdfs folder.</p><div class="fullcomment"><div class="comment cmt"><p>Lists folder names in the specified hdfs folder.</p><pre>assert(HdfsHelper.listFolderNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"folder_1"</span>, <span class="lit">"folder_2"</span>))</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to list folder names</p></dd><dt>returns</dt><dd class="cmt"><p>the list of folder names in the specified folder</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#loadTypesafeConfigFromHdfs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadTypesafeConfigFromHdfs(hdfsConfigPath:String):com.typesafe.config.Config"></a>
       <a id="loadTypesafeConfigFromHdfs(String):Config"></a>
@@ -587,7 +667,11 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
       <span class="symbol">
         <span class="name">loadTypesafeConfigFromHdfs</span><span class="params">(<span name="hdfsConfigPath">hdfsConfigPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="com.typesafe.config.Config">Config</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@loadTypesafeConfigFromHdfs(hdfsConfigPath:String):com.typesafe.config.Config" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Loads a typesafe config from Hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a typesafe config from Hdfs.</p><p>Typesafe is a config format which looks like this:</p><pre>config {
 	airlines = [
 		{
@@ -611,8 +695,7 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
 	]
 }</pre></div><dl class="paramcmts block"><dt class="param">hdfsConfigPath</dt><dd class="cmt"><p>the absolute path of the typesafe config file on
 hdfs we want to load as a typesafe Config object.</p></dd><dt>returns</dt><dd class="cmt"><p>the com.typesafe.config.Config object which contains usable
-data.
-</p></dd></dl></div>
+data.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#loadXmlFileFromHdfs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadXmlFileFromHdfs(hdfsXmlPath:String):scala.xml.Elem"></a>
       <a id="loadXmlFileFromHdfs(String):Elem"></a>
@@ -624,11 +707,14 @@ data.
       <span class="symbol">
         <span class="name">loadXmlFileFromHdfs</span><span class="params">(<span name="hdfsXmlPath">hdfsXmlPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.xml.Elem">Elem</span></span>
       </span>
-      </h4>
-      <p class="shortcomment cmt">Loads an Xml file from Hdfs as a scala.</p><div class="fullcomment"><div class="comment cmt"><p>Loads an Xml file from Hdfs as a scala.xml.Elem object.</p><p>For xml files too big to fit in memory, consider instead using the spark
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@loadXmlFileFromHdfs(hdfsXmlPath:String):scala.xml.Elem" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Loads an Xml file from Hdfs as a scala.xml.Elem object.</p><div class="fullcomment"><div class="comment cmt"><p>Loads an Xml file from Hdfs as a scala.xml.Elem object.</p><p>For xml files too big to fit in memory, consider instead using the spark
 API.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the xml file on hdfs</p></dd><dt>returns</dt><dd class="cmt"><p>the scala.xml.Elem object
-</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the xml file on hdfs</p></dd><dt>returns</dt><dd class="cmt"><p>the scala.xml.Elem object</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#moveFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="moveFile(oldPath:String,newPath:String,overwrite:Boolean):Unit"></a>
       <a id="moveFile(String,String,Boolean):Unit"></a>
@@ -640,13 +726,16 @@ API.
       <span class="symbol">
         <span class="name">moveFile</span><span class="params">(<span name="oldPath">oldPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newPath">newPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="overwrite">overwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@moveFile(oldPath:String,newPath:String,overwrite:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Moves/renames a file.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a file.</p><p>Throws an IOException if the value of the parameter overwrite is false
 and a file already exists at the target path where to move the file.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the file to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the file to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
-destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt">classOf[IOException]<p>
-</p></span></dd></dl></div>
+destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"></span></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#moveFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="moveFolder(oldPath:String,newPath:String,overwrite:Boolean):Unit"></a>
       <a id="moveFolder(String,String,Boolean):Unit"></a>
@@ -658,13 +747,16 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">moveFolder</span><span class="params">(<span name="oldPath">oldPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="newPath">newPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="overwrite">overwrite: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@moveFolder(oldPath:String,newPath:String,overwrite:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Moves/renames a folder.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a folder.</p><p>Throws an IOException if the value of the parameter overwrite is false
 and a folder already exists at the target path where to move the folder.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the folder to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the folder to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
-destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt">classOf[IOException]<p>
-</p></span></dd></dl></div>
+destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"></span></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -676,7 +768,11 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -689,7 +785,11 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -702,7 +802,11 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -715,7 +819,11 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -728,7 +836,11 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#validateHdfsXmlWithXsd" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="validateHdfsXmlWithXsd(hdfsXmlPath:String,xsdFile:java.net.URL):Unit"></a>
@@ -741,14 +853,17 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
       <span class="symbol">
         <span class="name">validateHdfsXmlWithXsd</span><span class="params">(<span name="hdfsXmlPath">hdfsXmlPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="xsdFile">xsdFile: <span class="extype" name="java.net.URL">URL</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@validateHdfsXmlWithXsd(hdfsXmlPath:String,xsdFile:java.net.URL):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Validates an XML file on hdfs in regard to the given XSD.</p><div class="fullcomment"><div class="comment cmt"><p>Validates an XML file on hdfs in regard to the given XSD.</p><p>Returns nothing and don't catch the error if the xml is not valid. This
 way you can retrieve the error and analyse it.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the file on hdfs for which to validate
 the compliance with the given xsd.</p></dd><dt class="param">xsdFile</dt><dd class="cmt"><p>the xsd file. The easiest is to put your xsd file within
 your resources folder (src/main/resources) and then get it as an URL
-with getClass.getResource(&quot;/my_file.xsd&quot;).
-</p></dd></dl></div>
+with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -760,7 +875,11 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).
       <span class="symbol">
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -779,7 +898,11 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -798,7 +921,11 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).
       <span class="symbol">
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -817,12 +944,15 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).
       <span class="symbol">
         <span class="name">writeToHdfsFile</span><span class="params">(<span name="content">content: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@writeToHdfsFile(content:Seq[String],filePath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
 enough.</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
 HdfsHelper.writeToHdfsFile(<span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the array of strings to write in the file as one line per
-string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content
-</p></dd></dl></div>
+string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#writeToHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="writeToHdfsFile(content:String,filePath:String):Unit"></a>
       <a id="writeToHdfsFile(String,String):Unit"></a>
@@ -834,11 +964,14 @@ string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt cl
       <span class="symbol">
         <span class="name">writeToHdfsFile</span><span class="params">(<span name="content">content: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@writeToHdfsFile(content:String,filePath:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
 enough.</p><p>Overwrites the file if already existing.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
-with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content
-</p></dd></dl></div>
+with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -872,6 +1005,7 @@ with \n in order to write several lines).</p></dd><dt class="param">filePath</dt
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../lib/template.js"></script>
+
+
     </body>
       </html>
