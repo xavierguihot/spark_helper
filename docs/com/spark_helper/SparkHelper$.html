@@ -599,18 +599,18 @@ files).</p></dd></dl></div>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.spark_helper.SparkHelper#textFileWithDelimiter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="textFileWithDelimiter(hdfsPath:String,sparkContext:org.apache.spark.SparkContext,delimiter:String):org.apache.spark.rdd.RDD[String]"></a>
-      <a id="textFileWithDelimiter(String,SparkContext,String):RDD[String]"></a>
+      <a id="textFileWithDelimiter(hdfsPath:String,sparkContext:org.apache.spark.SparkContext,delimiter:String,maxRecordLength:String):org.apache.spark.rdd.RDD[String]"></a>
+      <a id="textFileWithDelimiter(String,SparkContext,String,String):RDD[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">textFileWithDelimiter</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sparkContext">sparkContext: <span class="extype" name="org.apache.spark.SparkContext">SparkContext</span></span>, <span name="delimiter">delimiter: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">textFileWithDelimiter</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sparkContext">sparkContext: <span class="extype" name="org.apache.spark.SparkContext">SparkContext</span></span>, <span name="delimiter">delimiter: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="maxRecordLength">maxRecordLength: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;1000000&quot;</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@textFileWithDelimiter(hdfsPath:String,sparkContext:org.apache.spark.SparkContext,delimiter:String):org.apache.spark.rdd.RDD[String]" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$@textFileWithDelimiter(hdfsPath:String,sparkContext:org.apache.spark.SparkContext,delimiter:String,maxRecordLength:String):org.apache.spark.rdd.RDD[String]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -631,7 +631,7 @@ worse the whole xml file is one line.</p><pre><span class="cmt">// Let's say dat
 &lt;/Customer&gt;\n
 &lt;/Customers&gt;
 <span class="cmt">//Then you can use it this way:</span>
-<span class="kw">val</span> computedRecords = HdfsHelper.textFileWithDelimiter(
+<span class="kw">val</span> computedRecords = SparkHelper.textFileWithDelimiter(
 	<span class="lit">"my/path/to/customers.xml"</span>, sparkContext, &lt;Customer&gt;\n
 ).collect()
 <span class="kw">val</span> expectedRecords = <span class="std">Array</span>(
@@ -647,7 +647,8 @@ worse the whole xml file is one line.</p><pre><span class="cmt">// Let's say dat
 	)
 )
 assert(computedRecords == expectedRecords)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file to read (folder or file, '*' works
-as well).</p></dd><dt class="param">sparkContext</dt><dd class="cmt"><p>the SparkContext</p></dd><dt class="param">delimiter</dt><dd class="cmt"><p>the specific record delimiter which replaces &quot;\n&quot;</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD of records</p></dd></dl></div>
+as well).</p></dd><dt class="param">sparkContext</dt><dd class="cmt"><p>the SparkContext</p></dd><dt class="param">delimiter</dt><dd class="cmt"><p>the specific record delimiter which replaces &quot;\n&quot;</p></dd><dt class="param">maxRecordLength</dt><dd class="cmt"><p>the max length (not sure which unit) of a record
+before considering the record too long to fit into memory.</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD of records</p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

@@ -157,7 +157,7 @@ object SparkHelper extends Serializable {
 	  * </Customer>\n
 	  * </Customers>
 	  * //Then you can use it this way:
-	  * val computedRecords = HdfsHelper.textFileWithDelimiter(
+	  * val computedRecords = SparkHelper.textFileWithDelimiter(
 	  * 	"my/path/to/customers.xml", sparkContext, <Customer>\n
 	  * ).collect()
 	  * val expectedRecords = Array(
@@ -179,14 +179,25 @@ object SparkHelper extends Serializable {
 	  * as well).
 	  * @param sparkContext the SparkContext
 	  * @param delimiter the specific record delimiter which replaces "\n"
+	  * @param maxRecordLength the max length (not sure which unit) of a record
+	  * before considering the record too long to fit into memory.
 	  * @return the RDD of records
 	  */
 	def textFileWithDelimiter(
-		hdfsPath: String, sparkContext: SparkContext, delimiter: String
+		hdfsPath: String, sparkContext: SparkContext, delimiter: String,
+		maxRecordLength: String = "1000000"
 	): RDD[String] = {
 
 		val conf = new Configuration(sparkContext.hadoopConfiguration)
+		// This configuration sets the record delimiter:
 		conf.set("textinputformat.record.delimiter", delimiter)
+		// and this one limits the size of one record. This is necessary in
+		// order to avoid reading from a corrupted file from which a record
+		// could be too long to fit in memory. This way, when reading a
+		// corrupted file, this will throw an exception (java.io.IOException -
+		// thus catchable) rather than having a messy out of memory which will
+		// stop the sparkContext:
+		conf.set("mapreduce.input.linerecordreader.line.maxlength", maxRecordLength)
 
 		sparkContext.newAPIHadoopFile(
 			hdfsPath, classOf[TextInputFormat],
