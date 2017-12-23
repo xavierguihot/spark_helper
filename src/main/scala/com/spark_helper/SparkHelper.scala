@@ -28,8 +28,8 @@ import scala.util.Random
   * {{{
   * // Same as SparkContext.saveAsTextFile, but the result is a single file:
   * SparkHelper.saveAsSingleTextFile(myOutputRDD, "/my/output/file/path.txt")
-  * // Same as SparkContext.textFile, but instead of reading one record per line,
-  * // it reads records spread over several lines:
+  * // Same as SparkContext.textFile, but instead of reading one record per line, it reads records spread over several lines.
+  * // This way, xml, json, yml or any multi-line record file format can be used with Spark:
   * SparkHelper.textFileWithDelimiter("/my/input/folder/path", sparkContext, "---\n")
   * }}}
   *

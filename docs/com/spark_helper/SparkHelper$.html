@@ -53,8 +53,8 @@
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>A few exemples:</p><pre><span class="cmt">// Same as SparkContext.saveAsTextFile, but the result is a single file:</span>
 SparkHelper.saveAsSingleTextFile(myOutputRDD, <span class="lit">"/my/output/file/path.txt"</span>)
-<span class="cmt">// Same as SparkContext.textFile, but instead of reading one record per line,</span>
-<span class="cmt">// it reads records spread over several lines:</span>
+<span class="cmt">// Same as SparkContext.textFile, but instead of reading one record per line, it reads records spread over several lines.</span>
+<span class="cmt">// This way, xml, json, yml or any multi-line record file format can be used with Spark:</span>
 SparkHelper.textFileWithDelimiter(<span class="lit">"/my/input/folder/path"</span>, sparkContext, <span class="lit">"---\n"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">

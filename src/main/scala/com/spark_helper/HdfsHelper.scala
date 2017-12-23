@@ -40,14 +40,33 @@ import scala.collection.JavaConversions._
   * spark job and replace it with methods fully tested whose name is
   * self-explanatory/readable.
   *
+  * For instance, one don't want to remove a file from hdfs using 3 lines of
+  * code and thus could instead just use HdfsHelper.deleteFile("my/hdfs/file/path.csv").
+  *
   * A few exemples:
   *
   * {{{
+  * import com.spark_helper.HdfsHelper
+  *
+  * // A bunch of methods wrapping the FileSystem API, such as:
   * HdfsHelper.fileExists("my/hdfs/file/path.txt")
   * assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
   * assert(HdfsHelper.getFileModificationDate("my/hdfs/file/path.txt") == "20170306")
   * assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
+  * HdfsHelper.deleteFile("my/hdfs/file/path.csv")
+  * HdfsHelper.moveFolder("my/hdfs/folder")
+  * HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
+  * HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
+  *
+  * // Some Xml/Typesafe helpers for hadoop as well:
   * HdfsHelper.isHdfsXmlCompliantWithXsd("my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
+  * HdfsHelper.loadXmlFileFromHdfs("my/hdfs/file/path.xml")
+  *
+  * // Very handy to load a config (typesafe format) stored on hdfs at the begining of a spark job:
+  * HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
+  *
+  * // In order to write small amount of data in a file on hdfs without the whole spark stack:
+  * HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -76,7 +95,6 @@ object HdfsHelper extends Serializable {
 				throw new IllegalArgumentException(
 					"To delete a folder, prefer using the deleteFolder() method."
 				)
-
 			else
 				fileSystem.delete(fileToDelete, true)
 		}
@@ -100,7 +118,6 @@ object HdfsHelper extends Serializable {
 				throw new IllegalArgumentException(
 					"To delete a file, prefer using the deleteFile() method."
 				)
-
 			else
 				fileSystem.delete(folderToDelete, true)
 		}
@@ -562,6 +579,8 @@ object HdfsHelper extends Serializable {
 
 	/** Loads a typesafe config from Hdfs.
 	  *
+	  * The best way to load the configuration of your job from hdfs.
+	  *
 	  * Typesafe is a config format which looks like this:
 	  * {{{
 	  * config {
@@ -572,7 +591,6 @@ object HdfsHelper extends Serializable {
 	  * 			kpis {
 	  * 				search_count_threshold = 25000
 	  * 				popularity_count_threshold = 400
-	  * 				ratio_key_vs_nested_key_threshold = 20
 	  * 			}
 	  * 		}
 	  * 		{
@@ -581,7 +599,6 @@ object HdfsHelper extends Serializable {
 	  * 			kpis {
 	  * 				search_count_threshold = 100000
 	  * 				popularity_count_threshold = 800
-	  * 				ratio_key_vs_nested_key_threshold = 20
 	  * 			}
 	  * 		}
 	  * 	]

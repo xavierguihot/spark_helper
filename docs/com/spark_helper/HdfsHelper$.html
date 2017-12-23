@@ -51,11 +51,28 @@
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
-self-explanatory/readable.</p><p>A few exemples:</p><pre>HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
+self-explanatory/readable.</p><p>For instance, one don't want to remove a file from hdfs using 3 lines of
+code and thus could instead just use HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
+
+<span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
+HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
 assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))
 assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
 assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
-HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>)
+HdfsHelper.moveFolder(<span class="lit">"my/hdfs/folder"</span>)
+HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])
+HdfsHelper.appendHeader(<span class="lit">"my/hdfs/file/path.csv"</span>, <span class="lit">"colum0,column1"</span>)
+
+<span class="cmt">// Some Xml/Typesafe helpers for hadoop as well:</span>
+HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
+HdfsHelper.loadXmlFileFromHdfs(<span class="lit">"my/hdfs/file/path.xml"</span>)
+
+<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the begining of a spark job:</span>
+HdfsHelper.loadTypesafeConfigFromHdfs(<span class="lit">"my/hdfs/file/path.conf"</span>): Config
+
+<span class="cmt">// In order to write small amount of data in a file on hdfs without the whole spark stack:</span>
+HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -672,7 +689,7 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Loads a typesafe config from Hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a typesafe config from Hdfs.</p><p>Typesafe is a config format which looks like this:</p><pre>config {
+      <p class="shortcomment cmt">Loads a typesafe config from Hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a typesafe config from Hdfs.</p><p>The best way to load the configuration of your job from hdfs.</p><p>Typesafe is a config format which looks like this:</p><pre>config {
 	airlines = [
 		{
 			code = QF
@@ -680,7 +697,6 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
 			kpis {
 				search_count_threshold = <span class="num">25000</span>
 				popularity_count_threshold = <span class="num">400</span>
-				ratio_key_vs_nested_key_threshold = <span class="num">20</span>
 			}
 		}
 		{
@@ -689,7 +705,6 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
 			kpis {
 				search_count_threshold = <span class="num">100000</span>
 				popularity_count_threshold = <span class="num">800</span>
-				ratio_key_vs_nested_key_threshold = <span class="num">20</span>
 			}
 		}
 	]
@@ -735,7 +750,13 @@ API.
 and a file already exists at the target path where to move the file.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the file to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the file to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
-destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"></span></dd></dl></div>
+destination.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[IOException]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#moveFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="moveFolder(oldPath:String,newPath:String,overwrite:Boolean):Unit"></a>
       <a id="moveFolder(String,String,Boolean):Unit"></a>
@@ -756,7 +777,13 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</d
 and a folder already exists at the target path where to move the folder.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the folder to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the folder to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
-destination.</p></dd></dl><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"></span></dd></dl></div>
+destination.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[IOException]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

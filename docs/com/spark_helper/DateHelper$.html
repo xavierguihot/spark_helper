@@ -55,7 +55,10 @@ self-explanatory/readable.</p><p>A few exemples:</p><pre>assert(DateHelper.daysB
 assert(DateHelper.today() == <span class="lit">"20170310"</span>) <span class="cmt">// If today's "20170310"</span>
 assert(DateHelper.yesterday() == <span class="lit">"20170309"</span>) <span class="cmt">// If today's "20170310"</span>
 assert(DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170327"</span>)
-assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10:24"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10:24"</span>)
+assert(DateHelper.currentTimestamp() == <span class="lit">"1493105229736"</span>)
+assert(DateHelper.nDaysBefore(<span class="num">3</span>) == <span class="lit">"20170307"</span>) <span class="cmt">// If today's "20170310"</span>
+assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/DateHelper.scala">DateHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -411,8 +414,8 @@ objects instead of String dates.
       </a>
     </span>
       <p class="shortcomment cmt">Returns which date it will be x days after the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it will be x days after the given date.</p><p>If the given date is &quot;20170122&quot; and we request the date it will be 3
-days after, we'll return &quot;20170125&quot;.</p><pre>assert(DateHelper.nDaysBeforeDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)
-assert(DateHelper.nDaysBeforeDate(<span class="num">5</span>, <span class="lit">"170305"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysAfter</dt><dd class="cmt"><p>the nbr of days after the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the
+days after, we'll return &quot;20170125&quot;.</p><pre>assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)
+assert(DateHelper.nDaysAfterDate(<span class="num">5</span>, <span class="lit">"170305"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysAfter</dt><dd class="cmt"><p>the nbr of days after the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the
 date for nbrOfDaysAfter days after.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
 returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysAfter after date under the
 requested format.</p></dd></dl></div>

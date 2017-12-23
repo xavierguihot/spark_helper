@@ -20,6 +20,9 @@ import org.joda.time.format.DateTimeFormatter
   * assert(DateHelper.yesterday() == "20170309") // If today's "20170310"
   * assert(DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") == "170327")
   * assert(DateHelper.now("HH:mm") == "10:24")
+  * assert(DateHelper.currentTimestamp() == "1493105229736")
+  * assert(DateHelper.nDaysBefore(3) == "20170307") // If today's "20170310"
+  * assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -131,8 +134,8 @@ object DateHelper extends Serializable {
 	  * days after, we'll return "20170125".
 	  *
 	  * {{{
-	  * assert(DateHelper.nDaysBeforeDate(3, "20170307") == "20170310")
-	  * assert(DateHelper.nDaysBeforeDate(5, "170305", "yyMMdd") == "170310")
+	  * assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
+	  * assert(DateHelper.nDaysAfterDate(5, "170305", "yyMMdd") == "170310")
 	  * }}}
 	  *
 	  * @param nbrOfDaysAfter the nbr of days after the given date

@@ -11,9 +11,9 @@ import java.lang.Math.abs
   *
   * Some exemples of Test objects:
   * {{{
-  * new Test("pctOfWhatever", 0.06f, "inferior to", 0.1f, "pct")
-  * new Test("pctOfSomethingElse", 0.27f, "superior to", 0.3f, "pct")
-  * new Test("someNbr", 1235f, "equal to", 1235f, "nbr")
+  * new Test("pctOfWhatever", 0.06d, "inferior to", 0.1d, "pct")
+  * new Test("pctOfSomethingElse", 0.27d, "superior to", 0.3d, "pct")
+  * new Test("someNbr", 1235d, "equal to", 1235d, "nbr")
   * }}}
   *
   * @author Xavier Guihot
@@ -23,9 +23,9 @@ import java.lang.Math.abs
   *
   * Some exemples of Test objects:
   * {{{
-  * new Test("pctOfWhatever", 0.06f, "inferior to", 0.1f, "pct")
-  * new Test("pctOfSomethingElse", 0.27f, "superior to", 0.3f, "pct")
-  * new Test("someNbr", 1235f, "equal to", 1235f, "nbr")
+  * new Test("pctOfWhatever", 0.06d, "inferior to", 0.1d, "pct")
+  * new Test("pctOfSomethingElse", 0.27d, "superior to", 0.3d, "pct")
+  * new Test("someNbr", 1235d, "equal to", 1235d, "nbr")
   * }}}
   *
   * @param description the name/description of the KPI which will appear on the
@@ -69,7 +69,7 @@ class Test(
 	}
 
 	/** Stringify a pretty report for this test */
-	private[monitoring]  def stringify(): String = {
+	private[monitoring] def stringify(): String = {
 
 		val suffix = kpiType match {
 			case "pct" => "%"
