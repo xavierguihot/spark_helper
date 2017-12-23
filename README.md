@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.0.12
+Version: 1.0.13
 
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -65,6 +65,9 @@ HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
 
 // In order to write small amount of data in a file on hdfs without the whole spark stack:
 HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+
+// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:
+HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
 ```
 
 ### SparkHelper:
@@ -146,7 +149,7 @@ assert(FieldChecker.isCurrencyCode("USD"))
 
 With sbt, just add this one line to your build.sbt:
 
-	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.12" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.12/spark_helper-1.0.12.jar"
+	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.13" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.13/spark_helper-1.0.13.jar"
 
 
 ## Building the project:

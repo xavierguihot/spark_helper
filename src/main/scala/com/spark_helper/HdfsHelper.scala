@@ -67,6 +67,9 @@ import scala.collection.JavaConversions._
   *
   * // In order to write small amount of data in a file on hdfs without the whole spark stack:
   * HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+  *
+  * // Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:
+  * HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -689,6 +692,45 @@ object HdfsHelper extends Serializable {
 
 		if (deleteInputFile)
 			deleteFile(inputPath)
+	}
+
+	/** Deletes in the given folder, the files/folders older than the given threshold (in days).
+	  *
+	  * {{{
+	  * // Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:
+	  * HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
+	  * }}}
+	  *
+	  * @param folderPath the path of the folder on hdfs to purge
+	  * @param purgeAge the threshold (in nbr of days) above which a file is
+	  * considered too old and thus deleted/purged.
+	  */
+	def purgeFolder(folderPath: String, purgeAge: Int): Unit = {
+
+		if (purgeAge < 0)
+			throw new IllegalArgumentException(
+				"The purgeAge provided \"" + purgeAge + "\" must be superior to 0."
+			)
+
+		FileSystem.get(
+			new Configuration()
+		).listStatus(
+			new Path(folderPath)
+		).filter( path => {
+
+			val fileAgeInDays = Days.daysBetween(
+				new DateTime(path.getModificationTime()),
+				new DateTime()
+			).getDays()
+
+			fileAgeInDays >= purgeAge
+
+		}).foreach( path =>
+			if (path.isFile)
+				deleteFile(folderPath + "/" + path.getPath.getName)
+			else
+				deleteFolder(folderPath + "/" + path.getPath.getName)
+		)
 	}
 
 	/** Internal implementation of the addition to a file of header and footer.

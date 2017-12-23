@@ -163,7 +163,10 @@ HdfsHelper.loadXmlFileFromHdfs(<span class="lit">"my/hdfs/file/path.xml"</span>)
 HdfsHelper.loadTypesafeConfigFromHdfs(<span class="lit">"my/hdfs/file/path.conf"</span>): Config
 
 <span class="cmt">// In order to write small amount of data in a file on hdfs without the whole spark stack:</span>
-HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+
+<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:</span>
+HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
     </li><li name="com.spark_helper.SparkHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

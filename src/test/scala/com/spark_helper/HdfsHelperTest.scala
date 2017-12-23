@@ -479,4 +479,36 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
 		HdfsHelper.deleteFolder("src/test/resources/folder/")
 	}
+
+	test("Purge Folder from too old Files/Folders") {
+
+		HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
+		HdfsHelper.createEmptyHdfsFile("src/test/resources/folder_to_purge/file.txt")
+		HdfsHelper.createEmptyHdfsFile("src/test/resources/folder_to_purge/folder/file.txt")
+		assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
+		assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+
+		HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 63)
+
+		assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
+		assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+
+		HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 1)
+
+		assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
+		assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+
+		val messageThrown = intercept[IllegalArgumentException] {
+			HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", -3)
+		}
+		val expectedMessage = "The purgeAge provided \"-3\" must be superior to 0."
+		assert(messageThrown.getMessage === expectedMessage)
+
+		HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 0)
+
+		assert(!HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
+		assert(!HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+
+		HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
+	}
 }
