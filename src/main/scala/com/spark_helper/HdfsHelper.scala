@@ -166,8 +166,8 @@ object HdfsHelper extends Serializable {
 	  * @param newPath the new path of the file to rename
 	  * @param overwrite (default = false) if true, enable the overwrite of the
 	  * destination.
-	  * @throws classOf[IOException]
 	  */
+	@throws(classOf[IOException])
 	def moveFile(
 		oldPath: String, newPath: String, overwrite: Boolean = false
 	): Unit = {
@@ -210,8 +210,8 @@ object HdfsHelper extends Serializable {
 	  * @param newPath the new path of the folder to rename
 	  * @param overwrite (default = false) if true, enable the overwrite of the
 	  * destination.
-	  * @throws classOf[IOException]
 	  */
+	@throws(classOf[IOException])
 	def moveFolder(
 		oldPath: String, newPath: String, overwrite: Boolean = false
 	): Unit = {
