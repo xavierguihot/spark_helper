@@ -43,27 +43,29 @@ and thus could instead just use HdfsHelper.deleteFile("my/hdfs/file/path.csv").
 
 A non-exhaustive list of exemples:
 
-	import com.spark_helper.HdfsHelper
+```scala
+import com.spark_helper.HdfsHelper
 
-	// A bunch of methods wrapping the FileSystem API, such as:
-	HdfsHelper.fileExists("my/hdfs/file/path.txt")
-	assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
-	assert(HdfsHelper.getFileModificationDate("my/hdfs/file/path.txt") == "20170306")
-	assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
-	HdfsHelper.deleteFile("my/hdfs/file/path.csv")
-	HdfsHelper.moveFolder("my/hdfs/folder")
-	HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
-	HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
+// A bunch of methods wrapping the FileSystem API, such as:
+HdfsHelper.fileExists("my/hdfs/file/path.txt")
+assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
+assert(HdfsHelper.getFileModificationDate("my/hdfs/file/path.txt") == "20170306")
+assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
+HdfsHelper.deleteFile("my/hdfs/file/path.csv")
+HdfsHelper.moveFolder("my/hdfs/folder")
+HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
+HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
 
-	// Some Xml/Typesafe helpers for hadoop as well:
-	HdfsHelper.isHdfsXmlCompliantWithXsd("my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
-	HdfsHelper.loadXmlFileFromHdfs("my/hdfs/file/path.xml")
+// Some Xml/Typesafe helpers for hadoop as well:
+HdfsHelper.isHdfsXmlCompliantWithXsd("my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
+HdfsHelper.loadXmlFileFromHdfs("my/hdfs/file/path.xml")
 
-	// Very handy to load a config (typesafe format) stored on hdfs at the begining of a spark job:
-	HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
+// Very handy to load a config (typesafe format) stored on hdfs at the begining of a spark job:
+HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
 
-	// In order to write small amount of data in a file on hdfs without the whole spark stack:
-	HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+// In order to write small amount of data in a file on hdfs without the whole spark stack:
+HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+```
 
 ### SparkHelper:
 
@@ -73,15 +75,17 @@ Contains basic file/RRD-related methods based on the Spark APIs.
 
 A non-exhaustive list of exemples:
 
-	import com.spark_helper.SparkHelper
+```scala
+import com.spark_helper.SparkHelper
 
-	// Same as SparkContext.saveAsTextFile, but the result is a single file:
-	SparkHelper.saveAsSingleTextFile(myOutputRDD, "/my/output/file/path.txt")
+// Same as SparkContext.saveAsTextFile, but the result is a single file:
+SparkHelper.saveAsSingleTextFile(myOutputRDD, "/my/output/file/path.txt")
 
-	// Same as SparkContext.textFile, but instead of reading one record per line,
-	// it reads records spread over several lines. This way, xml, json, yml or
-	// any multi-line record file format can be used with Spark:
-	SparkHelper.textFileWithDelimiter("/my/input/folder/path", sparkContext, "---\n")
+// Same as SparkContext.textFile, but instead of reading one record per line,
+// it reads records spread over several lines. This way, xml, json, yml or
+// any multi-line record file format can be used with Spark:
+SparkHelper.textFileWithDelimiter("/my/input/folder/path", sparkContext, "---\n")
+```
 
 ### Monitor:
 
@@ -104,16 +108,18 @@ data-mining classic dates manipulations.
 
 A non-exhaustive list of exemples:
 
-	import com.spark_helper.DateHelper
+```scala
+import com.spark_helper.DateHelper
 
-	assert(DateHelper.daysBetween("20161230", "20170101") == List("20161230", "20161231", "20170101"))
-	assert(DateHelper.today() == "20170310") // If today's "20170310"
-	assert(DateHelper.yesterday() == "20170309") // If today's "20170310"
-	assert(DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") == "170327")
-	assert(DateHelper.now("HH:mm") == "10:24")
-	assert(DateHelper.currentTimestamp() == "1493105229736")
-	assert(DateHelper.nDaysBefore(3) == "20170307") // If today's "20170310"
-	assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
+assert(DateHelper.daysBetween("20161230", "20170101") == List("20161230", "20161231", "20170101"))
+assert(DateHelper.today() == "20170310") // If today's "20170310"
+assert(DateHelper.yesterday() == "20170309") // If today's "20170310"
+assert(DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") == "170327")
+assert(DateHelper.now("HH:mm") == "10:24")
+assert(DateHelper.currentTimestamp() == "1493105229736")
+assert(DateHelper.nDaysBefore(3) == "20170307") // If today's "20170310"
+assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
+```
 
 ### FieldChecker
 
@@ -123,14 +129,16 @@ Validation (before cast) for stringified fields:
 
 A few exemples:
 
-	import com.spark_helper.FieldChecker
+```scala
+import com.spark_helper.FieldChecker
 
-	assert(FieldChecker.isInteger("15"))
-	assert(!FieldChecker.isInteger("1.5"))
-	assert(FieldChecker.isInteger("-1"))
-	assert(FieldChecker.isStrictlyPositiveInteger("123"))
-	assert(!FieldChecker.isYyyyMMddDate("20170333"))
-	assert(FieldChecker.isCurrencyCode("USD"))
+assert(FieldChecker.isInteger("15"))
+assert(!FieldChecker.isInteger("1.5"))
+assert(FieldChecker.isInteger("-1"))
+assert(FieldChecker.isStrictlyPositiveInteger("123"))
+assert(!FieldChecker.isYyyyMMddDate("20170333"))
+assert(FieldChecker.isCurrencyCode("USD"))
+```
 
 
 ## Including spark_helper to your dependencies:
