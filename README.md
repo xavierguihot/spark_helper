@@ -1,5 +1,5 @@
 
-# SparkHelper [![Build Status](https://travis-ci.org/XavierGuihot/spark_helper.svg?branch=master)](https://travis-ci.org/XavierGuihot/spark_helper)
+# SparkHelper [![Build Status](https://travis-ci.org/XavierGuihot/spark_helper.svg?branch=master)](https://travis-ci.org/XavierGuihot/spark_helper) [![Coverage Status](https://coveralls.io/repos/github/XavierGuihot/spark_helper/badge.svg?branch=master)](https://coveralls.io/github/XavierGuihot/spark_helper?branch=master)
 
 
 ## Overview

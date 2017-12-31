@@ -1,8 +1,10 @@
 language: scala
 scala:
-   - 2.10.4
-   - 2.11.2
-   - 2.11.8
+  - 2.10.4
+  - 2.11.2
+  - 2.11.8
+script: "sbt clean coverage test"
+after_success: "sbt coverageReport coveralls"
 notifications:
-   email:
-      - x.guihot@gmail.com
+  email:
+    - x.guihot@gmail.com
