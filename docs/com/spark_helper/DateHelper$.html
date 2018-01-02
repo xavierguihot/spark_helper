@@ -343,6 +343,24 @@ format.</p></dd></dl></div>
       <p class="shortcomment cmt">Returns the date associated to the given UTC timestamp.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the date associated to the given UTC timestamp.</p><pre>assert(DateHelper.getDateFromTimestamp(<span class="num">1496074819</span>L) == <span class="lit">"20170529"</span>)
 assert(DateHelper.getDateFromTimestamp(<span class="num">1496074819</span>L, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170529"</span>)</pre></div><dl class="paramcmts block"><dt class="param">timestamp</dt><dd class="cmt"><p>the UTC timestamps (nbr of millis since 1970-01-01) for
 which to get the associated date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format of the provided dates</p></dd><dt>returns</dt><dd class="cmt"><p>the associated date under the requested format</p></dd></dl></div>
+    </li><li name="com.spark_helper.DateHelper#getDayOfWeek" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getDayOfWeek(date:String,format:String):Int"></a>
+      <a id="getDayOfWeek(String,String):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getDayOfWeek</span><span class="params">(<span name="date">date: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@getDayOfWeek(date:String,format:String):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the day of week for a date under the given format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the day of week for a date under the given format.</p><p>A Monday is 1 and a Sunday is 7.</p><pre>assert(DateHelper.getDayOfWeek(<span class="lit">"20160614"</span>) == <span class="num">2</span>)</pre></div><dl class="paramcmts block"><dt class="param">date</dt><dd class="cmt"><p>the date for which to get the day of week</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which the date is
+provided.</p></dd><dt>returns</dt><dd class="cmt"><p>the associated day of week, such as 2 for Tuesday</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
