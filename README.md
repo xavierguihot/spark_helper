@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.0.13
+Version: 1.0.14
 
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -149,7 +149,7 @@ assert(FieldChecker.isCurrencyCode("USD"))
 
 With sbt, just add this one line to your build.sbt:
 
-	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.13" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.13/spark_helper-1.0.13.jar"
+	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.14" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.14/spark_helper-1.0.14.jar"
 
 
 ## Building the project:

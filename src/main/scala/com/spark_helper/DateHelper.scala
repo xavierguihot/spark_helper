@@ -351,4 +351,19 @@ object DateHelper extends Serializable {
 			new DateTime(timestamp * 1000L, DateTimeZone.UTC)
 		)
 	}
+
+	/** Returns the day of week for a date under the given format.
+	  *
+	  * A Monday is 1 and a Sunday is 7.
+	  *
+	  * {{{ assert(DateHelper.getDayOfWeek("20160614") == 2) }}}
+	  *
+	  * @param date the date for which to get the day of week
+	  * @param format (default = "yyyyMMdd") the format under which the date is
+	  * provided.
+	  * @return the associated day of week, such as 2 for Tuesday
+	  */
+	def getDayOfWeek(date: String, format: String = "yyyyMMdd"): Int = {
+		DateTimeFormat.forPattern(format).parseDateTime(date).getDayOfWeek()
+	}
 }

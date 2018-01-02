@@ -69,4 +69,8 @@ class DateHelperTest extends FunSuite {
 		assert(DateHelper.nDaysAfterDate(3, "20170307") === "20170310")
 		assert(DateHelper.nDaysAfterDate(5, "170305", "yyMMdd") === "170310")
 	}
+
+	test("Day of Week") {
+		assert(DateHelper.getDayOfWeek("20180102") === 2)
+	}
 }
