@@ -1,11 +1,11 @@
 
-# SparkHelper [![Build Status](https://travis-ci.org/XavierGuihot/spark_helper.svg?branch=master)](https://travis-ci.org/XavierGuihot/spark_helper) [![Coverage Status](https://coveralls.io/repos/github/XavierGuihot/spark_helper/badge.svg?branch=master)](https://coveralls.io/github/XavierGuihot/spark_helper?branch=master)
+# SparkHelper [![Build Status](https://travis-ci.org/xavierguihot/spark_helper.svg?branch=master)](https://travis-ci.org/xavierguihot/spark_helper) [![Coverage Status](https://coveralls.io/repos/github/xavierguihot/spark_helper/badge.svg?branch=master)](https://coveralls.io/github/xavierguihot/spark_helper?branch=master) [![Release](https://jitpack.io/v/xavierguihot/spark_helper.svg)](https://jitpack.io/#xavierguihot/spark_helper)
 
 
 ## Overview
 
 
-Version: 1.0.14
+Version: 1.0.15
 
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -147,9 +147,44 @@ assert(FieldChecker.isCurrencyCode("USD"))
 ## Including spark_helper to your dependencies:
 
 
-With sbt, just add this one line to your build.sbt:
+With sbt, add these lines to your build.sbt:
 
-	libraryDependencies += "spark_helper" % "spark_helper" % "1.0.14" from "https://github.com/xavierguihot/spark_helper/releases/download/v1.0.14/spark_helper-1.0.14.jar"
+```
+resolvers += "jitpack" at "https://jitpack.io"
+
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.0.15"
+```
+
+With maven, add these lines to your pom.xml:
+
+```xml
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+
+<dependency>
+	<groupId>com.github.xavierguihot</groupId>
+	<artifactId>spark_helper</artifactId>
+	<version>v1.0.15</version>
+</dependency>
+```
+
+With gradle, add these lines to your build.gradle:
+
+```
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+
+dependencies {
+	compile 'com.github.xavierguihot:spark_helper:v1.0.15'
+}
+```
 
 
 ## Building the project:
