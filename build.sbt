@@ -1,14 +1,20 @@
 name := "spark_helper"
 
-version := "1.0.15"
+version := "1.0.16"
 
 scalaVersion := "2.11.8"
 
-scalacOptions ++= Seq("-unchecked", "-deprecation", "-Xfatal-warnings")
+scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
 assemblyJarName in assembly := name.value + "-" + version.value + ".jar"
 
 assemblyOutputPath in assembly := file("./" + name.value + "-" + version.value + ".jar")
+
+wartremoverWarnings in (Compile, compile) ++= Warts.all
+wartremoverWarnings in (Compile, compile) --= Seq(
+	Wart.DefaultArguments, Wart.Nothing, Wart.Equals, Wart.NonUnitStatements,
+	Wart.Overloading
+)
 
 val sparkVersion        = "2.1.0"
 val apacheCommonVersion = "3.5"

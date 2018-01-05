@@ -1,17 +1,12 @@
 package com.spark_helper
 
-import org.apache.spark.HashPartitioner
+import org.apache.spark.{HashPartitioner, SparkContext}
 import org.apache.spark.rdd.RDD
-import org.apache.spark.SparkContext
 
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.FileSystem
-import org.apache.hadoop.fs.FileUtil
-import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.{FileSystem, FileUtil, Path}
 import org.apache.hadoop.io.compress.CompressionCodec
-import org.apache.hadoop.io.LongWritable
-import org.apache.hadoop.io.NullWritable
-import org.apache.hadoop.io.Text
+import org.apache.hadoop.io.{LongWritable, NullWritable, Text}
 import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
 
@@ -51,7 +46,7 @@ object SparkHelper extends Serializable {
 	  * @param outputRDD the RDD of strings to store in one file
 	  * @param outputFile the path of the produced file
 	  */
-	def saveAsSingleTextFile(outputRDD: RDD[String], outputFile: String) = {
+	def saveAsSingleTextFile(outputRDD: RDD[String], outputFile: String): Unit = {
 		saveAsSingleTextFileInternal(outputRDD, outputFile, None)
 	}
 
@@ -72,7 +67,7 @@ object SparkHelper extends Serializable {
 	def saveAsSingleTextFile(
 		outputRDD: RDD[String], outputFile: String,
 		compressionCodec: Class[_ <: CompressionCodec]
-	) = {
+	): Unit = {
 		saveAsSingleTextFileInternal(outputRDD, outputFile, Some(compressionCodec))
 	}
 
@@ -97,7 +92,7 @@ object SparkHelper extends Serializable {
 	  */
 	def saveAsSingleTextFile(
 		outputRDD: RDD[String], outputFile: String, workingFolder: String
-	) = {
+	): Unit = {
 		saveAsSingleTextFileWithWorkingFolderInternal(
 			outputRDD, outputFile, workingFolder, None
 		)
@@ -127,7 +122,7 @@ object SparkHelper extends Serializable {
 	def saveAsSingleTextFile(
 		outputRDD: RDD[String], outputFile: String, workingFolder: String,
 		compressionCodec: Class[_ <: CompressionCodec]
-	) = {
+	): Unit = {
 		saveAsSingleTextFileWithWorkingFolderInternal(
 			outputRDD, outputFile, workingFolder, Some(compressionCodec)
 		)
@@ -232,7 +227,7 @@ object SparkHelper extends Serializable {
 	  */
 	def saveAsTextFileByKey(
 		keyValueRDD: RDD[(String, String)], outputFolder: String, keyNbr: Int
-	) = {
+	): Unit = {
 
 		HdfsHelper.deleteFolder(outputFolder)
 
@@ -271,7 +266,7 @@ object SparkHelper extends Serializable {
 	def saveAsTextFileByKey(
 		keyValueRDD: RDD[(String, String)], outputFolder: String, keyNbr: Int,
 		compressionCodec: Class[_ <: CompressionCodec]
-	) = {
+	): Unit = {
 
 		HdfsHelper.deleteFolder(outputFolder)
 
@@ -311,7 +306,7 @@ object SparkHelper extends Serializable {
 	def decreaseCoalescence(
 		highCoalescenceLevelFolder: String, lowerCoalescenceLevelFolder: String,
 		finalCoalescenceLevel: Int, sparkContext: SparkContext
-	) = {
+	): Unit = {
 		decreaseCoalescenceInternal(
 			highCoalescenceLevelFolder, lowerCoalescenceLevelFolder,
 			finalCoalescenceLevel, sparkContext, None
@@ -349,7 +344,7 @@ object SparkHelper extends Serializable {
 		highCoalescenceLevelFolder: String, lowerCoalescenceLevelFolder: String,
 		finalCoalescenceLevel: Int, sparkContext: SparkContext,
 		compressionCodec: Class[_ <: CompressionCodec]
-	) = {
+	): Unit = {
 		decreaseCoalescenceInternal(
 			highCoalescenceLevelFolder, lowerCoalescenceLevelFolder,
 			finalCoalescenceLevel, sparkContext, Some(compressionCodec)
@@ -378,7 +373,7 @@ object SparkHelper extends Serializable {
 	  */
 	def saveAsTextFileAndCoalesce(
 		outputRDD: RDD[String], outputFolder: String, finalCoalescenceLevel: Int
-	) = {
+	): Unit = {
 
 		val sparkContext = outputRDD.context
 
@@ -424,7 +419,7 @@ object SparkHelper extends Serializable {
 	def saveAsTextFileAndCoalesce(
 		outputRDD: RDD[String], outputFolder: String, finalCoalescenceLevel: Int,
 		compressionCodec: Class[_ <: CompressionCodec]
-	) = {
+	): Unit = {
 
 		val sparkContext = outputRDD.context
 
@@ -452,7 +447,7 @@ object SparkHelper extends Serializable {
 	private def saveAsSingleTextFileWithWorkingFolderInternal(
 		outputRDD: RDD[String], outputFile: String, workingFolder: String,
 		compressionCodec: Option[Class[_ <: CompressionCodec]]
-	) {
+	): Unit = {
 
 		// We chose a random name for the temporary file:
 		val temporaryName = Random.alphanumeric.take(10).mkString("")
@@ -487,10 +482,12 @@ object SparkHelper extends Serializable {
 
 		// Classic saveAsTextFile in a temporary folder:
 		HdfsHelper.deleteFolder(outputFile + ".tmp")
-		if (compressionCodec.isEmpty)
-			outputRDD.saveAsTextFile(outputFile + ".tmp")
-		else
-			outputRDD.saveAsTextFile(outputFile + ".tmp", compressionCodec.get)
+		compressionCodec match {
+			case Some(compressionCodec) => 
+					outputRDD.saveAsTextFile(outputFile + ".tmp", compressionCodec)
+			case None =>
+					outputRDD.saveAsTextFile(outputFile + ".tmp")
+		}
 
 		// Merge the folder into a single file:
 		HdfsHelper.deleteFile(outputFile)
@@ -514,12 +511,13 @@ object SparkHelper extends Serializable {
 			finalCoalescenceLevel
 		)
 
-		if (compressionCodec.isEmpty)
-			intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder)
-		else
-			intermediateRDD.saveAsTextFile(
-				lowerCoalescenceLevelFolder, compressionCodec.get
-			)
+		compressionCodec match {
+			case Some(compressionCodec) => 
+					intermediateRDD.saveAsTextFile(
+						lowerCoalescenceLevelFolder, compressionCodec)
+			case None =>
+					intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder)
+		}
 
 		HdfsHelper.deleteFolder(highCoalescenceLevelFolder)
 	}

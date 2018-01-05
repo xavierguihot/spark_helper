@@ -322,7 +322,7 @@ compression.</p></dd></dl></div>
     </span>
       <p class="shortcomment cmt">Creates an empty file on hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an empty file on hdfs.</p><p>Might be usefull for token files. For instance a file which is only used
 as a timestamp token of the last update of a processus, or a file which
-blocks the execution of an other instance of the same job, ...</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre><p>In case this is used as a timestamp container, you can then use the
+blocks the execution of an other instance of the same job, ...</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre><p>In case this is used as a timestamp container, you can then use the
 following methods to retrieve its timestamp:</p><pre><span class="kw">val</span> fileAge = HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"/some/hdfs/file/path.token"</span>)
 <span class="kw">val</span> lastModificationDate = HdfsHelper.getFolderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -749,17 +749,10 @@ API.
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Moves/renames a file.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a file.</p><p>Throws an IOException if the value of the parameter overwrite is false
-and a file already exists at the target path where to move the file.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
+      <p class="shortcomment cmt">Moves/renames a file.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a file.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the file to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the file to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
-destination.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[IOException]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
+destination.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#moveFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="moveFolder(oldPath:String,newPath:String,overwrite:Boolean):Unit"></a>
       <a id="moveFolder(String,String,Boolean):Unit"></a>
@@ -776,17 +769,10 @@ destination.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Moves/renames a folder.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a folder.</p><p>Throws an IOException if the value of the parameter overwrite is false
-and a folder already exists at the target path where to move the folder.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
+      <p class="shortcomment cmt">Moves/renames a folder.</p><div class="fullcomment"><div class="comment cmt"><p>Moves/renames a folder.</p><p>This method deals with performing the &quot;mkdir -p&quot; if the target path has
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the folder to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the folder to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
-destination.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@throws</span><span class="args">(<span>
-      
-      <span class="symbol">classOf[IOException]</span>
-    </span>)</span>
-              
-        </dd></dl></div>
+destination.</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -999,7 +985,7 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd></dl></div>
       </a>
     </span>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
-enough.</p><p>Overwrites the file is it already existed.</p><pre>HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
 HdfsHelper.writeToHdfsFile(<span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the array of strings to write in the file as one line per
 string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#writeToHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1019,7 +1005,7 @@ string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt cl
       </a>
     </span>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
-enough.</p><p>Overwrites the file if already existing.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
+enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
 with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li></ol>
             </div>

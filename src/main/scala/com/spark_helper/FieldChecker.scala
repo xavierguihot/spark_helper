@@ -3,9 +3,9 @@ package com.spark_helper
 import Math.round
 
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.IllegalFieldValueException
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+
+import scala.util.Try
 
 /** A facility which validates a value for a specific type of field.
   *
@@ -113,14 +113,7 @@ object FieldChecker extends Serializable {
 	  * @param stringValue the stringified float
 	  * @return if the stringified float is an float
 	  */
-	def isFloat(stringValue: String): Boolean = {
-		try {
-			stringValue.toFloat
-			true
-		} catch {
-			case nfe: NumberFormatException => false
-		}
-	}
+	def isFloat(stringValue: String): Boolean = Try(stringValue.toFloat).isSuccess
 
 	/** Validates a string is a positive float.
 	  *
@@ -238,13 +231,9 @@ object FieldChecker extends Serializable {
 	  * @return if the provided date is under the provided format
 	  */
 	def isDateCompliantWithFormat(stringValue: String, format: String): Boolean = {
-		try {
+		Try(
 			DateTimeFormat.forPattern(format).parseDateTime(stringValue)
-			true
-		} catch {
-			case ife: IllegalFieldValueException => false
-			case iae: IllegalArgumentException => false
-		}
+		).isSuccess
 	}
 
 	/** Validates a string is a 3-upper-chars (city/airport code).

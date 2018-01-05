@@ -1,17 +1,11 @@
 package com.spark_helper
 
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.FileSystem
-import org.apache.hadoop.fs.FileUtil
-import org.apache.hadoop.fs.Path
-import org.apache.hadoop.io.compress.CompressionCodec
-import org.apache.hadoop.io.compress.CompressionCodecFactory
-import org.apache.hadoop.io.compress.GzipCodec
-import org.apache.hadoop.io.compress.BZip2Codec
+import org.apache.hadoop.fs.{FileSystem, FileUtil, FileStatus, Path}
+import org.apache.hadoop.io.compress.{CompressionCodec, CompressionCodecFactory, GzipCodec, BZip2Codec}
 import org.apache.hadoop.io.IOUtils
 
-import org.joda.time.DateTime
-import org.joda.time.Days
+import org.joda.time.{DateTime, Days}
 import org.joda.time.format.DateTimeFormat
 
 import scala.xml.Elem
@@ -25,12 +19,9 @@ import org.xml.sax.SAXException
 
 import java.net.URL
 
-import java.io.File
-import java.io.InputStreamReader
-import java.io.IOException
+import java.io.{File, InputStreamReader}
 
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.collection.JavaConversions._
 
@@ -94,12 +85,12 @@ object HdfsHelper extends Serializable {
 
 		if (fileSystem.exists(fileToDelete)) {
 
-			if (!fileSystem.isFile(fileToDelete))
-				throw new IllegalArgumentException(
-					"To delete a folder, prefer using the deleteFolder() method."
-				)
-			else
-				fileSystem.delete(fileToDelete, true)
+			require(
+				fileSystem.isFile(fileToDelete),
+				"to delete a folder, prefer using the deleteFolder() method."
+			)
+
+			fileSystem.delete(fileToDelete, true)
 		}
 	}
 
@@ -117,12 +108,12 @@ object HdfsHelper extends Serializable {
 
 		if (fileSystem.exists(folderToDelete)) {
 
-			if (fileSystem.isFile(folderToDelete))
-				throw new IllegalArgumentException(
-					"To delete a file, prefer using the deleteFile() method."
-				)
-			else
-				fileSystem.delete(folderToDelete, true)
+			require(
+				!fileSystem.isFile(folderToDelete),
+				"to delete a file, prefer using the deleteFile() method."
+			)
+
+			fileSystem.delete(folderToDelete, true)
 		}
 	}
 
@@ -147,9 +138,10 @@ object HdfsHelper extends Serializable {
 
 		val fileToCheck = new Path(hdfsPath)
 
-		if (fileSystem.exists(fileToCheck) && !fileSystem.isFile(fileToCheck))
-			throw new IllegalArgumentException(
-				"To check if a folder exists, prefer using the folderExists() method."
+		if (fileSystem.exists(fileToCheck))
+			require(
+				fileSystem.isFile(fileToCheck),
+				"to check if a folder exists, prefer using the folderExists() method."
 			)
 
 		fileSystem.exists(fileToCheck)
@@ -166,18 +158,16 @@ object HdfsHelper extends Serializable {
 		
 		val folderToCheck = new Path(hdfsPath)
 
-		if (fileSystem.exists(folderToCheck) && fileSystem.isFile(folderToCheck))
-			throw new IllegalArgumentException(
-				"To check if a file exists, prefer using the fileExists() method."
+		if (fileSystem.exists(folderToCheck))
+			require(
+				!fileSystem.isFile(folderToCheck),
+				"to check if a file exists, prefer using the fileExists() method."
 			)
 
 		fileSystem.exists(folderToCheck)
 	}
 
 	/** Moves/renames a file.
-	  *
-	  * Throws an IOException if the value of the parameter overwrite is false
-	  * and a file already exists at the target path where to move the file.
 	  *
 	  * This method deals with performing the "mkdir -p" if the target path has
 	  * intermediate folders not yet created.
@@ -187,7 +177,6 @@ object HdfsHelper extends Serializable {
 	  * @param overwrite (default = false) if true, enable the overwrite of the
 	  * destination.
 	  */
-	@throws(classOf[IOException])
 	def moveFile(
 		oldPath: String, newPath: String, overwrite: Boolean = false
 	): Unit = {
@@ -197,17 +186,19 @@ object HdfsHelper extends Serializable {
 		val fileToRename = new Path(oldPath)
 		val renamedFile = new Path(newPath)
 
-		if (fileSystem.exists(fileToRename) && !fileSystem.isFile(fileToRename))
-			throw new IllegalArgumentException(
-				"To move a folder, prefer using the moveFolder() method."
+		if (fileSystem.exists(fileToRename))
+			require(
+				fileSystem.isFile(fileToRename),
+				"to move a folder, prefer using the moveFolder() method."
 			)
 
 		if (overwrite)
 			fileSystem.delete(renamedFile, true)
-
-		else if (fileSystem.exists(renamedFile))
-			throw new IOException(
-				"A file already exists at target location " + newPath
+		else
+			require(
+				!fileSystem.exists(renamedFile),
+				"overwrite option set to false, but a file already exists at " +
+				"target location " + newPath
 			)
 
 		// Before moving the file to its final destination, we check if the
@@ -220,9 +211,6 @@ object HdfsHelper extends Serializable {
 
 	/** Moves/renames a folder.
 	  *
-	  * Throws an IOException if the value of the parameter overwrite is false
-	  * and a folder already exists at the target path where to move the folder.
-	  *
 	  * This method deals with performing the "mkdir -p" if the target path has
 	  * intermediate folders not yet created.
 	  *
@@ -231,7 +219,6 @@ object HdfsHelper extends Serializable {
 	  * @param overwrite (default = false) if true, enable the overwrite of the
 	  * destination.
 	  */
-	@throws(classOf[IOException])
 	def moveFolder(
 		oldPath: String, newPath: String, overwrite: Boolean = false
 	): Unit = {
@@ -241,17 +228,19 @@ object HdfsHelper extends Serializable {
 		val folderToRename = new Path(oldPath)
 		val renamedFolder = new Path(newPath)
 
-		if (fileSystem.exists(folderToRename) && fileSystem.isFile(folderToRename))
-			throw new IllegalArgumentException(
-				"To move a file, prefer using the moveFile() method."
+		if (fileSystem.exists(folderToRename))
+			require(
+				!fileSystem.isFile(folderToRename),
+				"to move a file, prefer using the moveFile() method."
 			)
 
 		if (overwrite)
 			fileSystem.delete(renamedFolder, true)
-
-		else if (fileSystem.exists(renamedFolder))
-			throw new IOException(
-				"A folder already exists at target location " + newPath
+		else
+			require(
+				!fileSystem.exists(renamedFolder),
+				"overwrite option set to false, but a folder already exists " +
+				"at target location " + newPath
 			)
 
 		// Before moving the folder to its final destination, we check if the
@@ -268,7 +257,7 @@ object HdfsHelper extends Serializable {
 	  * as a timestamp token of the last update of a processus, or a file which
 	  * blocks the execution of an other instance of the same job, ...
 	  *
-	  * Overwrites the file is it already existed.
+	  * Overwrites the file if it already exists.
 	  *
 	  * {{{ HdfsHelper.createEmptyHdfsFile("/some/hdfs/file/path.token") }}}
 	  *
@@ -291,7 +280,7 @@ object HdfsHelper extends Serializable {
 	  * Please only consider this way of storing data when the data set is small
 	  * enough.
 	  *
-	  * Overwrites the file if already existing.
+	  * Overwrites the file if it already exists.
 	  *
 	  * {{{ HdfsHelper.writeToHdfsFile("some\nrelatively small\ntext", "/some/hdfs/file/path.txt") }}}
 	  *
@@ -310,7 +299,7 @@ object HdfsHelper extends Serializable {
 	  * Please only consider this way of storing data when the data set is small
 	  * enough.
 	  *
-	  * Overwrites the file is it already existed.
+	  * Overwrites the file if it already exists.
 	  *
 	  * {{{
 	  * HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
@@ -360,7 +349,7 @@ object HdfsHelper extends Serializable {
 					)
 				// If it's a dir and we're not in a recursive option:
 				else
-					List()
+					Nil
 			}
 		).toList.sorted
 	}
@@ -707,10 +696,11 @@ object HdfsHelper extends Serializable {
 	  */
 	def purgeFolder(folderPath: String, purgeAge: Int): Unit = {
 
-		if (purgeAge < 0)
-			throw new IllegalArgumentException(
-				"The purgeAge provided \"" + purgeAge + "\" must be superior to 0."
-			)
+		require(
+			purgeAge >= 0,
+			"the purgeAge provided \"" + purgeAge.toString + "\" must be " +
+			"superior to 0."
+		)
 
 		FileSystem.get(
 			new Configuration()
@@ -757,8 +747,10 @@ object HdfsHelper extends Serializable {
 		val inputFile = fileSystem.open(new Path(filePath))
 		val tmpOutputFile = fileSystem.create(new Path(tmpOutputPath))
 
-		if (header != None)
-			tmpOutputFile.write((header.get + "\n").getBytes("UTF-8"))
+		header match {
+			case Some(header) => tmpOutputFile.write((header + "\n").getBytes("UTF-8"))
+			case None => ()
+		}
 
 		try {
 			IOUtils.copyBytes(inputFile, tmpOutputFile, new Configuration(), false)
@@ -766,8 +758,10 @@ object HdfsHelper extends Serializable {
 			inputFile.close()
 		}
 
-		if (footer != None)
-			tmpOutputFile.write(footer.get.getBytes("UTF-8"))
+		footer match {
+			case Some(footer) => tmpOutputFile.write(footer.getBytes("UTF-8"))
+			case None => ()
+		}
 
 		deleteFile(filePath)
 		moveFile(tmpOutputPath, filePath)

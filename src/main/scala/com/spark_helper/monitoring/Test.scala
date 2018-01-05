@@ -1,7 +1,5 @@
 package com.spark_helper.monitoring
 
-import java.security.InvalidParameterException
-
 import java.lang.Math.abs
 
 /** A class which represents a KPI to validate.
@@ -41,34 +39,26 @@ class Test(
 	appliedThreshold: Double, kpiType: String
 ) {
 
-	// Let's check user inputs are correct:
-	{
-		if (!List("superior to", "inferior to", "equal to").contains(thresholdType))
-			throw new InvalidParameterException(
-				"The threshold type can only be \"superior to\", \"inferior to\"" +
-				"or \"equal to\", but you used: \"" + thresholdType + "\"."
-			)
-		if (!List("pct", "nbr").contains(kpiType))
-			throw new InvalidParameterException(
-				"The kpi type can only be \"pct\" or \"nbr\", but you " +
-				"used: \"" + kpiType + "\"."
-			)
-	}
+	require(
+		List("superior to", "inferior to", "equal to").contains(thresholdType),
+		"the threshold type can only be \"superior to\", \"inferior to\" or " +
+		"\"equal to\", but you used: \"" + thresholdType + "\"."
+	)
 
-	/** Getter for the success of this test */
+	require(
+		List("pct", "nbr").contains(kpiType),
+		"the kpi type can only be \"pct\" or \"nbr\", but you used: \"" +
+		kpiType + "\"."
+	)
+
 	private[monitoring] def isSuccess(): Boolean = {
-
-		if (thresholdType == "superior to")
-			abs(kpiValue) >= appliedThreshold
-
-		else if (thresholdType == "inferior to")
-			abs(kpiValue) <= appliedThreshold
-
-		else
-			kpiValue == appliedThreshold
+		thresholdType match {
+			case "superior to" => abs(kpiValue) >= appliedThreshold
+			case "inferior to" => abs(kpiValue) <= appliedThreshold
+			case "equal to"    => kpiValue == appliedThreshold
+		}
 	}
 
-	/** Stringify a pretty report for this test */
 	private[monitoring] def stringify(): String = {
 
 		val suffix = kpiType match {
@@ -79,7 +69,7 @@ class Test(
 		List(
 			"\tKPI: " + description,
 			"\t\tValue: " + kpiValue.toString + suffix,
-			"\t\tMust be " + thresholdType + " " + appliedThreshold + suffix,
+			"\t\tMust be " + thresholdType + " " + appliedThreshold.toString + suffix,
 			"\t\tValidated: " + isSuccess().toString
 		).mkString("\n")
 	}

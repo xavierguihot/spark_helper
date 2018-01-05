@@ -1,7 +1,6 @@
 package com.spark_helper.monitoring
 
-import com.spark_helper.DateHelper
-import com.spark_helper.HdfsHelper
+import com.spark_helper.{DateHelper, HdfsHelper}
 
 import org.apache.spark.SparkContext
 
@@ -276,10 +275,10 @@ class Monitor(
 
 		var update = ""
 
-		if (taskDescription != "")
+		if (!taskDescription.isEmpty)
 			update += taskDescription + ": failed\n"
 
-		if (diagnostic != "")
+		if (!diagnostic.isEmpty)
 			update += "\tDiagnostic: " + diagnostic + "\n"
 
 		update += (
@@ -344,7 +343,7 @@ class Monitor(
 		var update = ""
 
 		// A title in the report for the kpi validation:
-		if (testSuitName != "") {
+		if (!testSuitName.isEmpty) {
 			val validation = if (testsAreValid) "success" else "failed"
 			update += testSuitName + ": " + validation + "\n"
 		}
@@ -465,11 +464,11 @@ class Monitor(
 
 		var initialReport = ""
 
-		if (reportTitle != "")
+		if (!reportTitle.isEmpty)
 			initialReport += "\t\t\t\t\t" + reportTitle + "\n\n"
-		if (pointOfContact != "")
+		if (!pointOfContact.isEmpty)
 			initialReport += "Point of contact: " + pointOfContact + "\n"
-		if (additionalInfo != "")
+		if (!additionalInfo.isEmpty)
 			initialReport += additionalInfo + "\n"
 
 		initialReport += DateHelper.now("[HH:mm]") + " Begining"

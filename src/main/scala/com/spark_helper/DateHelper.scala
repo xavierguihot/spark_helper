@@ -1,10 +1,7 @@
 package com.spark_helper
 
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
-import org.joda.time.Days
-import org.joda.time.format.DateTimeFormat
-import org.joda.time.format.DateTimeFormatter
+import org.joda.time.{DateTime, DateTimeZone, Days}
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 
 /** A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).
   *

@@ -1,11 +1,8 @@
 package com.spark_helper.monitoring
 
-import com.spark_helper.DateHelper
-import com.spark_helper.HdfsHelper
+import com.spark_helper.{DateHelper, HdfsHelper}
 
 import com.holdenkarau.spark.testing.SharedSparkContext
-
-import java.security.InvalidParameterException
 
 import org.scalatest.FunSuite
 
@@ -211,12 +208,12 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 	}
 
 	test("Incorrect User Inputs for Test Objects") {
-		val messageThrown = intercept[InvalidParameterException] {
+		val messageThrown = intercept[IllegalArgumentException] {
 			new Test("pctOfWhatever", 0.06d, "skdjbv", 0.1d, "pct")
 		}
 		val expectedMessage = (
-			"The threshold type can only be \"superior to\", " +
-			"\"inferior to\"or \"equal to\", but you used: \"skdjbv\"."
+			"requirement failed: the threshold type can only be \"superior " +
+			"to\", \"inferior to\" or \"equal to\", but you used: \"skdjbv\"."
 		)
 		assert(messageThrown.getMessage === expectedMessage)
 	}

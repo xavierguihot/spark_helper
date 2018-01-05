@@ -2,8 +2,6 @@ package com.spark_helper
 
 import com.holdenkarau.spark.testing.SharedSparkContext
 
-import java.io.IOException
-
 import org.scalatest.FunSuite
 
 /** Testing facility for the HdfsHelper.
@@ -23,7 +21,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 		var messageThrown = intercept[IllegalArgumentException] {
 			HdfsHelper.deleteFolder("src/test/resources/file_to_delete.txt")
 		}
-		var expectedMessage = "To delete a file, prefer using the deleteFile() method."
+		var expectedMessage = (
+			"requirement failed: to delete a file, prefer using the " +
+			"deleteFile() method."
+		)
 		assert(messageThrown.getMessage === expectedMessage)
 		assert(HdfsHelper.fileExists("src/test/resources/file_to_delete.txt"))
 
@@ -39,7 +40,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 		messageThrown = intercept[IllegalArgumentException] {
 			HdfsHelper.deleteFile("src/test/resources/folder_to_delete")
 		}
-		expectedMessage = "To delete a folder, prefer using the deleteFolder() method."
+		expectedMessage = (
+			"requirement failed: to delete a folder, prefer using the " +
+			"deleteFolder() method."
+		)
 		assert(messageThrown.getMessage === expectedMessage)
 		assert(HdfsHelper.folderExists("src/test/resources/folder_to_delete"))
 
@@ -64,7 +68,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 			HdfsHelper.folderExists("src/test/resources/file_to_check.txt")
 		}
 		var expectedMessage = (
-			"To check if a file exists, prefer using the fileExists() method."
+			"requirement failed: to check if a file exists, prefer using the " +
+			"fileExists() method."
 		)
 		assert(messageThrown.getMessage === expectedMessage)
 
@@ -82,7 +87,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 			HdfsHelper.fileExists("src/test/resources/folder_to_check")
 		}
 		expectedMessage = (
-			"To check if a folder exists, prefer using the folderExists() method."
+			"requirement failed: to check if a folder exists, prefer using " +
+			"the folderExists() method."
 		)
 		assert(messageThrown.getMessage === expectedMessage)
 
@@ -233,15 +239,15 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 		HdfsHelper.writeToHdfsFile("", "src/test/resources/renamed_file.txt")
 
 		// Let's rename the file to the path where a file already exists:
-		val ioExceptionThrown = intercept[IOException] {
+		val ioExceptionThrown = intercept[IllegalArgumentException] {
 			HdfsHelper.moveFile(
 				"src/test/resources/some_file.txt",
 				"src/test/resources/renamed_file.txt"
 			)
 		}
 		var expectedMessage = (
-			"A file already exists at target location " +
-			"src/test/resources/renamed_file.txt"
+			"requirement failed: overwrite option set to false, but a file " +
+			"already exists at target location src/test/resources/renamed_file.txt"
 		)
 		assert(ioExceptionThrown.getMessage === expectedMessage)
 
@@ -262,7 +268,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 				"src/test/resources/renamed_file.txt"
 			)
 		}
-		expectedMessage = "To move a file, prefer using the moveFile() method."
+		expectedMessage = (
+			"requirement failed: to move a file, prefer using the " +
+			"moveFile() method."
+		)
 		assert(illegalArgExceptionThrown.getMessage === expectedMessage)
 
 		assert(HdfsHelper.fileExists("src/test/resources/some_file.txt"))
@@ -313,7 +322,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 				"src/test/resources/renamed_folder"
 			)
 		}
-		val expectedMessage = "To move a folder, prefer using the moveFolder() method."
+		val expectedMessage = (
+			"requirement failed: to move a folder, prefer using the " +
+			"moveFolder() method."
+		)
 		assert(messageThrown.getMessage === expectedMessage)
 
 		assert(HdfsHelper.fileExists("src/test/resources/some_folder_to_move/file_1.txt"))
@@ -501,7 +513,9 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 		val messageThrown = intercept[IllegalArgumentException] {
 			HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", -3)
 		}
-		val expectedMessage = "The purgeAge provided \"-3\" must be superior to 0."
+		val expectedMessage = (
+			"requirement failed: the purgeAge provided \"-3\" must be superior to 0."
+		)
 		assert(messageThrown.getMessage === expectedMessage)
 
 		HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 0)
