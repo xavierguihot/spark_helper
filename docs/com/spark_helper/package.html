@@ -98,32 +98,6 @@ assert(DateHelper.nDaysBefore(<span class="num">3</span>) == <span class="lit">"
 assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/DateHelper.scala">DateHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
-    </li><li name="com.spark_helper.FieldChecker" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="FieldChecker"></a>
-      <a id="FieldChecker:FieldChecker"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="FieldChecker$.html"><span class="name">FieldChecker</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.package@FieldChecker" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">A facility which validates a value for a specific type of field.</p><div class="fullcomment"><div class="comment cmt"><p>A facility which validates a value for a specific type of field.</p><p>For instance this allows to validate that a stringified integer is an
-integer or that a date is under yyyyMMdd format or again that an airport is
-a 3 upper case string:</p><p>A few exemples:</p><pre>assert(FieldChecker.isInteger(<span class="lit">"15"</span>))
-assert(!FieldChecker.isInteger(<span class="lit">"1.5"</span>))
-assert(FieldChecker.isInteger(<span class="lit">"-1"</span>))
-assert(FieldChecker.isStrictlyPositiveInteger(<span class="lit">"123"</span>))
-assert(!FieldChecker.isYyyyMMddDate(<span class="lit">"20170333"</span>))
-assert(FieldChecker.isCurrencyCode(<span class="lit">"USD"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
-/main/scala/com/spark_helper/FieldChecker.scala">FieldChecker</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HdfsHelper"></a>
       <a id="HdfsHelper:HdfsHelper"></a>

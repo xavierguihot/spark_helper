@@ -18,13 +18,12 @@ names are self-explanatory and readable.
 
 This also provides a monitoring/logger tool.
 
-This is a bunch of 5 modules:
+This is a bunch of 4 modules:
 
 * [HdfsHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.HdfsHelper$): Wrapper around apache Hadoop FileSystem API ([org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html)) for file manipulations on hdfs.
 * [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$): Hdfs file manipulations through the Spark API.
 * [Monitor](http://xavierguihot.com/spark_helper/#com.spark_helper.monitoring.Monitor$): Spark custom monitoring/logger and kpi validator.
 * [DateHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.DateHelper$): Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for usual data mining dates manipulations.
-* [FieldChecker](http://xavierguihot.com/spark_helper/#com.spark_helper.FieldChecker$): Validation for stringified fields.
 
 Compatible with Spark 2.
 
@@ -123,26 +122,6 @@ assert(DateHelper.currentTimestamp() == "1493105229736")
 assert(DateHelper.nDaysBefore(3) == "20170307") // If today's "20170310"
 assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
 ```
-
-### FieldChecker
-
-The full list of methods is available at [FieldChecker](http://xavierguihot.com/spark_helper/#com.spark_helper.FieldChecker$).
-
-Validation (before cast) for stringified fields:
-
-A few exemples:
-
-```scala
-import com.spark_helper.FieldChecker
-
-assert(FieldChecker.isInteger("15"))
-assert(!FieldChecker.isInteger("1.5"))
-assert(FieldChecker.isInteger("-1"))
-assert(FieldChecker.isStrictlyPositiveInteger("123"))
-assert(!FieldChecker.isYyyyMMddDate("20170333"))
-assert(FieldChecker.isCurrencyCode("USD"))
-```
-
 
 ## Including spark_helper to your dependencies:
 
