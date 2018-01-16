@@ -57,8 +57,8 @@ code and thus could instead just use HdfsHelper.deleteFile(&quot;my/hdfs/file/pa
 <span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
 HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
 assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))
-assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
-assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
+assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
+assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
 HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>)
 HdfsHelper.moveFolder(<span class="lit">"my/hdfs/folder"</span>)
 HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])
@@ -323,8 +323,8 @@ compression.</p></dd></dl></div>
       <p class="shortcomment cmt">Creates an empty file on hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an empty file on hdfs.</p><p>Might be usefull for token files. For instance a file which is only used
 as a timestamp token of the last update of a processus, or a file which
 blocks the execution of an other instance of the same job, ...</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre><p>In case this is used as a timestamp container, you can then use the
-following methods to retrieve its timestamp:</p><pre><span class="kw">val</span> fileAge = HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"/some/hdfs/file/path.token"</span>)
-<span class="kw">val</span> lastModificationDate = HdfsHelper.getFolderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create</p></dd></dl></div>
+following methods to retrieve its timestamp:</p><pre><span class="kw">val</span> fileAge = HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"/some/hdfs/file/path.token"</span>)
+<span class="kw">val</span> lastModificationDate = HdfsHelper.folderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createFolder(hdfsPath:String):Unit"></a>
       <a id="createFolder(String):Unit"></a>
@@ -431,6 +431,45 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
     </span>
       <p class="shortcomment cmt">Checks if the file exists.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the file exists.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which we check if it exists</p></dd><dt>returns</dt><dd class="cmt"><p>if the file exists</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#fileModificationDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fileModificationDate(hdfsPath:String,format:String):String"></a>
+      <a id="fileModificationDate(String,String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fileModificationDate</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@fileModificationDate(hdfsPath:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the stringified date of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given file.</p><pre>assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
+modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given file,
+under the provided format.</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#fileModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fileModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
+      <a id="fileModificationDateTime(String):DateTime"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fileModificationDateTime</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@fileModificationDateTime(hdfsPath:String):org.joda.time.DateTime" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the joda DateTime of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the joda DateTime of the last modification of the given file.
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given file</p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -472,6 +511,45 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
     </span>
       <p class="shortcomment cmt">Checks if the folder exists.</p><div class="fullcomment"><div class="comment cmt"><p>Checks if the folder exists.
 </p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which we check if it exists</p></dd><dt>returns</dt><dd class="cmt"><p>if the folder exists</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#folderModificationDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="folderModificationDate(hdfsPath:String,format:String):String"></a>
+      <a id="folderModificationDate(String,String):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">folderModificationDate</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@folderModificationDate(hdfsPath:String,format:String):String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the stringified date of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given folder.</p><pre>assert(HdfsHelper.folderModificationDate(<span class="lit">"my/hdfs/folder"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
+modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given
+folder, under the provided format.</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#folderModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="folderModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
+      <a id="folderModificationDateTime(String):DateTime"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">folderModificationDateTime</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@folderModificationDateTime(hdfsPath:String):org.joda.time.DateTime" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the joda DateTime of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the joda DateTime of the last modification of the given folder.
+</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given folder</p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -489,102 +567,6 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.spark_helper.HdfsHelper#getFileModificationDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getFileModificationDate(hdfsPath:String,format:String):String"></a>
-      <a id="getFileModificationDate(String,String):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getFileModificationDate</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFileModificationDate(hdfsPath:String,format:String):String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Returns the stringified date of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given file.</p><pre>assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
-modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given file,
-under the provided format.</p></dd></dl></div>
-    </li><li name="com.spark_helper.HdfsHelper#getFileModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getFileModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
-      <a id="getFileModificationDateTime(String):DateTime"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getFileModificationDateTime</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFileModificationDateTime(hdfsPath:String):org.joda.time.DateTime" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Returns the joda DateTime of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the joda DateTime of the last modification of the given file.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given file</p></dd></dl></div>
-    </li><li name="com.spark_helper.HdfsHelper#getFolderModificationDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getFolderModificationDate(hdfsPath:String,format:String):String"></a>
-      <a id="getFolderModificationDate(String,String):String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getFolderModificationDate</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;yyyyMMdd&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFolderModificationDate(hdfsPath:String,format:String):String" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Returns the stringified date of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given folder.</p><pre>assert(HdfsHelper.getFolderModificationDate(<span class="lit">"my/hdfs/filder"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
-modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given
-folder, under the provided format.</p></dd></dl></div>
-    </li><li name="com.spark_helper.HdfsHelper#getFolderModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getFolderModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
-      <a id="getFolderModificationDateTime(String):DateTime"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getFolderModificationDateTime</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.HdfsHelper$@getFolderModificationDateTime(hdfsPath:String):org.joda.time.DateTime" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Returns the joda DateTime of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the joda DateTime of the last modification of the given folder.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime of the last modification of the given folder</p></dd></dl></div>
-    </li><li name="com.spark_helper.HdfsHelper#getNbrOfDaysSinceFileWasLastModified" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="getNbrOfDaysSinceFileWasLastModified(hdfsPath:String):Int"></a>
-      <a id="getNbrOfDaysSinceFileWasLastModified(String):Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">getNbrOfDaysSinceFileWasLastModified</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.HdfsHelper$@getNbrOfDaysSinceFileWasLastModified(hdfsPath:String):Int" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Returns the nbr of days since the given file has been last modified.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the nbr of days since the given file has been last modified.</p><pre>assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which we want the nbr of days
-since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days since the given file has been last modified</p></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -773,6 +755,24 @@ destination.</p></dd></dl></div>
 intermediate folders not yet created.
 </p></div><dl class="paramcmts block"><dt class="param">oldPath</dt><dd class="cmt"><p>the path of the folder to rename</p></dd><dt class="param">newPath</dt><dd class="cmt"><p>the new path of the folder to rename</p></dd><dt class="param">overwrite</dt><dd class="cmt"><p>(default = false) if true, enable the overwrite of the
 destination.</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#nbrOfDaysSinceFileWasLastModified" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nbrOfDaysSinceFileWasLastModified(hdfsPath:String):Int"></a>
+      <a id="nbrOfDaysSinceFileWasLastModified(String):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nbrOfDaysSinceFileWasLastModified</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@nbrOfDaysSinceFileWasLastModified(hdfsPath:String):Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the nbr of days since the given file has been last modified.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the nbr of days since the given file has been last modified.</p><pre>assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which we want the nbr of days
+since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr of days since the given file has been last modified</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

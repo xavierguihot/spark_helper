@@ -56,8 +56,8 @@ class DateHelperTest extends FunSuite {
 	}
 
 	test("Get Date from Timestamp") {
-		assert(DateHelper.getDateFromTimestamp(1496074819L) === "20170529")
-		assert(DateHelper.getDateFromTimestamp(1496074819L, "yyMMdd") === "170529")
+		assert(DateHelper.dateFromTimestamp(1496074819L) === "20170529")
+		assert(DateHelper.dateFromTimestamp(1496074819L, "yyMMdd") === "170529")
 	}
 
 	test("Date it was N Days before Date") {
@@ -71,6 +71,6 @@ class DateHelperTest extends FunSuite {
 	}
 
 	test("Day of Week") {
-		assert(DateHelper.getDayOfWeek("20180102") === 2)
+		assert(DateHelper.dayOfWeek("20180102") === 2)
 	}
 }

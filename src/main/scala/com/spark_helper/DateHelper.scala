@@ -95,9 +95,7 @@ object DateHelper extends Serializable {
 	  * format.
 	  */
 	def nDaysBefore(nbrOfDaysBefore: Int, format: String = "yyyyMMdd"): String = {
-		DateTimeFormat.forPattern(format).print(
-			new DateTime().minusDays(nbrOfDaysBefore)
-		)
+		DateTimeFormat.forPattern(format).print(new DateTime().minusDays(nbrOfDaysBefore))
 	}
 
 	/** Returns which date it was x days before the given date.
@@ -164,8 +162,7 @@ object DateHelper extends Serializable {
 	  */
 	def now(format: String = "yyyyMMdd_HHmm", utc: Boolean = false): String = {
 		DateTimeFormat.forPattern(format).print(
-			if (utc) new DateTime().withZone(DateTimeZone.UTC) else new DateTime()
-		)
+			if (utc) new DateTime().withZone(DateTimeZone.UTC) else new DateTime())
 	}
 
 	/** Returns today's date/time under the requested format.
@@ -224,8 +221,7 @@ object DateHelper extends Serializable {
 		date: String, inputFormat: String, outputFormat: String
 	): String = {
 		DateTimeFormat.forPattern(outputFormat).print(
-			DateTimeFormat.forPattern(inputFormat).parseDateTime(date)
-		)
+			DateTimeFormat.forPattern(inputFormat).parseDateTime(date))
 	}
 
 	/** Returns the current local timestamp.
@@ -332,8 +328,8 @@ object DateHelper extends Serializable {
 	/** Returns the date associated to the given UTC timestamp.
 	  *
 	  * {{{
-	  * assert(DateHelper.getDateFromTimestamp(1496074819L) == "20170529")
-	  * assert(DateHelper.getDateFromTimestamp(1496074819L, "yyMMdd") == "170529")
+	  * assert(DateHelper.dateFromTimestamp(1496074819L) == "20170529")
+	  * assert(DateHelper.dateFromTimestamp(1496074819L, "yyMMdd") == "170529")
 	  * }}}
 	  *
 	  * @param timestamp the UTC timestamps (nbr of millis since 1970-01-01) for
@@ -341,26 +337,25 @@ object DateHelper extends Serializable {
 	  * @param format (default = "yyyyMMdd") the format of the provided dates
 	  * @return the associated date under the requested format
 	  */
-	def getDateFromTimestamp(
+	def dateFromTimestamp(
 		timestamp: Long, format: String = "yyyyMMdd"
 	): String = {
 		DateTimeFormat.forPattern(format).print(
-			new DateTime(timestamp * 1000L, DateTimeZone.UTC)
-		)
+			new DateTime(timestamp * 1000L, DateTimeZone.UTC))
 	}
 
 	/** Returns the day of week for a date under the given format.
 	  *
 	  * A Monday is 1 and a Sunday is 7.
 	  *
-	  * {{{ assert(DateHelper.getDayOfWeek("20160614") == 2) }}}
+	  * {{{ assert(DateHelper.dayOfWeek("20160614") == 2) }}}
 	  *
 	  * @param date the date for which to get the day of week
 	  * @param format (default = "yyyyMMdd") the format under which the date is
 	  * provided.
 	  * @return the associated day of week, such as 2 for Tuesday
 	  */
-	def getDayOfWeek(date: String, format: String = "yyyyMMdd"): Int = {
+	def dayOfWeek(date: String, format: String = "yyyyMMdd"): Int = {
 		DateTimeFormat.forPattern(format).parseDateTime(date).getDayOfWeek()
 	}
 }

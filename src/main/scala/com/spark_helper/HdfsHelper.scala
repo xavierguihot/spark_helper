@@ -42,8 +42,8 @@ import scala.collection.JavaConversions._
   * // A bunch of methods wrapping the FileSystem API, such as:
   * HdfsHelper.fileExists("my/hdfs/file/path.txt")
   * assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
-  * assert(HdfsHelper.getFileModificationDate("my/hdfs/file/path.txt") == "20170306")
-  * assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
+  * assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
+  * assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
   * HdfsHelper.deleteFile("my/hdfs/file/path.csv")
   * HdfsHelper.moveFolder("my/hdfs/folder")
   * HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
@@ -87,8 +87,7 @@ object HdfsHelper extends Serializable {
 
 			require(
 				fileSystem.isFile(fileToDelete),
-				"to delete a folder, prefer using the deleteFolder() method."
-			)
+				"to delete a folder, prefer using the deleteFolder() method.")
 
 			fileSystem.delete(fileToDelete, true)
 		}
@@ -110,8 +109,7 @@ object HdfsHelper extends Serializable {
 
 			require(
 				!fileSystem.isFile(folderToDelete),
-				"to delete a file, prefer using the deleteFile() method."
-			)
+				"to delete a file, prefer using the deleteFile() method.")
 
 			fileSystem.delete(folderToDelete, true)
 		}
@@ -141,8 +139,7 @@ object HdfsHelper extends Serializable {
 		if (fileSystem.exists(fileToCheck))
 			require(
 				fileSystem.isFile(fileToCheck),
-				"to check if a folder exists, prefer using the folderExists() method."
-			)
+				"to check if a folder exists, prefer using the folderExists() method.")
 
 		fileSystem.exists(fileToCheck)
 	}
@@ -161,8 +158,7 @@ object HdfsHelper extends Serializable {
 		if (fileSystem.exists(folderToCheck))
 			require(
 				!fileSystem.isFile(folderToCheck),
-				"to check if a file exists, prefer using the fileExists() method."
-			)
+				"to check if a file exists, prefer using the fileExists() method.")
 
 		fileSystem.exists(folderToCheck)
 	}
@@ -189,8 +185,7 @@ object HdfsHelper extends Serializable {
 		if (fileSystem.exists(fileToRename))
 			require(
 				fileSystem.isFile(fileToRename),
-				"to move a folder, prefer using the moveFolder() method."
-			)
+				"to move a folder, prefer using the moveFolder() method.")
 
 		if (overwrite)
 			fileSystem.delete(renamedFile, true)
@@ -198,8 +193,7 @@ object HdfsHelper extends Serializable {
 			require(
 				!fileSystem.exists(renamedFile),
 				"overwrite option set to false, but a file already exists at " +
-				"target location " + newPath
-			)
+				"target location " + newPath)
 
 		// Before moving the file to its final destination, we check if the
 		// folder where to put the file exists, and if not we create it:
@@ -231,8 +225,7 @@ object HdfsHelper extends Serializable {
 		if (fileSystem.exists(folderToRename))
 			require(
 				!fileSystem.isFile(folderToRename),
-				"to move a file, prefer using the moveFile() method."
-			)
+				"to move a file, prefer using the moveFile() method.")
 
 		if (overwrite)
 			fileSystem.delete(renamedFolder, true)
@@ -240,8 +233,7 @@ object HdfsHelper extends Serializable {
 			require(
 				!fileSystem.exists(renamedFolder),
 				"overwrite option set to false, but a folder already exists " +
-				"at target location " + newPath
-			)
+				"at target location " + newPath)
 
 		// Before moving the folder to its final destination, we check if the
 		// folder where to put the folder exists, and if not we create it:
@@ -264,8 +256,8 @@ object HdfsHelper extends Serializable {
 	  * In case this is used as a timestamp container, you can then use the
 	  * following methods to retrieve its timestamp:
 	  * {{{
-	  * val fileAge = HdfsHelper.getNbrOfDaysSinceFileWasLastModified("/some/hdfs/file/path.token")
-	  * val lastModificationDate = HdfsHelper.getFolderModificationDate("/some/hdfs/file/path.token")
+	  * val fileAge = HdfsHelper.nbrOfDaysSinceFileWasLastModified("/some/hdfs/file/path.token")
+	  * val lastModificationDate = HdfsHelper.folderModificationDate("/some/hdfs/file/path.token")
 	  * }}}
 	  *
 	  * @param filePath the path of the empty file to create
@@ -333,25 +325,19 @@ object HdfsHelper extends Serializable {
 
 		FileSystem.get(new Configuration()).listStatus(
 			new Path(hdfsPath)
-		).flatMap(
-			status => {
-				// If it's a file:
-				if (status.isFile) {
-					if (onlyName)
-						List(status.getPath.getName)
-					else
-						List(hdfsPath + "/" + status.getPath.getName)
-				}
-				// If it's a dir and we're in a recursive option:
-				else if (recursive)
-					listFileNamesInFolder(
-						hdfsPath + "/" + status.getPath.getName, true, onlyName
-					)
-				// If it's a dir and we're not in a recursive option:
-				else
-					Nil
+		).flatMap{ status =>
+			// If it's a file:
+			if (status.isFile) {
+				if (onlyName) List(status.getPath.getName)
+				else List(hdfsPath + "/" + status.getPath.getName)
 			}
-		).toList.sorted
+			// If it's a dir and we're in a recursive option:
+			else if (recursive)
+				listFileNamesInFolder(hdfsPath + "/" + status.getPath.getName, true, onlyName)
+			// If it's a dir and we're not in a recursive option:
+			else
+				Nil
+		}.toList.sorted
 	}
 
 	/** Lists folder names in the specified hdfs folder.
@@ -382,7 +368,7 @@ object HdfsHelper extends Serializable {
 	  * modification date.
 	  * @return the joda DateTime of the last modification of the given file
 	  */
-	def getFileModificationDateTime(hdfsPath: String): DateTime = {
+	def fileModificationDateTime(hdfsPath: String): DateTime = {
 		new DateTime(
 			FileSystem.get(
 				new Configuration()
@@ -395,7 +381,7 @@ object HdfsHelper extends Serializable {
 	/** Returns the stringified date of the last modification of the given file.
 	  *
 	  * {{{
-	  * assert(HdfsHelper.getFileModificationDate("my/hdfs/file/path.txt") == "20170306")
+	  * assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
 	  * }}}
 	  *
 	  * @param hdfsPath the path of the file for which to get the last
@@ -405,10 +391,8 @@ object HdfsHelper extends Serializable {
 	  * @return the stringified date of the last modification of the given file,
 	  * under the provided format.
 	  */
-	def getFileModificationDate(hdfsPath: String, format: String = "yyyyMMdd"): String = {
-		DateTimeFormat.forPattern(format).print(
-			getFileModificationDateTime(hdfsPath)
-		)
+	def fileModificationDate(hdfsPath: String, format: String = "yyyyMMdd"): String = {
+		DateTimeFormat.forPattern(format).print(fileModificationDateTime(hdfsPath))
 	}
 
 	/** Returns the joda DateTime of the last modification of the given folder.
@@ -417,14 +401,14 @@ object HdfsHelper extends Serializable {
 	  * modification date.
 	  * @return the joda DateTime of the last modification of the given folder
 	  */
-	def getFolderModificationDateTime(hdfsPath: String): DateTime = {
-		getFileModificationDateTime(hdfsPath)
+	def folderModificationDateTime(hdfsPath: String): DateTime = {
+		fileModificationDateTime(hdfsPath)
 	}
 
 	/** Returns the stringified date of the last modification of the given folder.
 	  *
 	  * {{{
-	  * assert(HdfsHelper.getFolderModificationDate("my/hdfs/filder") == "20170306")
+	  * assert(HdfsHelper.folderModificationDate("my/hdfs/folder") == "20170306")
 	  * }}}
 	  *
 	  * @param hdfsPath the path of the folder for which to get the last
@@ -434,25 +418,23 @@ object HdfsHelper extends Serializable {
 	  * @return the stringified date of the last modification of the given
 	  * folder, under the provided format.
 	  */
-	def getFolderModificationDate(
-		hdfsPath: String, format: String = "yyyyMMdd"
-	): String = {
-		getFileModificationDate(hdfsPath, format)
+	def folderModificationDate(hdfsPath: String, format: String = "yyyyMMdd"): String = {
+		fileModificationDate(hdfsPath, format)
 	}
 
 	/** Returns the nbr of days since the given file has been last modified.
 	  *
 	  * {{{
-	  * assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
+	  * assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
 	  * }}}
 	  *
 	  * @param hdfsPath the path of the file for which we want the nbr of days
 	  * since the last modification.
 	  * @return the nbr of days since the given file has been last modified
 	  */
-	def getNbrOfDaysSinceFileWasLastModified(hdfsPath: String): Int = {
+	def nbrOfDaysSinceFileWasLastModified(hdfsPath: String): Int = {
 		Days.daysBetween(
-			getFileModificationDateTime(hdfsPath), new DateTime()
+			fileModificationDateTime(hdfsPath), new DateTime()
 		).getDays()
 	}
 
@@ -478,8 +460,7 @@ object HdfsHelper extends Serializable {
 		workingFolderPath: String = ""
 	): Unit = {
 		appendHeaderAndFooterInternal(
-			filePath, Some(header), Some(footer), workingFolderPath
-		)
+			filePath, Some(header), Some(footer), workingFolderPath)
 	}
 
 	/** Appends a header to a file.
@@ -500,9 +481,7 @@ object HdfsHelper extends Serializable {
 	def appendHeader(
 		filePath: String, header: String, workingFolderPath: String = ""
 	): Unit = {
-		appendHeaderAndFooterInternal(
-			filePath, Some(header), None, workingFolderPath
-		)
+		appendHeaderAndFooterInternal(filePath, Some(header), None, workingFolderPath)
 	}
 
 	/** Appends a footer to a file.
@@ -520,9 +499,7 @@ object HdfsHelper extends Serializable {
 	def appendFooter(
 		filePath: String, footer: String, workingFolderPath: String = ""
 	): Unit = {
-		appendHeaderAndFooterInternal(
-			filePath, None, Some(footer), workingFolderPath
-		)
+		appendHeaderAndFooterInternal(filePath, None, Some(footer), workingFolderPath)
 	}
 
 	/** Validates an XML file on hdfs in regard to the given XSD.
@@ -560,9 +537,7 @@ object HdfsHelper extends Serializable {
 
 		val xmlFile = new StreamSource(fileSystem.open(new Path(hdfsXmlPath)))
 
-		val schemaFactory = SchemaFactory.newInstance(
-			XMLConstants.W3C_XML_SCHEMA_NS_URI
-		)
+		val schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
 
 		val validator = schemaFactory.newSchema(xsdFile).newValidator()
 
@@ -605,8 +580,7 @@ object HdfsHelper extends Serializable {
 	def loadTypesafeConfigFromHdfs(hdfsConfigPath: String): Config = {
 
 		val reader = new InputStreamReader(
-			FileSystem.get(new Configuration()).open(new Path(hdfsConfigPath))
-		)
+			FileSystem.get(new Configuration()).open(new Path(hdfsConfigPath)))
 
 		try { ConfigFactory.parseReader(reader) } finally { reader.close() }
 	}
@@ -622,8 +596,7 @@ object HdfsHelper extends Serializable {
 	def loadXmlFileFromHdfs(hdfsXmlPath: String): Elem = {
 
 		val reader = new InputStreamReader(
-			FileSystem.get(new Configuration()).open(new Path(hdfsXmlPath))
-		)
+			FileSystem.get(new Configuration()).open(new Path(hdfsXmlPath)))
 
 		try { XML.load(reader) } finally { reader.close() }
 	}
@@ -665,15 +638,12 @@ object HdfsHelper extends Serializable {
 
 		// The compression code:
 		val codec = new CompressionCodecFactory(new Configuration()).getCodec(
-			new Path(outputPath)
-		)
+			new Path(outputPath))
 		// We include the compression codec to the output stream:
 		val compressedOutputStream = codec.createOutputStream(outputStream)
 
 		try {
-			IOUtils.copyBytes(
-				inputStream, compressedOutputStream, new Configuration(), false
-			)
+			IOUtils.copyBytes(inputStream, compressedOutputStream, new Configuration(), false)
 		} finally {
 			inputStream.close()
 			compressedOutputStream.close();
@@ -698,15 +668,14 @@ object HdfsHelper extends Serializable {
 
 		require(
 			purgeAge >= 0,
-			"the purgeAge provided \"" + purgeAge.toString + "\" must be " +
-			"superior to 0."
+			"the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0."
 		)
 
 		FileSystem.get(
 			new Configuration()
 		).listStatus(
 			new Path(folderPath)
-		).filter( path => {
+		).filter{ path =>
 
 			val fileAgeInDays = Days.daysBetween(
 				new DateTime(path.getModificationTime()),
@@ -715,7 +684,7 @@ object HdfsHelper extends Serializable {
 
 			fileAgeInDays >= purgeAge
 
-		}).foreach( path =>
+		}.foreach( path =>
 			if (path.isFile)
 				deleteFile(folderPath + "/" + path.getPath.getName)
 			else

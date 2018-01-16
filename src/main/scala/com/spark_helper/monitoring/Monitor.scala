@@ -283,8 +283,7 @@ class Monitor(
 
 		update += (
 			"\t\t" + error.toString() + "\n" +
-			error.getStackTrace.map(line => "\t\t" + line).mkString("\n") + "\n"
-		)
+			error.getStackTrace.map(line => "\t\t" + line).mkString("\n") + "\n")
 
 		updateReport(update)
 
@@ -421,8 +420,7 @@ class Monitor(
 		val finalReport = report + (
 			DateHelper.now("[HH:mm]") + " Duration: " +
 			DurationFormatUtils.formatDuration(
-				Calendar.getInstance().getTimeInMillis() - begining, "HH:mm:ss"
-			)
+				Calendar.getInstance().getTimeInMillis() - begining, "HH:mm:ss")
 		)
 
 		// The extension of the report depending on the success:
@@ -432,16 +430,14 @@ class Monitor(
 		// timestamp:
 		HdfsHelper.writeToHdfsFile(
 			finalReport,
-			logFolder + "/" + DateHelper.now("yyyyMMdd_HHmmss") + ".log" + validationFileExtension
-		)
+			logFolder + "/" + DateHelper.now("yyyyMMdd_HHmmss") + ".log" + validationFileExtension)
 
 		// But we store it as well with a fixed name such as current.success:
 		HdfsHelper.deleteFile(logFolder + "/current.success")
 		HdfsHelper.deleteFile(logFolder + "/current.failed")
 		HdfsHelper.writeToHdfsFile(
 			finalReport,
-			logFolder + "/current" + validationFileExtension
-		)
+			logFolder + "/current" + validationFileExtension)
 
 		// And if we "live loged", then we remove the "current.ongoing" file:
 		HdfsHelper.deleteFile(logFolder + "/current.ongoing")
@@ -501,13 +497,9 @@ class Monitor(
 				"WARNING: Do not base yourself on this file to check if your " +
 				"job is still running. This file might persist if your job " +
 				"has been killed and thus couldn't reach your call to the " +
-				"saveReport() method."
-			)
+				"saveReport() method.")
 
-			HdfsHelper.writeToHdfsFile(
-				ongoingReport,
-				logFolder + "/current.ongoing"
-			)
+			HdfsHelper.writeToHdfsFile(ongoingReport, logFolder + "/current.ongoing")
 		}
 	}
 
@@ -521,12 +513,10 @@ class Monitor(
 				logFolder
 			).filter(
 				logName => !logName.startsWith("current")
-			).filter(
-				logName => { // 20170327_1545.log.success
-					val logDate = logName.substring(0, 8) // 20170327
-					logDate < nDaysAgo
-				}
-			).foreach(
+			).filter{ logName => // 20170327_1545.log.success
+				val logDate = logName.substring(0, 8) // 20170327
+				logDate < nDaysAgo
+			}.foreach(
 				logName => HdfsHelper.deleteFile(logFolder + "/" + logName)
 			)
 		}

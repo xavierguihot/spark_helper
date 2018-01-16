@@ -94,8 +94,7 @@ object SparkHelper extends Serializable {
 		outputRDD: RDD[String], outputFile: String, workingFolder: String
 	): Unit = {
 		saveAsSingleTextFileWithWorkingFolderInternal(
-			outputRDD, outputFile, workingFolder, None
-		)
+			outputRDD, outputFile, workingFolder, None)
 	}
 
 	/** Saves an RDD in exactly one file.
@@ -124,8 +123,7 @@ object SparkHelper extends Serializable {
 		compressionCodec: Class[_ <: CompressionCodec]
 	): Unit = {
 		saveAsSingleTextFileWithWorkingFolderInternal(
-			outputRDD, outputFile, workingFolder, Some(compressionCodec)
-		)
+			outputRDD, outputFile, workingFolder, Some(compressionCodec))
 	}
 
 	/** Equivalent to sparkContext.textFile(), but for a specific record delimiter.
@@ -309,8 +307,7 @@ object SparkHelper extends Serializable {
 	): Unit = {
 		decreaseCoalescenceInternal(
 			highCoalescenceLevelFolder, lowerCoalescenceLevelFolder,
-			finalCoalescenceLevel, sparkContext, None
-		)
+			finalCoalescenceLevel, sparkContext, None)
 	}
 
 	/** Decreases the nbr of partitions of a folder.
@@ -347,8 +344,7 @@ object SparkHelper extends Serializable {
 	): Unit = {
 		decreaseCoalescenceInternal(
 			highCoalescenceLevelFolder, lowerCoalescenceLevelFolder,
-			finalCoalescenceLevel, sparkContext, Some(compressionCodec)
-		)
+			finalCoalescenceLevel, sparkContext, Some(compressionCodec))
 	}
 
 	/** Saves as text file, but by decreasing the nbr of partitions of the output.
@@ -390,8 +386,7 @@ object SparkHelper extends Serializable {
 		// back:
 		decreaseCoalescenceInternal(
 			outputFolder + "_tmp", outputFolder,
-			finalCoalescenceLevel, sparkContext, None
-		)
+			finalCoalescenceLevel, sparkContext, None)
 	}
 
 	/** Saves as text file, but by decreasing the nbr of partitions of the output.
@@ -436,8 +431,7 @@ object SparkHelper extends Serializable {
 		// back:
 		decreaseCoalescenceInternal(
 			outputFolder + "_tmp", outputFolder,
-			finalCoalescenceLevel, sparkContext, Some(compressionCodec)
-		)
+			finalCoalescenceLevel, sparkContext, Some(compressionCodec))
 	}
 
 	//////
@@ -454,14 +448,11 @@ object SparkHelper extends Serializable {
 
 		// We perform the merge into a temporary single text file:
 		saveAsSingleTextFileInternal(
-			outputRDD, workingFolder + "/" + temporaryName, compressionCodec
-		)
+			outputRDD, workingFolder + "/" + temporaryName, compressionCodec)
 
 		// And then only we put the resulting file in its final real location:
 		HdfsHelper.moveFile(
-			workingFolder + "/" + temporaryName, outputFile,
-			overwrite = true
-		)
+			workingFolder + "/" + temporaryName, outputFile, overwrite = true)
 	}
 
 	/** Saves RDD in exactly one file.
@@ -494,8 +485,7 @@ object SparkHelper extends Serializable {
 		FileUtil.copyMerge(
 			fileSystem, new Path(outputFile + ".tmp"),
 			fileSystem, new Path(outputFile),
-			true, new Configuration(), null
-		)
+			true, new Configuration(), null)
 		HdfsHelper.deleteFolder(outputFile + ".tmp")
 	}
 

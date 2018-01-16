@@ -51,12 +51,10 @@ class Test(
 		kpiType + "\"."
 	)
 
-	private[monitoring] def isSuccess(): Boolean = {
-		thresholdType match {
-			case "superior to" => abs(kpiValue) >= appliedThreshold
-			case "inferior to" => abs(kpiValue) <= appliedThreshold
-			case "equal to"    => kpiValue == appliedThreshold
-		}
+	private[monitoring] def isSuccess(): Boolean = thresholdType match {
+		case "superior to" => abs(kpiValue) >= appliedThreshold
+		case "inferior to" => abs(kpiValue) <= appliedThreshold
+		case "equal to"    => kpiValue == appliedThreshold
 	}
 
 	private[monitoring] def stringify(): String = {

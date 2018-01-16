@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.0.16
+Version: 1.0.17
 
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -48,8 +48,8 @@ import com.spark_helper.HdfsHelper
 // A bunch of methods wrapping the FileSystem API, such as:
 HdfsHelper.fileExists("my/hdfs/file/path.txt")
 assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
-assert(HdfsHelper.getFileModificationDate("my/hdfs/file/path.txt") == "20170306")
-assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
+assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
+assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
 HdfsHelper.deleteFile("my/hdfs/file/path.csv")
 HdfsHelper.moveFolder("my/hdfs/folder")
 HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
@@ -131,7 +131,7 @@ With sbt, add these lines to your build.sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.0.16"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.0.17"
 ```
 
 With maven, add these lines to your pom.xml:
@@ -147,7 +147,7 @@ With maven, add these lines to your pom.xml:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>v1.0.16</version>
+	<version>v1.0.17</version>
 </dependency>
 ```
 
@@ -161,7 +161,7 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:v1.0.16'
+	compile 'com.github.xavierguihot:spark_helper:v1.0.17'
 }
 ```
 

@@ -122,8 +122,8 @@ code and thus could instead just use HdfsHelper.deleteFile(&quot;my/hdfs/file/pa
 <span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
 HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
 assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))
-assert(HdfsHelper.getFileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
-assert(HdfsHelper.getNbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
+assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
+assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
 HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>)
 HdfsHelper.moveFolder(<span class="lit">"my/hdfs/folder"</span>)
 HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])
