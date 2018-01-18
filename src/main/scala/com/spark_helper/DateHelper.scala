@@ -3,6 +3,8 @@ package com.spark_helper
 import org.joda.time.{DateTime, DateTimeZone, Days}
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 
+import scala.util.Try
+
 /** A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).
   *
   * The goal is to remove the maximum of highly used low-level code from your
@@ -357,5 +359,25 @@ object DateHelper extends Serializable {
 	  */
 	def dayOfWeek(date: String, format: String = "yyyyMMdd"): Int = {
 		DateTimeFormat.forPattern(format).parseDateTime(date).getDayOfWeek()
+	}
+
+	/** Validates a string date is under the provided format.
+	  *
+	  * {{{
+	  * assert(DateHelper.isDateCompliantWithFormat("20170302", "yyyyMMdd"))
+	  * assert(!DateHelper.isDateCompliantWithFormat("20170333", "yyyyMMdd"))
+	  * assert(DateHelper.isDateCompliantWithFormat("20170228", "yyyyMMdd"))
+	  * assert(!DateHelper.isDateCompliantWithFormat("20170229", "yyyyMMdd"))
+	  * assert(!DateHelper.isDateCompliantWithFormat("170228", "yyyyMMdd"))
+	  * assert(!DateHelper.isDateCompliantWithFormat("", "yyyyMMdd"))
+	  * assert(!DateHelper.isDateCompliantWithFormat("a", "yyyyMMdd"))
+	  * assert(!DateHelper.isDateCompliantWithFormat("24JAN17", "yyyyMMdd"))
+	  * }}}
+	  *
+	  * @param stringValue the stringified date
+	  * @return if the provided date is under the provided format
+	  */
+	def isDateCompliantWithFormat(stringValue: String, format: String): Boolean = {
+		Try(DateTimeFormat.forPattern(format).parseDateTime(stringValue)).isSuccess
 	}
 }

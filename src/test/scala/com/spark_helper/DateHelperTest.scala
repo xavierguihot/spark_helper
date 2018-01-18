@@ -73,4 +73,15 @@ class DateHelperTest extends FunSuite {
 	test("Day of Week") {
 		assert(DateHelper.dayOfWeek("20180102") === 2)
 	}
+
+	test("Date versus Provided Format") {
+		assert(DateHelper.isDateCompliantWithFormat("20170302", "yyyyMMdd"))
+		assert(!DateHelper.isDateCompliantWithFormat("20170333", "yyyyMMdd"))
+		assert(DateHelper.isDateCompliantWithFormat("20170228", "yyyyMMdd"))
+		assert(!DateHelper.isDateCompliantWithFormat("20170229", "yyyyMMdd"))
+		assert(!DateHelper.isDateCompliantWithFormat("170228", "yyyyMMdd"))
+		assert(!DateHelper.isDateCompliantWithFormat("", "yyyyMMdd"))
+		assert(!DateHelper.isDateCompliantWithFormat("a", "yyyyMMdd"))
+		assert(!DateHelper.isDateCompliantWithFormat("24JAN17", "yyyyMMdd"))
+	}
 }

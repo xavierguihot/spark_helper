@@ -378,6 +378,30 @@ format.</p></dd></dl></div>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.DateHelper#isDateCompliantWithFormat" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDateCompliantWithFormat(stringValue:String,format:String):Boolean"></a>
+      <a id="isDateCompliantWithFormat(String,String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDateCompliantWithFormat</span><span class="params">(<span name="stringValue">stringValue: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="format">format: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.DateHelper$@isDateCompliantWithFormat(stringValue:String,format:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Validates a string date is under the provided format.</p><div class="fullcomment"><div class="comment cmt"><p>Validates a string date is under the provided format.</p><pre>assert(DateHelper.isDateCompliantWithFormat(<span class="lit">"20170302"</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(!DateHelper.isDateCompliantWithFormat(<span class="lit">"20170333"</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(DateHelper.isDateCompliantWithFormat(<span class="lit">"20170228"</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(!DateHelper.isDateCompliantWithFormat(<span class="lit">"20170229"</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(!DateHelper.isDateCompliantWithFormat(<span class="lit">"170228"</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(!DateHelper.isDateCompliantWithFormat(<span class="lit">""</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(!DateHelper.isDateCompliantWithFormat(<span class="lit">"a"</span>, <span class="lit">"yyyyMMdd"</span>))
+assert(!DateHelper.isDateCompliantWithFormat(<span class="lit">"24JAN17"</span>, <span class="lit">"yyyyMMdd"</span>))</pre></div><dl class="paramcmts block"><dt class="param">stringValue</dt><dd class="cmt"><p>the stringified date</p></dd><dt>returns</dt><dd class="cmt"><p>if the provided date is under the provided format</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
