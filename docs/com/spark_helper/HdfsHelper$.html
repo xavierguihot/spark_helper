@@ -49,10 +49,12 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A facility to deal with file manipulations (wrapper around hdfs apache
+Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>For instance, one don't want to remove a file from hdfs using 3 lines of
-code and thus could instead just use HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
+code and thus could instead just use
+HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
 
 <span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
 HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
@@ -65,16 +67,22 @@ HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</
 HdfsHelper.appendHeader(<span class="lit">"my/hdfs/file/path.csv"</span>, <span class="lit">"colum0,column1"</span>)
 
 <span class="cmt">// Some Xml/Typesafe helpers for hadoop as well:</span>
-HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
+HdfsHelper.isHdfsXmlCompliantWithXsd(
+  <span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
 HdfsHelper.loadXmlFileFromHdfs(<span class="lit">"my/hdfs/file/path.xml"</span>)
 
-<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the begining of a spark job:</span>
+<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the</span>
+<span class="cmt">// begining of a spark job:</span>
 HdfsHelper.loadTypesafeConfigFromHdfs(<span class="lit">"my/hdfs/file/path.conf"</span>): Config
 
-<span class="cmt">// In order to write small amount of data in a file on hdfs without the whole spark stack:</span>
-HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="cmt">// In order to write small amount of data in a file on hdfs without the</span>
+<span class="cmt">// whole spark stack:</span>
+HdfsHelper.writeToHdfsFile(
+  <span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>),
+  <span class="lit">"/some/hdfs/file/path.txt"</span>)
 
-<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:</span>
+<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the</span>
+<span class="cmt">// timestamp is older than 10 days:</span>
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
@@ -190,10 +198,10 @@ HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span cla
       </a>
     </span>
       <p class="shortcomment cmt">Appends a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a footer to a file.</p><p>If the workingFolderPath parameter is provided, then the processing is
-done in a working/tmp folder and then only, the final file is moved
-to its final real location. This way, in case of cluster instability,
-i.e. in case the Spark job is interupted, this avoids having a temporary
-or corrupted file in output.
+done in a working/tmp folder and then only, the final file is moved to its
+final real location. This way, in case of cluster instability, i.e. in
+case the Spark job is interupted, this avoids having a temporary or
+corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the footer</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendHeader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendHeader(filePath:String,header:String,workingFolderPath:String):Unit"></a>
@@ -213,10 +221,10 @@ or corrupted file in output.
     </span>
       <p class="shortcomment cmt">Appends a header to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header to a file.</p><p>Usefull when creating a csv file with spark and you need to add a header
 describing the different fields.</p><p>If the workingFolderPath parameter is provided, then the processing is
-done in a working/tmp folder and then only, the final file is moved
-to its final real location. This way, in case of cluster instability,
-i.e. in case the Spark job is interupted, this avoids having a temporary
-or corrupted file in output.
+done in a working/tmp folder and then only, the final file is moved to its
+final real location. This way, in case of cluster instability, i.e. in
+case the Spark job is interupted, this avoids having a temporary or
+corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendHeaderAndFooter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendHeaderAndFooter(filePath:String,header:String,footer:String,workingFolderPath:String):Unit"></a>
@@ -234,12 +242,12 @@ or corrupted file in output.
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Appends a header and a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header and a footer to a file.</p><p>Usefull when creating an xml file with spark and you need to add top
-level tags.</p><p>If the workingFolderPath parameter is provided, then the processing is
-done in a working/tmp folder and then only, the final file is moved
-to its final real location. This way, in case of cluster instability,
-i.e. in case the Spark job is interupted, this avoids having a temporary
-or corrupted file in output.
+      <p class="shortcomment cmt">Appends a header and a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header and a footer to a file.</p><p>Usefull when creating an xml file with spark and you need to add top level
+tags.</p><p>If the workingFolderPath parameter is provided, then the processing is
+done in a working/tmp folder and then only, the final file is moved to its
+final real location. This way, in case of cluster instability, i.e. in
+case the Spark job is interupted, this avoids having a temporary or
+corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header and the
 footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -298,12 +306,13 @@ footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to ad
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Compresses an Hdfs file to the given codec, without changing the lines order.</p><div class="fullcomment"><div class="comment cmt"><p>Compresses an Hdfs file to the given codec, without changing the lines order.</p><p>For instance, after producing an xml for which the order matters, one
-don't want to use sparkContext.saveAsTextFile with a compression codec
-due to the resulting compressed file in which lines would be unordered.</p><p>Here is an example, where hdfs/path/to/uncompressed_file.txt will be
+      <p class="shortcomment cmt">Compresses an Hdfs file to the given codec, without changing the lines
+order.</p><div class="fullcomment"><div class="comment cmt"><p>Compresses an Hdfs file to the given codec, without changing the lines
+order.</p><p>For instance, after producing an xml for which the order matters, one
+don't want to use sparkContext.saveAsTextFile with a compression codec due
+to the resulting compressed file in which lines would be unordered.</p><p>Here is an example, where hdfs/path/to/uncompressed_file.txt will be
 compressed and renamed hdfs/path/to/uncompressed_file.txt.gz:</p><pre>HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])</pre></div><dl class="paramcmts block"><dt class="param">inputPath</dt><dd class="cmt"><p>the path of the file on hdfs to compress</p></dd><dt class="param">compressionCodec</dt><dd class="cmt"><p>the type of compression to use (for instance
-classOf[BZip2Codec] or classOf[GzipCodec])).</p></dd><dt class="param">deleteInputFile</dt><dd class="cmt"><p>if the input file is deleted after its
-compression.</p></dd></dl></div>
+classOf[BZip2Codec] or classOf[GzipCodec])).</p></dd><dt class="param">deleteInputFile</dt><dd class="cmt"><p>if the input file is deleted after its compression</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#createEmptyHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createEmptyHdfsFile(filePath:String):Unit"></a>
       <a id="createEmptyHdfsFile(String):Unit"></a>
@@ -529,8 +538,8 @@ modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime 
     </span>
       <p class="shortcomment cmt">Returns the stringified date of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given folder.</p><pre>assert(HdfsHelper.folderModificationDate(<span class="lit">"my/hdfs/folder"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
 modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given
-folder, under the provided format.</p></dd></dl></div>
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given folder,
+under the provided format.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#folderModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="folderModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
       <a id="folderModificationDateTime(String):DateTime"></a>
@@ -601,10 +610,10 @@ modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime 
       </a>
     </span>
       <p class="shortcomment cmt">Validates an XML file on hdfs in regard to the given XSD.</p><div class="fullcomment"><div class="comment cmt"><p>Validates an XML file on hdfs in regard to the given XSD.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the file on hdfs for which to validate
-the compliance with the given xsd.</p></dd><dt class="param">xsdFile</dt><dd class="cmt"><p>the xsd file. The easiest is to put your xsd file within
-your resources folder (src/main/resources) and then get it as an URL
-with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd class="cmt"><p>if the xml is compliant with the xsd</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the file on hdfs for which to validate the
+compliance with the given xsd.</p></dd><dt class="param">xsdFile</dt><dd class="cmt"><p>the xsd file. The easiest is to put your xsd file within
+your resources folder (src/main/resources) and then get it as an URL with
+getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd class="cmt"><p>if the xml is compliant with the xsd</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -639,8 +648,8 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd><dt>returns</dt><dd
       </a>
     </span>
       <p class="shortcomment cmt">Lists file names in the specified hdfs folder.</p><div class="fullcomment"><div class="comment cmt"><p>Lists file names in the specified hdfs folder.</p><pre>assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to list file names</p></dd><dt class="param">recursive</dt><dd class="cmt"><p>(default = false) if true, list files in subfolders as
-well.</p></dd><dt class="param">onlyName</dt><dd class="cmt"><p>(default = true) if false, list paths instead of only
-name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names in the specified folder</p></dd></dl></div>
+well.</p></dd><dt class="param">onlyName</dt><dd class="cmt"><p>(default = true) if false, list paths instead of only name
+of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names in the specified folder</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#listFolderNamesInFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="listFolderNamesInFolder(hdfsPath:String):List[String]"></a>
       <a id="listFolderNamesInFolder(String):List[String]"></a>
@@ -675,27 +684,26 @@ name of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names
       </a>
     </span>
       <p class="shortcomment cmt">Loads a typesafe config from Hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a typesafe config from Hdfs.</p><p>The best way to load the configuration of your job from hdfs.</p><p>Typesafe is a config format which looks like this:</p><pre>config {
-	airlines = [
-		{
-			code = QF
-			window_size_in_hour = <span class="num">6</span>
-			kpis {
-				search_count_threshold = <span class="num">25000</span>
-				popularity_count_threshold = <span class="num">400</span>
-			}
-		}
-		{
-			code = AF
-			window_size_in_hour = <span class="num">6</span>
-			kpis {
-				search_count_threshold = <span class="num">100000</span>
-				popularity_count_threshold = <span class="num">800</span>
-			}
-		}
-	]
+  airlines = [
+    {
+      code = QF
+      window_size_in_hour = <span class="num">6</span>
+      kpis {
+        search_count_threshold = <span class="num">25000</span>
+        popularity_count_threshold = <span class="num">400</span>
+      }
+    }
+    {
+      code = AF
+      window_size_in_hour = <span class="num">6</span>
+      kpis {
+        search_count_threshold = <span class="num">100000</span>
+        popularity_count_threshold = <span class="num">800</span>
+      }
+    }
+  ]
 }</pre></div><dl class="paramcmts block"><dt class="param">hdfsConfigPath</dt><dd class="cmt"><p>the absolute path of the typesafe config file on
-hdfs we want to load as a typesafe Config object.</p></dd><dt>returns</dt><dd class="cmt"><p>the com.typesafe.config.Config object which contains usable
-data.</p></dd></dl></div>
+hdfs we want to load as a typesafe Config object.</p></dd><dt>returns</dt><dd class="cmt"><p>the com.typesafe.config.Config object which contains usable data</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#loadXmlFileFromHdfs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadXmlFileFromHdfs(hdfsXmlPath:String):scala.xml.Elem"></a>
       <a id="loadXmlFileFromHdfs(String):Elem"></a>
@@ -840,7 +848,10 @@ since the last modification.</p></dd><dt>returns</dt><dd class="cmt"><p>the nbr 
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Deletes in the given folder, the files/folders older than the given threshold (in days).</p><div class="fullcomment"><div class="comment cmt"><p>Deletes in the given folder, the files/folders older than the given threshold (in days).</p><pre><span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:</span>
+      <p class="shortcomment cmt">Deletes in the given folder, the files/folders older than the given
+threshold (in days).</p><div class="fullcomment"><div class="comment cmt"><p>Deletes in the given folder, the files/folders older than the given
+threshold (in days).</p><pre><span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the</span>
+<span class="cmt">// timestamp is older than 10 days:</span>
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre></div><dl class="paramcmts block"><dt class="param">folderPath</dt><dd class="cmt"><p>the path of the folder on hdfs to purge</p></dd><dt class="param">purgeAge</dt><dd class="cmt"><p>the threshold (in nbr of days) above which a file is
 considered too old and thus deleted/purged.</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -895,10 +906,10 @@ considered too old and thus deleted/purged.</p></dd></dl></div>
     </span>
       <p class="shortcomment cmt">Validates an XML file on hdfs in regard to the given XSD.</p><div class="fullcomment"><div class="comment cmt"><p>Validates an XML file on hdfs in regard to the given XSD.</p><p>Returns nothing and don't catch the error if the xml is not valid. This
 way you can retrieve the error and analyse it.
-</p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the file on hdfs for which to validate
-the compliance with the given xsd.</p></dd><dt class="param">xsdFile</dt><dd class="cmt"><p>the xsd file. The easiest is to put your xsd file within
-your resources folder (src/main/resources) and then get it as an URL
-with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">hdfsXmlPath</dt><dd class="cmt"><p>the path of the file on hdfs for which to validate the
+compliance with the given xsd.</p></dd><dt class="param">xsdFile</dt><dd class="cmt"><p>the xsd file. The easiest is to put your xsd file within
+your resources folder (src/main/resources) and then get it as an URL with
+getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -985,8 +996,10 @@ with getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd></dl></div>
       </a>
     </span>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
-enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
-HdfsHelper.writeToHdfsFile(<span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the array of strings to write in the file as one line per
+enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(
+  <span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+HdfsHelper.writeToHdfsFile(
+  <span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the array of strings to write in the file as one line per
 string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#writeToHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="writeToHdfsFile(content:String,filePath:String):Unit"></a>
@@ -1005,7 +1018,8 @@ string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt cl
       </a>
     </span>
       <p class="shortcomment cmt">Saves text in a file when content is too small to really require an RDD.</p><div class="fullcomment"><div class="comment cmt"><p>Saves text in a file when content is too small to really require an RDD.</p><p>Please only consider this way of storing data when the data set is small
-enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(<span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
+enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(
+ <span class="lit">"some\nrelatively small\ntext"</span>, <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the string to write in the file (you can provide a string
 with \n in order to write several lines).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li></ol>
             </div>

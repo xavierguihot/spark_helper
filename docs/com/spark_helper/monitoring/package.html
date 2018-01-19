@@ -91,69 +91,73 @@ facility:</p><pre><span class="kw">val</span> sparkContext = <span class="kw">ne
 
 <span class="kw">try</span> {
 
-	<span class="cmt">// Let's perform a spark pipeline which might goes wrong:</span>
-	<span class="kw">val</span> processedData = sparkContext.textFile(<span class="lit">"/my/hdfs/input/path"</span>).map(<span class="kw">do</span> whatever)
+  <span class="cmt">// Let's perform a spark pipeline which might goes wrong:</span>
+  <span class="kw">val</span> processedData = sparkContext
+    .textFile(<span class="lit">"/my/hdfs/input/path"</span>).map(<span class="kw">do</span> whatever)
 
-	<span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
-	<span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
-		<span class="std">List</span>(
-			<span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
-			<span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
-		),
-		<span class="lit">"My pipeline descirption"</span>
-	)
+  <span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
+  <span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
+    <span class="std">List</span>(
+      <span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
+      <span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
+    ),
+    <span class="lit">"My pipeline descirption"</span>
+  )
 
-	<span class="kw">if</span> (outputIsValid)
-		processedData.saveAsTextFile(<span class="lit">"wherever/folder"</span>)
+  <span class="kw">if</span> (outputIsValid)
+    processedData.saveAsTextFile(<span class="lit">"wherever/folder"</span>)
 
 } <span class="kw">catch</span> {
-	<span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span> {
-		monitor.updateReportWithError(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
-	}
-	<span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span> {
-		monitor.updateReportWithError(e, <span class="lit">"My pipeline descirption"</span>)
-	}
+  <span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span> {
+    monitor.updateReportWithError(
+      iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+  }
+  <span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span> {
+    monitor.updateReportWithError(e, <span class="lit">"My pipeline descirption"</span>)
+  }
 }
 
 <span class="kw">if</span> (monitor.isSuccess()) {
-	<span class="kw">val</span> doMore = <span class="lit">"Let's do more stuff!"</span>
-	monitor.updateReport(<span class="lit">"My second pipeline description: success"</span>)
+  <span class="kw">val</span> doMore = <span class="lit">"Let's do more stuff!"</span>
+  monitor.updateReport(<span class="lit">"My second pipeline description: success"</span>)
 }
 
-<span class="cmt">// At the end of the different steps of the job, we can store the report in HDFS:</span>
+<span class="cmt">// At the end of the different steps of the job, we can store the report in</span>
+<span class="cmt">// HDFS:</span>
 monitor.saveReport(<span class="lit">"/my/hdfs/functionnal/logs/folder"</span>)
 
-<span class="cmt">// At the end of your job, if you considered your job isn't successfull, then crash it!:</span>
+<span class="cmt">// At the end of your job, if you considered your job isn't successfull,</span>
+<span class="cmt">// then crash it!:</span>
 <span class="kw">if</span> (!monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception()</pre><p>If we were to read the stored report after this simple pipeline, here are
-some possible scenarios:</p><p>First scenario, problem with the input of the job:</p><pre>					My Simple Job
+some possible scenarios:</p><p>First scenario, problem with the input of the job:</p><pre>          My Simple Job
 
 [<span class="num">10</span>:<span class="num">23</span>] Begining
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
-	Diagnostic: No input data!
-		org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
-		at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
-		at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
-		...
-[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>					My Simple Job
+  Diagnostic: No input data!
+    org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+    at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+    at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+    ...
+[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>          My Simple Job
 
 [<span class="num">10</span>:<span class="num">23</span>] Begining
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
-		java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
-		java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
-		java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
-		...
-[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>					My Simple Job
+    java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
+    java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
+    java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
+    ...
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>          My Simple Job
 
 [<span class="num">10</span>:<span class="num">23</span>] Begining
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
-	KPI: Nbr of output records
-		Value: <span class="num">14669071.0</span>
-		Must be superior to <span class="num">10000000.0</span>
-		Validated: <span class="kw">true</span>
-	KPI: <span class="std">Some</span> pct of invalid output
-		Value: <span class="num">0.06</span>%
-		Must be inferior to <span class="num">3.0</span>%
-		Validated: <span class="kw">true</span>
+  KPI: Nbr of output records
+    Value: <span class="num">14669071.0</span>
+    Must be superior to <span class="num">10000000.0</span>
+    Validated: <span class="kw">true</span>
+  KPI: <span class="std">Some</span> pct of invalid output
+    Value: <span class="num">0.06</span>%
+    Must be inferior to <span class="num">3.0</span>%
+    Validated: <span class="kw">true</span>
 [<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
 [<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>One of the good things of this facility is the catching of spark exceptions
 and it's storage within a log file. This makes it a lot easier to quickly

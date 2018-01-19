@@ -49,7 +49,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A facility which deals with usual date needs (wrapper around
+<a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>A few exemples:</p><pre>assert(DateHelper.daysBetween(<span class="lit">"20161230"</span>, <span class="lit">"20170101"</span>) == <span class="std">List</span>(<span class="lit">"20161230"</span>, <span class="lit">"20161231"</span>, <span class="lit">"20170101"</span>))
 assert(DateHelper.today() == <span class="lit">"20170310"</span>) <span class="cmt">// If today's "20170310"</span>
@@ -455,12 +456,12 @@ objects instead of String dates.
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Returns which date it will be x days after the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it will be x days after the given date.</p><p>If the given date is &quot;20170122&quot; and we request the date it will be 3
-days after, we'll return &quot;20170125&quot;.</p><pre>assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)
-assert(DateHelper.nDaysAfterDate(<span class="num">5</span>, <span class="lit">"170305"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysAfter</dt><dd class="cmt"><p>the nbr of days after the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the
-date for nbrOfDaysAfter days after.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
-returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysAfter after date under the
-requested format.</p></dd></dl></div>
+      <p class="shortcomment cmt">Returns which date it will be x days after the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it will be x days after the given date.</p><p>If the given date is &quot;20170122&quot; and we request the date it will be 3 days
+after, we'll return &quot;20170125&quot;.</p><pre>assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)
+assert(DateHelper.nDaysAfterDate(<span class="num">5</span>, <span class="lit">"170305"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170310"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysAfter</dt><dd class="cmt"><p>the nbr of days after the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the date
+for nbrOfDaysAfter days after.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
+returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysAfter after date under the requested
+format.</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nDaysBefore" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nDaysBefore(nbrOfDaysBefore:Int,format:String):String"></a>
       <a id="nDaysBefore(Int,String):String"></a>
@@ -480,8 +481,7 @@ requested format.</p></dd></dl></div>
       <p class="shortcomment cmt">Returns which date it was x days before today under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it was x days before today under the requested format.</p><p>If we're &quot;20170125&quot; and we request for 3 days before, we'll return
 &quot;20170122&quot;.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.nDaysBefore(<span class="num">3</span>) == <span class="lit">"20170307"</span>)
-assert(DateHelper.nDaysBefore(<span class="num">5</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170305"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysBefore</dt><dd class="cmt"><p>the nbr of days before today</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the returned date</p></dd><dt>returns</dt><dd class="cmt"><p>today's date minus the nbrOfDaysBefore under the requested
-format.</p></dd></dl></div>
+assert(DateHelper.nDaysBefore(<span class="num">5</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170305"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysBefore</dt><dd class="cmt"><p>the nbr of days before today</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the returned date</p></dd><dt>returns</dt><dd class="cmt"><p>today's date minus the nbrOfDaysBefore under the requested format</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nDaysBeforeDate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nDaysBeforeDate(nbrOfDaysBefore:Int,date:String,format:String):String"></a>
       <a id="nDaysBeforeDate(Int,String,String):String"></a>
@@ -500,10 +500,10 @@ format.</p></dd></dl></div>
     </span>
       <p class="shortcomment cmt">Returns which date it was x days before the given date.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it was x days before the given date.</p><p>If the given date is &quot;20170125&quot; and we request the date it was 3 days
 before, we'll return &quot;20170122&quot;.</p><pre>assert(DateHelper.nDaysBeforeDate(<span class="num">3</span>, <span class="lit">"20170310"</span>) == <span class="lit">"20170307"</span>)
-assert(DateHelper.nDaysBeforeDate(<span class="num">5</span>, <span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170305"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysBefore</dt><dd class="cmt"><p>the nbr of days before the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the
-date for nbrOfDaysBefore days before.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
-returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysBefore before date under the
-requested format.</p></dd></dl></div>
+assert(DateHelper.nDaysBeforeDate(<span class="num">5</span>, <span class="lit">"170310"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170305"</span>)</pre></div><dl class="paramcmts block"><dt class="param">nbrOfDaysBefore</dt><dd class="cmt"><p>the nbr of days before the given date</p></dd><dt class="param">date</dt><dd class="cmt"><p>the date under the provided format for which we want the date
+for nbrOfDaysBefore days before.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format for the provided and
+returned dates.</p></dd><dt>returns</dt><dd class="cmt"><p>the date it was nbrOfDaysBefore before date under the requested
+format.</p></dd></dl></div>
     </li><li name="com.spark_helper.DateHelper#nbrOfDaysBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nbrOfDaysBetween(firstDate:String,lastDate:String,format:String):Int"></a>
       <a id="nbrOfDaysBetween(String,String,String):Int"></a>
@@ -743,7 +743,7 @@ assert(DateHelper.today(<span class="lit">"yyMMdd"</span>) == <span class="lit">
       <p class="shortcomment cmt">Returns which date it was 2 days before today under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns which date it was 2 days before today under the requested format.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.twoDaysAgo() == <span class="lit">"20170308"</span>)
 assert(DateHelper.twoDaysAgo(<span class="lit">"yyMMdd"</span>) == <span class="lit">"170308"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format in which to output the
-date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two days ago under the requested format</p></dd></dl></div>
+date of two days ago.</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two days ago under the requested format</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -832,7 +832,7 @@ date of two days ago</p></dd><dt>returns</dt><dd class="cmt"><p>the date of two 
       <p class="shortcomment cmt">Returns yesterday's date/time under the requested format.</p><div class="fullcomment"><div class="comment cmt"><p>Returns yesterday's date/time under the requested format.</p><pre><span class="cmt">// If today's "20170310":</span>
 assert(DateHelper.yesterday() == <span class="lit">"20170309"</span>)
 assert(DateHelper.yesterday(<span class="lit">"yyMMdd"</span>) == <span class="lit">"170309"</span>)</pre></div><dl class="paramcmts block"><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format in which to output the
-date of yesterday</p></dd><dt>returns</dt><dd class="cmt"><p>yesterday's date under the requested format</p></dd></dl></div>
+date of yesterday.</p></dd><dt>returns</dt><dd class="cmt"><p>yesterday's date under the requested format</p></dd></dl></div>
     </li></ol>
             </div>
 

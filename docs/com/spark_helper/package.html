@@ -86,7 +86,9 @@
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility which deals with usual date needs (wrapper around <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
+      <p class="shortcomment cmt">A facility which deals with usual date needs (wrapper around
+<a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility which deals with usual date needs (wrapper around
+<a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>A few exemples:</p><pre>assert(DateHelper.daysBetween(<span class="lit">"20161230"</span>, <span class="lit">"20170101"</span>) == <span class="std">List</span>(<span class="lit">"20161230"</span>, <span class="lit">"20161231"</span>, <span class="lit">"20170101"</span>))
 assert(DateHelper.today() == <span class="lit">"20170310"</span>) <span class="cmt">// If today's "20170310"</span>
@@ -114,10 +116,13 @@ assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility to deal with file manipulations (wrapper around hdfs apache Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
+      <p class="shortcomment cmt">A facility to deal with file manipulations (wrapper around hdfs apache
+Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility to deal with file manipulations (wrapper around hdfs apache
+Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>For instance, one don't want to remove a file from hdfs using 3 lines of
-code and thus could instead just use HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
+code and thus could instead just use
+HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
 
 <span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
 HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
@@ -130,16 +135,22 @@ HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</
 HdfsHelper.appendHeader(<span class="lit">"my/hdfs/file/path.csv"</span>, <span class="lit">"colum0,column1"</span>)
 
 <span class="cmt">// Some Xml/Typesafe helpers for hadoop as well:</span>
-HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
+HdfsHelper.isHdfsXmlCompliantWithXsd(
+  <span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
 HdfsHelper.loadXmlFileFromHdfs(<span class="lit">"my/hdfs/file/path.xml"</span>)
 
-<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the begining of a spark job:</span>
+<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the</span>
+<span class="cmt">// begining of a spark job:</span>
 HdfsHelper.loadTypesafeConfigFromHdfs(<span class="lit">"my/hdfs/file/path.conf"</span>): Config
 
-<span class="cmt">// In order to write small amount of data in a file on hdfs without the whole spark stack:</span>
-HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="cmt">// In order to write small amount of data in a file on hdfs without the</span>
+<span class="cmt">// whole spark stack:</span>
+HdfsHelper.writeToHdfsFile(
+  <span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>),
+  <span class="lit">"/some/hdfs/file/path.txt"</span>)
 
-<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:</span>
+<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the</span>
+<span class="cmt">// timestamp is older than 10 days:</span>
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
@@ -163,8 +174,10 @@ HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span cla
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>A few exemples:</p><pre><span class="cmt">// Same as SparkContext.saveAsTextFile, but the result is a single file:</span>
 SparkHelper.saveAsSingleTextFile(myOutputRDD, <span class="lit">"/my/output/file/path.txt"</span>)
-<span class="cmt">// Same as SparkContext.textFile, but instead of reading one record per line, it reads records spread over several lines.</span>
-<span class="cmt">// This way, xml, json, yml or any multi-line record file format can be used with Spark:</span>
+<span class="cmt">// Same as SparkContext.textFile, but instead of reading one record per</span>
+<span class="cmt">// line, it reads records spread over several lines.</span>
+<span class="cmt">// This way, xml, json, yml or any multi-line record file format can be used</span>
+<span class="cmt">// with Spark:</span>
 SparkHelper.textFileWithDelimiter(<span class="lit">"/my/input/folder/path"</span>, sparkContext, <span class="lit">"---\n"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>

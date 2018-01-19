@@ -58,69 +58,73 @@ facility:</p><pre><span class="kw">val</span> sparkContext = <span class="kw">ne
 
 <span class="kw">try</span> {
 
-	<span class="cmt">// Let's perform a spark pipeline which might goes wrong:</span>
-	<span class="kw">val</span> processedData = sparkContext.textFile(<span class="lit">"/my/hdfs/input/path"</span>).map(<span class="kw">do</span> whatever)
+  <span class="cmt">// Let's perform a spark pipeline which might goes wrong:</span>
+  <span class="kw">val</span> processedData = sparkContext
+    .textFile(<span class="lit">"/my/hdfs/input/path"</span>).map(<span class="kw">do</span> whatever)
 
-	<span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
-	<span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
-		<span class="std">List</span>(
-			<span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
-			<span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
-		),
-		<span class="lit">"My pipeline descirption"</span>
-	)
+  <span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
+  <span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
+    <span class="std">List</span>(
+      <span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
+      <span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
+    ),
+    <span class="lit">"My pipeline descirption"</span>
+  )
 
-	<span class="kw">if</span> (outputIsValid)
-		processedData.saveAsTextFile(<span class="lit">"wherever/folder"</span>)
+  <span class="kw">if</span> (outputIsValid)
+    processedData.saveAsTextFile(<span class="lit">"wherever/folder"</span>)
 
 } <span class="kw">catch</span> {
-	<span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span> {
-		monitor.updateReportWithError(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
-	}
-	<span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span> {
-		monitor.updateReportWithError(e, <span class="lit">"My pipeline descirption"</span>)
-	}
+  <span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span> {
+    monitor.updateReportWithError(
+      iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+  }
+  <span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span> {
+    monitor.updateReportWithError(e, <span class="lit">"My pipeline descirption"</span>)
+  }
 }
 
 <span class="kw">if</span> (monitor.isSuccess()) {
-	<span class="kw">val</span> doMore = <span class="lit">"Let's do more stuff!"</span>
-	monitor.updateReport(<span class="lit">"My second pipeline description: success"</span>)
+  <span class="kw">val</span> doMore = <span class="lit">"Let's do more stuff!"</span>
+  monitor.updateReport(<span class="lit">"My second pipeline description: success"</span>)
 }
 
-<span class="cmt">// At the end of the different steps of the job, we can store the report in HDFS:</span>
+<span class="cmt">// At the end of the different steps of the job, we can store the report in</span>
+<span class="cmt">// HDFS:</span>
 monitor.saveReport(<span class="lit">"/my/hdfs/functionnal/logs/folder"</span>)
 
-<span class="cmt">// At the end of your job, if you considered your job isn't successfull, then crash it!:</span>
+<span class="cmt">// At the end of your job, if you considered your job isn't successfull,</span>
+<span class="cmt">// then crash it!:</span>
 <span class="kw">if</span> (!monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception()</pre><p>If we were to read the stored report after this simple pipeline, here are
-some possible scenarios:</p><p>First scenario, problem with the input of the job:</p><pre>					My Simple Job
+some possible scenarios:</p><p>First scenario, problem with the input of the job:</p><pre>          My Simple Job
 
 [<span class="num">10</span>:<span class="num">23</span>] Begining
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
-	Diagnostic: No input data!
-		org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
-		at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
-		at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
-		...
-[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>					My Simple Job
+  Diagnostic: No input data!
+    org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+    at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+    at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+    ...
+[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>          My Simple Job
 
 [<span class="num">10</span>:<span class="num">23</span>] Begining
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
-		java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
-		java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
-		java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
-		...
-[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>					My Simple Job
+    java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
+    java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
+    java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
+    ...
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>          My Simple Job
 
 [<span class="num">10</span>:<span class="num">23</span>] Begining
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
-	KPI: Nbr of output records
-		Value: <span class="num">14669071.0</span>
-		Must be superior to <span class="num">10000000.0</span>
-		Validated: <span class="kw">true</span>
-	KPI: <span class="std">Some</span> pct of invalid output
-		Value: <span class="num">0.06</span>%
-		Must be inferior to <span class="num">3.0</span>%
-		Validated: <span class="kw">true</span>
+  KPI: Nbr of output records
+    Value: <span class="num">14669071.0</span>
+    Must be superior to <span class="num">10000000.0</span>
+    Validated: <span class="kw">true</span>
+  KPI: <span class="std">Some</span> pct of invalid output
+    Value: <span class="num">0.06</span>%
+    Must be inferior to <span class="num">3.0</span>%
+    Validated: <span class="kw">true</span>
 [<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
 [<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>One of the good things of this facility is the catching of spark exceptions
 and it's storage within a log file. This makes it a lot easier to quickly
@@ -193,7 +197,7 @@ the possibility to easily have a look at what happened.</p><p>Source <a href="ht
       </a>
     </span>
       <p class="shortcomment cmt">Creates a Monitor object.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a Monitor object.
-Creating the Monitor object like this:</p><pre><span class="kw">new</span> Monitor(<span class="lit">"My Spark Job Title"</span>, <span class="lit">"someone@box.com"</span>, <span class="lit">"Whatever pretty descritpion."</span>)</pre><p>will result in the report to start like this:</p><pre>					My Spark Job Title
+Creating the Monitor object like this:</p><pre><span class="kw">new</span> Monitor(<span class="lit">"My Spark Job Title"</span>, <span class="lit">"someone@box.com"</span>, <span class="lit">"Whatever pretty descritpion."</span>)</pre><p>will result in the report to start like this:</p><pre>          My Spark Job Title
 Point of contact: someone@box.com
 Whatever pretty descritpion.
 [..:..] Begining</pre></div><dl class="paramcmts block"><dt class="param">reportTitle</dt><dd class="cmt"><p>(optional) what's outputed as a first line of the report</p></dd><dt class="param">pointOfContact</dt><dd class="cmt"><p>(optional) the persons in charge of the job</p></dd><dt class="param">additionalInfo</dt><dd class="cmt"><p>(optional) anything you want written at the begining
@@ -511,14 +515,14 @@ of your report.</p></dd><dt class="param">logFolder</dt><dd class="cmt"><p>(opti
     </span>
       <p class="shortcomment cmt">Saves the report in a single text file.</p><div class="fullcomment"><div class="comment cmt"><p>Saves the report in a single text file.</p><p>This report will be stored in the folder provided by the parameter
 logFolder and its name will be either yyyyMMdd_HHmmss.log.success or
-yyyyMMdd_HHmmss.log.failed depending on the monitoring status.</p><p>In addition to storing the report with a timestamp-based name, it is
-also stored under the name &quot;current.success&quot; or &quot;current.failed&quot; in the
-same folder in order to give it a fixed name for downstream projects to
-look for. Obviously if the new status is success, and the previous was
-failed, the previous current.failed file is deleted and vis et versa.</p><p>For high frequency jobs, it might be good not to keep all logs
+yyyyMMdd_HHmmss.log.failed depending on the monitoring status.</p><p>In addition to storing the report with a timestamp-based name, it is also
+stored under the name &quot;current.success&quot; or &quot;current.failed&quot; in the same
+folder in order to give it a fixed name for downstream projects to look
+for. Obviously if the new status is success, and the previous was failed,
+the previous current.failed file is deleted and vis et versa.</p><p>For high frequency jobs, it might be good not to keep all logs
 indefinitely. To avoid that, the parameter purgeLogs can be set to true
-and by providing the parameter purgeWindow, the nbr of days after which
-a log file is purged can be specified.
+and by providing the parameter purgeWindow, the nbr of days after which a
+log file is purged can be specified.
 </p></div><dl class="paramcmts block"><dt class="param">logFolder</dt><dd class="cmt"><p>the path of the folder in which this report is archived</p></dd><dt class="param">purgeLogs</dt><dd class="cmt"><p>(default = false) if logs are purged when too old</p></dd><dt class="param">purgeWindow</dt><dd class="cmt"><p>(default = 7 if purgeLogs = true) if purgeLogs is set
 to true, after how many days a log file is considered outdated and is
 purged.</p></dd></dl></div>
@@ -574,16 +578,15 @@ purged.</p></dd></dl></div>
     </span>
       <p class="shortcomment cmt">Updates the report by the validation of a single kpi.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report by the validation of a single kpi.</p><p>By providing a <a href="Test.html" class="extype" name="com.spark_helper.monitoring.Test">com.spark_helper.monitoring.Test</a> object to validate
 against a threshold, the report is updated with a detailed result of the
-validation and the success status of the monitoring is set to false if
-the KPI isn't valid.</p><p>If the validation is a failure then after that the status will never be
+validation and the success status of the monitoring is set to false if the
+KPI isn't valid.</p><p>If the validation is a failure then after that the status will never be
 success again, even if you update the report with success tasks.</p><p>Using this method like this:</p><pre>monitor.updateByKpiValidation(
-	<span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>),
-	<span class="lit">"Tests for whatever"</span>
-)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: success
-	KPI: pctOfWhatever
-		Value: <span class="num">0.06</span>%
-		Must be inferior to <span class="num">0.1</span>%
-		Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>the Test object to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if the test is successful</p></dd></dl></div>
+  <span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>),
+  <span class="lit">"Tests for whatever"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: success
+  KPI: pctOfWhatever
+    Value: <span class="num">0.06</span>%
+    Must be inferior to <span class="num">0.1</span>%
+    Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>the Test object to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if the test is successful</p></dd></dl></div>
     </li><li name="com.spark_helper.monitoring.Monitor#updateByKpisValidation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateByKpisValidation(tests:List[com.spark_helper.monitoring.Test],testSuitName:String):Boolean"></a>
       <a id="updateByKpisValidation(List[Test],String):Boolean"></a>
@@ -601,29 +604,29 @@ success again, even if you update the report with success tasks.</p><p>Using thi
       </a>
     </span>
       <p class="shortcomment cmt">Updates the report by the validation of a list of kpis/tests.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report by the validation of a list of kpis/tests.</p><p>By providing a list of <a href="Test.html" class="extype" name="com.spark_helper.monitoring.Test">com.spark_helper.monitoring.Test</a> objects to
-validate against thresholds, the report is updated with a detailed
-result of the validation and the success status of the monitoring is set
-to false if at least one KPI isn't valid.</p><p>If the validation of tests is a failure then after that the status will
+validate against thresholds, the report is updated with a detailed result
+of the validation and the success status of the monitoring is set to false
+if at least one KPI isn't valid.</p><p>If the validation of tests is a failure then after that the status will
 never be success again, even if you update the report with success tasks.</p><p>Using this method like this:</p><pre>monitor.updateByKpisValidation(
-	<span class="std">List</span>(
-		<span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>),
-		<span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>f, <span class="lit">"superior to"</span>, <span class="num">0.3</span>f, <span class="lit">"pct"</span>),
-		<span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>f, <span class="lit">"equal to"</span>, <span class="num">1235</span>f, <span class="lit">"nbr"</span>)
-	),
-	<span class="lit">"Tests for whatever"</span>
+  <span class="std">List</span>(
+    <span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>),
+    <span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>f, <span class="lit">"superior to"</span>, <span class="num">0.3</span>f, <span class="lit">"pct"</span>),
+    <span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>f, <span class="lit">"equal to"</span>, <span class="num">1235</span>f, <span class="lit">"nbr"</span>)
+  ),
+  <span class="lit">"Tests for whatever"</span>
 )</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: failed
-	KPI: pctOfWhatever
-		Value: <span class="num">0.06</span>%
-		Must be inferior to <span class="num">0.1</span>%
-		Validated: <span class="kw">true</span>
-	KPI: pctOfSomethingElse
-		Value: <span class="num">0.27</span>%
-		Must be superior to <span class="num">0.3</span>%
-		Validated: <span class="kw">false</span>
-	KPI: someNbr
-		Value: <span class="num">1235.0</span>
-		Must be equal to <span class="num">1235.0</span>
-		Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">tests</dt><dd class="cmt"><p>the list of Test objects to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if all tests were successful</p></dd></dl></div>
+  KPI: pctOfWhatever
+    Value: <span class="num">0.06</span>%
+    Must be inferior to <span class="num">0.1</span>%
+    Validated: <span class="kw">true</span>
+  KPI: pctOfSomethingElse
+    Value: <span class="num">0.27</span>%
+    Must be superior to <span class="num">0.3</span>%
+    Validated: <span class="kw">false</span>
+  KPI: someNbr
+    Value: <span class="num">1235.0</span>
+    Must be equal to <span class="num">1235.0</span>
+    Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">tests</dt><dd class="cmt"><p>the list of Test objects to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if all tests were successful</p></dd></dl></div>
     </li><li name="com.spark_helper.monitoring.Monitor#updateReport" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateReport(text:String):Unit"></a>
       <a id="updateReport(String):Unit"></a>
@@ -660,13 +663,14 @@ never be success again, even if you update the report with success tasks.</p><p>
       <p class="shortcomment cmt">Updates the report with the stack trace of an error.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with the stack trace of an error.</p><p>This sets the status of the monitoring to false. After that the status
 will never be success again, even if you update the report with success
 tasks.</p><p>Catching an error like this:</p><pre>monitor.updateReportWithError(
-	invalidInputException, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>
-)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">24</span>] My pipeline descirption: failed
-	Diagnostic: No input data!
-		org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
-		at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
-		at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
-		...</pre></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>the trown error</p></dd><dt class="param">taskDescription</dt><dd class="cmt"><p>the description of the step which failed</p></dd><dt class="param">diagnostic</dt><dd class="cmt"><p>(optional) the message we want to add to clarify the
+  invalidInputException,
+  <span class="lit">"My pipeline descirption"</span>,
+  diagnostic = <span class="lit">"No input data!"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">24</span>] My pipeline descirption: failed
+  Diagnostic: No input data!
+    org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+    at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+    at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+    ...</pre></div><dl class="paramcmts block"><dt class="param">error</dt><dd class="cmt"><p>the trown error</p></dd><dt class="param">taskDescription</dt><dd class="cmt"><p>the description of the step which failed</p></dd><dt class="param">diagnostic</dt><dd class="cmt"><p>(optional) the message we want to add to clarify the
 source of the problem. By default if this parameter is not used, then no
 diagnostic is append to the report.</p></dd><dt>returns</dt><dd class="cmt"><p>false since it's a failure</p></dd></dl></div>
     </li><li name="com.spark_helper.monitoring.Monitor#updateReportWithFailure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -706,8 +710,8 @@ action won't change the failed status of the monitoring.
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Updates the report with some text and a success.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with some text and a success.</p><p>If the status of the monitoring was success, then it stays success. If
-it was failure, then it stays a failure.</p><p>Using this method like this:</p><pre>monitor.updateReportWithSuccess(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text: success\n"</span></pre></div><dl class="paramcmts block"><dt class="param">taskDescription</dt><dd class="cmt"><p>the text to append to the report</p></dd><dt>returns</dt><dd class="cmt"><p>true since it's a success</p></dd></dl></div>
+      <p class="shortcomment cmt">Updates the report with some text and a success.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with some text and a success.</p><p>If the status of the monitoring was success, then it stays success. If it
+was failure, then it stays a failure.</p><p>Using this method like this:</p><pre>monitor.updateReportWithSuccess(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text: success\n"</span></pre></div><dl class="paramcmts block"><dt class="param">taskDescription</dt><dd class="cmt"><p>the text to append to the report</p></dd><dt>returns</dt><dd class="cmt"><p>true since it's a success</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
