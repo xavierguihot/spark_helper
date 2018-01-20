@@ -8,7 +8,8 @@ scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
   "-feature",
-  "-Ywarn-unused-import"
+  "-Ywarn-unused-import",
+  "-Ywarn-unused"
 )
 
 assemblyJarName in assembly := name.value + "-" + version.value + ".jar"
