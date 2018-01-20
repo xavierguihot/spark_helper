@@ -1,7 +1,7 @@
 package com.spark_helper
 
 import org.joda.time.{DateTime, DateTimeZone, Days}
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
+import org.joda.time.format.DateTimeFormat
 
 import scala.util.Try
 

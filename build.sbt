@@ -4,7 +4,12 @@ version := "1.0.18"
 
 scalaVersion := "2.11.8"
 
-scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-deprecation",
+  "-feature",
+  "-Ywarn-unused-import"
+)
 
 assemblyJarName in assembly := name.value + "-" + version.value + ".jar"
 

@@ -1,7 +1,7 @@
 package com.spark_helper
 
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{FileSystem, FileUtil, FileStatus, Path}
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.hadoop.io.compress.{CompressionCodec, CompressionCodecFactory}
 import org.apache.hadoop.io.compress.{GzipCodec, BZip2Codec}
 import org.apache.hadoop.io.IOUtils
@@ -10,7 +10,6 @@ import org.joda.time.{DateTime, Days}
 import org.joda.time.format.DateTimeFormat
 
 import scala.xml.Elem
-import javax.xml.transform.Source
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation._
 import scala.xml.XML
@@ -20,11 +19,9 @@ import org.xml.sax.SAXException
 
 import java.net.URL
 
-import java.io.{File, InputStreamReader}
+import java.io.InputStreamReader
 
 import com.typesafe.config.{Config, ConfigFactory}
-
-import scala.collection.JavaConversions._
 
 /** A facility to deal with file manipulations (wrapper around hdfs apache
   * Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html">org.apache.hadoop.fs.FileSystem</a>).

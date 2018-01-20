@@ -2,8 +2,6 @@ package com.spark_helper.monitoring
 
 import com.spark_helper.{DateHelper, HdfsHelper}
 
-import org.apache.spark.SparkContext
-
 import java.util.Calendar
 
 import org.apache.commons.lang3.time.DurationFormatUtils
