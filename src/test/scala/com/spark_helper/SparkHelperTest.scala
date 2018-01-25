@@ -22,8 +22,7 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFile("src/test/resources/single_text_file.txt")
     SparkHelper.saveAsSingleTextFile(
       repartitionedDataToStore,
-      "src/test/resources/single_text_file.txt"
-    )
+      "src/test/resources/single_text_file.txt")
 
     var singleFileStoredData = sc
       .textFile("src/test/resources/single_text_file.txt")
@@ -47,8 +46,7 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
     SparkHelper.saveAsSingleTextFile(
       repartitionedDataToStore,
       "src/test/resources/folder/single_text_file.txt",
-      workingFolder = "src/test/resources/tmp"
-    )
+      workingFolder = "src/test/resources/tmp")
     assert(
       HdfsHelper.fileExists("src/test/resources/folder/single_text_file.txt"))
 
@@ -79,10 +77,8 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
         "4 another line for the third record"
     )
 
-    HdfsHelper.writeToHdfsFile(
-      textContent,
-      "src/test/resources/some_weird_format.txt"
-    )
+    HdfsHelper
+      .writeToHdfsFile(textContent, "src/test/resources/some_weird_format.txt")
 
     var computedRecords = SparkHelper
       .textFileWithDelimiter(
@@ -124,10 +120,8 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
         "</Customers>"
     )
 
-    HdfsHelper.writeToHdfsFile(
-      xmlTextContent,
-      "src/test/resources/some_basic_xml.xml"
-    )
+    HdfsHelper
+      .writeToHdfsFile(xmlTextContent, "src/test/resources/some_basic_xml.xml")
 
     computedRecords = SparkHelper
       .textFileWithDelimiter(
@@ -174,16 +168,14 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
     SparkHelper.saveAsTextFileByKey(
       someKeyValueRdd,
       "src/test/resources/key_value_storage",
-      3
-    )
+      3)
 
     // The folder key_value_storage has been created:
     assert(HdfsHelper.folderExists("src/test/resources/key_value_storage"))
 
     // And it contains one file per key:
-    val genratedKeyFiles = HdfsHelper.listFileNamesInFolder(
-      "src/test/resources/key_value_storage"
-    )
+    val genratedKeyFiles = HdfsHelper
+      .listFileNamesInFolder("src/test/resources/key_value_storage")
     val expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
     assert(genratedKeyFiles === expectedKeyFiles)
 
@@ -219,29 +211,24 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
     // Let's create the folder with high level of coalescence (3 files):
     SparkHelper.saveAsSingleTextFile(
       sc.parallelize[String](Array("data_1_a", "data_1_b", "data_1_c")),
-      "src/test/resources/re_coalescence_test_input/input_file_1"
-    )
+      "src/test/resources/re_coalescence_test_input/input_file_1")
     SparkHelper.saveAsSingleTextFile(
       sc.parallelize[String](Array("data_2_a", "data_2_b")),
-      "src/test/resources/re_coalescence_test_input/input_file_2"
-    )
+      "src/test/resources/re_coalescence_test_input/input_file_2")
     SparkHelper.saveAsSingleTextFile(
       sc.parallelize[String](Array("data_3_a", "data_3_b", "data_3_c")),
-      "src/test/resources/re_coalescence_test_input/input_file_3"
-    )
+      "src/test/resources/re_coalescence_test_input/input_file_3")
 
     // Let's decrease the coalescence level in order to only have 2 files:
     SparkHelper.decreaseCoalescence(
       "src/test/resources/re_coalescence_test_input",
       "src/test/resources/re_coalescence_test_output",
       2,
-      sc
-    )
+      sc)
 
     // And we check we have two files in output:
-    val outputFileList = HdfsHelper.listFileNamesInFolder(
-      "src/test/resources/re_coalescence_test_output"
-    )
+    val outputFileList = HdfsHelper
+      .listFileNamesInFolder("src/test/resources/re_coalescence_test_output")
     val expectedFileList = List("_SUCCESS", "part-00000", "part-00001")
     assert(outputFileList === expectedFileList)
 

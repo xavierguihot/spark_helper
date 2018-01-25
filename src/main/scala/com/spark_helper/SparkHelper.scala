@@ -48,9 +48,8 @@ object SparkHelper extends Serializable {
     * @param outputRDD the RDD of strings to store in one file
     * @param outputFile the path of the produced file
     */
-  def saveAsSingleTextFile(outputRDD: RDD[String], outputFile: String): Unit = {
+  def saveAsSingleTextFile(outputRDD: RDD[String], outputFile: String): Unit =
     saveAsSingleTextFileInternal(outputRDD, outputFile, None)
-  }
 
   /** Saves an RDD in exactly one file.
     *
@@ -71,9 +70,8 @@ object SparkHelper extends Serializable {
       outputRDD: RDD[String],
       outputFile: String,
       compressionCodec: Class[_ <: CompressionCodec]
-  ): Unit = {
+  ): Unit =
     saveAsSingleTextFileInternal(outputRDD, outputFile, Some(compressionCodec))
-  }
 
   /** Saves an RDD in exactly one file.
     *
@@ -105,8 +103,7 @@ object SparkHelper extends Serializable {
       outputRDD,
       outputFile,
       workingFolder,
-      None
-    )
+      None)
   }
 
   /** Saves an RDD in exactly one file.
@@ -145,8 +142,7 @@ object SparkHelper extends Serializable {
       outputRDD,
       outputFile,
       workingFolder,
-      Some(compressionCodec)
-    )
+      Some(compressionCodec))
   }
 
   /** Equivalent to sparkContext.textFile(), but for a specific record delimiter.
@@ -354,8 +350,7 @@ object SparkHelper extends Serializable {
       lowerCoalescenceLevelFolder,
       finalCoalescenceLevel,
       sparkContext,
-      None
-    )
+      None)
   }
 
   /** Decreases the nbr of partitions of a folder.
@@ -401,8 +396,7 @@ object SparkHelper extends Serializable {
       lowerCoalescenceLevelFolder,
       finalCoalescenceLevel,
       sparkContext,
-      Some(compressionCodec)
-    )
+      Some(compressionCodec))
   }
 
   /** Saves as text file, but by decreasing the nbr of partitions of the output.
@@ -448,8 +442,7 @@ object SparkHelper extends Serializable {
       outputFolder,
       finalCoalescenceLevel,
       sparkContext,
-      None
-    )
+      None)
   }
 
   /** Saves as text file, but by decreasing the nbr of partitions of the output.
@@ -501,8 +494,7 @@ object SparkHelper extends Serializable {
       outputFolder,
       finalCoalescenceLevel,
       sparkContext,
-      Some(compressionCodec)
-    )
+      Some(compressionCodec))
   }
 
   //////
@@ -562,8 +554,7 @@ object SparkHelper extends Serializable {
       new Path(outputFile),
       true,
       new Configuration(),
-      null
-    )
+      null)
     HdfsHelper.deleteFolder(outputFile + ".tmp")
   }
 
@@ -581,10 +572,8 @@ object SparkHelper extends Serializable {
 
     compressionCodec match {
       case Some(compressionCodec) =>
-        intermediateRDD.saveAsTextFile(
-          lowerCoalescenceLevelFolder,
-          compressionCodec
-        )
+        intermediateRDD
+          .saveAsTextFile(lowerCoalescenceLevelFolder, compressionCodec)
       case None =>
         intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder)
     }

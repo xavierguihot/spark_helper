@@ -24,8 +24,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     monitor = new Monitor(
       "Processing of whatever",
       "xguihot@gmail.com",
-      "Documentation: https://github.com/xavierguihot/spark_helper"
-    )
+      "Documentation: https://github.com/xavierguihot/spark_helper")
     report = removeTimeStamps(monitor.getReport())
     var expectedReport = (
       "					Processing of whatever\n" +
@@ -97,8 +96,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
       "My Processing",
       "xguihot@gmail.com",
       "Documentation: https://github.com/xavierguihot/spark_helper",
-      logFolder = "src/test/resources/logs"
-    )
+      logFolder = "src/test/resources/logs")
     monitor.updateReport("Doing something: success")
 
     val reportStoredLines = sc
@@ -139,11 +137,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
       "a".toInt
     } catch {
       case nfe: NumberFormatException => {
-        monitor.updateReportWithError(
-          nfe,
-          "Parse to integer",
-          "my diagnostic"
-        )
+        monitor.updateReportWithError(nfe, "Parse to integer", "my diagnostic")
       }
     }
     // Warning, here I remove the stack trace because it depends on the
@@ -197,8 +191,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     monitor = new Monitor()
     success = monitor.updateByKpiValidation(
       new Test("someNbr", 55e6d, "superior to", 50e6d, "nbr"),
-      "Tests for whatever"
-    )
+      "Tests for whatever")
 
     assert(success)
     assert(monitor.isSuccess())
@@ -234,8 +227,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     val monitor = new Monitor(
       "My Processing",
       "xguihot@gmail.com",
-      "Documentation: https://github.com/xavierguihot/spark_helper"
-    )
+      "Documentation: https://github.com/xavierguihot/spark_helper")
     monitor.updateReport("Doing something: success")
 
     monitor.saveReport("src/test/resources/logs")
@@ -269,21 +261,16 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     // Let's create a log file not old enough to be purged (3 days before):
     val notOutdatedDate = DateHelper.nDaysBefore(3, "yyyyMMdd")
     val notOutdatedLogFile = notOutdatedDate + ".log.failed"
-    HdfsHelper.writeToHdfsFile(
-      "",
-      "src/test/resources/logs/" + notOutdatedLogFile
-    )
+    HdfsHelper
+      .writeToHdfsFile("", "src/test/resources/logs/" + notOutdatedLogFile)
 
     // Let's create the previous current.failed status log file:
     HdfsHelper.writeToHdfsFile("", "src/test/resources/logs/current.failed")
 
     // And we save the new report with the purge option:
     val monitor = new Monitor()
-    monitor.saveReport(
-      "src/test/resources/logs",
-      purgeLogs = true,
-      purgeWindow = 7
-    )
+    monitor
+      .saveReport("src/test/resources/logs", purgeLogs = true, purgeWindow = 7)
 
     assert(!HdfsHelper.fileExists("src/test/resources/logs/" + outdatedLogFile))
     assert(
@@ -302,15 +289,13 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     while (index >= 0) {
 
       if (timeStampFreeLogs(index + 6) == ']') // [12:15]
-        timeStampFreeLogs = (
+        timeStampFreeLogs =
           timeStampFreeLogs.substring(0, index) + "[..:..]" +
             timeStampFreeLogs.substring(index + 7)
-        )
       else if (timeStampFreeLogs(index + 12) == ']') // [12:15-12:23]
-        timeStampFreeLogs = (
+        timeStampFreeLogs =
           timeStampFreeLogs.substring(0, index) + "[..:..-..:..]" +
             timeStampFreeLogs.substring(index + 13)
-        )
 
       index = timeStampFreeLogs.indexOf("[", index + 1);
     }

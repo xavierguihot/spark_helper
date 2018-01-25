@@ -51,8 +51,7 @@ class Test(
   require(
     List("pct", "nbr").contains(kpiType),
     "the kpi type can only be \"pct\" or \"nbr\", but you used: \"" +
-      kpiType + "\"."
-  )
+      kpiType + "\".")
 
   private[monitoring] def isSuccess(): Boolean = thresholdType match {
     case "superior to" => abs(kpiValue) >= appliedThreshold

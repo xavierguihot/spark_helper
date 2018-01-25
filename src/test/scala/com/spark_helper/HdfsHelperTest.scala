@@ -33,10 +33,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     // Let's try to delete a folder:
 
-    HdfsHelper.writeToHdfsFile(
-      "",
-      "src/test/resources/folder_to_delete/file.txt"
-    )
+    HdfsHelper
+      .writeToHdfsFile("", "src/test/resources/folder_to_delete/file.txt")
 
     // 3: Let's try to delete it with the deleteFile method:
     messageThrown = intercept[IllegalArgumentException] {
@@ -80,10 +78,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     assert(!HdfsHelper.folderExists("src/test/resources/folder_to_check"))
 
-    HdfsHelper.writeToHdfsFile(
-      "",
-      "src/test/resources/folder_to_check/file.txt"
-    )
+    HdfsHelper
+      .writeToHdfsFile("", "src/test/resources/folder_to_check/file.txt")
 
     // 3: Let's try to check it exists with the fileExists method:
     messageThrown = intercept[IllegalArgumentException] {
@@ -131,8 +127,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     HdfsHelper.writeToHdfsFile(
       contentToStore,
-      "src/test/resources/folder/small_file.txt"
-    )
+      "src/test/resources/folder/small_file.txt")
 
     assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
 
@@ -152,10 +147,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     val listToStore = List("Hello World", "Whatever")
 
-    HdfsHelper.writeToHdfsFile(
-      listToStore,
-      "src/test/resources/folder/small_file.txt"
-    )
+    HdfsHelper
+      .writeToHdfsFile(listToStore, "src/test/resources/folder/small_file.txt")
 
     assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
 
@@ -174,9 +167,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_1.txt")
     HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_2.csv")
-    HdfsHelper.writeToHdfsFile(
-      "",
-      "src/test/resources/folder_1/folder_2/file_3.txt")
+    HdfsHelper
+      .writeToHdfsFile("", "src/test/resources/folder_1/folder_2/file_3.txt")
 
     // 1: Not recursive, names only:
     var fileNames =
@@ -185,10 +177,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(fileNames === expectedFileNames)
 
     // 2: Not recursive, full paths:
-    fileNames = HdfsHelper.listFileNamesInFolder(
-      "src/test/resources/folder_1",
-      onlyName = false
-    )
+    fileNames = HdfsHelper
+      .listFileNamesInFolder("src/test/resources/folder_1", onlyName = false)
     expectedFileNames = List(
       "src/test/resources/folder_1/file_1.txt",
       "src/test/resources/folder_1/file_2.csv"
@@ -196,10 +186,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(fileNames === expectedFileNames)
 
     // 3: Recursive, names only:
-    fileNames = HdfsHelper.listFileNamesInFolder(
-      "src/test/resources/folder_1",
-      recursive = true
-    )
+    fileNames = HdfsHelper
+      .listFileNamesInFolder("src/test/resources/folder_1", recursive = true)
     expectedFileNames = List("file_1.txt", "file_2.csv", "file_3.txt")
     assert(fileNames === expectedFileNames)
 
@@ -207,8 +195,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     fileNames = HdfsHelper.listFileNamesInFolder(
       "src/test/resources/folder_1",
       recursive = true,
-      onlyName = false
-    )
+      onlyName = false)
     expectedFileNames = List(
       "src/test/resources/folder_1/file_1.txt",
       "src/test/resources/folder_1/file_2.csv",
@@ -222,12 +209,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
   test("List Folder Names in Hdfs Folder") {
 
     HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_1.txt")
-    HdfsHelper.writeToHdfsFile(
-      "",
-      "src/test/resources/folder_1/folder_2/file_2.txt")
-    HdfsHelper.writeToHdfsFile(
-      "",
-      "src/test/resources/folder_1/folder_3/file_3.txt")
+    HdfsHelper
+      .writeToHdfsFile("", "src/test/resources/folder_1/folder_2/file_2.txt")
+    HdfsHelper
+      .writeToHdfsFile("", "src/test/resources/folder_1/folder_3/file_3.txt")
 
     val folderNames = HdfsHelper.listFolderNamesInFolder(
       "src/test/resources/folder_1"
@@ -261,8 +246,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     val ioExceptionThrown = intercept[IllegalArgumentException] {
       HdfsHelper.moveFile(
         "src/test/resources/some_file.txt",
-        "src/test/resources/renamed_file.txt"
-      )
+        "src/test/resources/renamed_file.txt")
     }
     var expectedMessage =
       "requirement failed: overwrite option set to false, but a file " +
@@ -283,8 +267,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     val illegalArgExceptionThrown = intercept[IllegalArgumentException] {
       HdfsHelper.moveFolder(
         "src/test/resources/some_file.txt",
-        "src/test/resources/renamed_file.txt"
-      )
+        "src/test/resources/renamed_file.txt")
     }
     expectedMessage =
       "requirement failed: to move a file, prefer using the " +
@@ -299,8 +282,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     // Let's rename the file:
     HdfsHelper.moveFile(
       "src/test/resources/some_file.txt",
-      "src/test/resources/renamed_file.txt"
-    )
+      "src/test/resources/renamed_file.txt")
 
     assert(!HdfsHelper.fileExists("src/test/resources/some_file.txt"))
     assert(HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
@@ -321,12 +303,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     // Let's create the folder to rename:
     HdfsHelper.writeToHdfsFile(
       "whatever",
-      "src/test/resources/some_folder_to_move/file_1.txt"
-    )
+      "src/test/resources/some_folder_to_move/file_1.txt")
     HdfsHelper.writeToHdfsFile(
       "something",
-      "src/test/resources/some_folder_to_move/file_2.txt"
-    )
+      "src/test/resources/some_folder_to_move/file_2.txt")
 
     // 1: Let's fail to move the folder with the moveFile() method:
 
@@ -342,8 +322,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     val messageThrown = intercept[IllegalArgumentException] {
       HdfsHelper.moveFile(
         "src/test/resources/some_folder_to_move",
-        "src/test/resources/renamed_folder"
-      )
+        "src/test/resources/renamed_folder")
     }
     val expectedMessage =
       "requirement failed: to move a folder, prefer using the " +
@@ -363,8 +342,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     // Let's rename the folder:
     HdfsHelper.moveFolder(
       "src/test/resources/some_folder_to_move",
-      "src/test/resources/renamed_folder"
-    )
+      "src/test/resources/renamed_folder")
 
     assert(!HdfsHelper.folderExists("src/test/resources/some_folder_to_move"))
     assert(
@@ -389,14 +367,12 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     // Let's create the file for which to add header and footer:
     HdfsHelper.writeToHdfsFile(
       "whatever\nsomething else\n",
-      "src/test/resources/header_footer_file.txt"
-    )
+      "src/test/resources/header_footer_file.txt")
 
     HdfsHelper.appendHeaderAndFooter(
       "src/test/resources/header_footer_file.txt",
       "my_header",
-      "my_footer"
-    )
+      "my_footer")
 
     var newContent = sc
       .textFile("src/test/resources/header_footer_file.txt")
@@ -419,15 +395,13 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     // Let's create the file for which to add header and footer:
     HdfsHelper.writeToHdfsFile(
       "whatever\nsomething else\n",
-      "src/test/resources/header_footer_file.txt"
-    )
+      "src/test/resources/header_footer_file.txt")
 
     HdfsHelper.appendHeaderAndFooter(
       "src/test/resources/header_footer_file.txt",
       "my_header",
       "my_footer",
-      workingFolderPath = "src/test/resources/header_footer_tmp"
-    )
+      workingFolderPath = "src/test/resources/header_footer_tmp")
 
     assert(HdfsHelper.folderExists("src/test/resources/header_footer_tmp"))
     assert(
@@ -465,10 +439,9 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     var xsdFile = getClass.getResource("/some_xml.xsd")
 
-    var isValid = HdfsHelper.isHdfsXmlCompliantWithXsd(
-      "src/test/resources/xml_file.txt",
-      xsdFile
-    )
+    var isValid = HdfsHelper
+      .isHdfsXmlCompliantWithXsd("src/test/resources/xml_file.txt", xsdFile)
+
     assert(isValid)
 
     // 2: Invalid xml:
@@ -483,10 +456,9 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     xsdFile = getClass.getResource("/some_xml.xsd")
 
-    isValid = HdfsHelper.isHdfsXmlCompliantWithXsd(
-      "src/test/resources/xml_file.txt",
-      xsdFile
-    )
+    isValid = HdfsHelper
+      .isHdfsXmlCompliantWithXsd("src/test/resources/xml_file.txt", xsdFile)
+
     assert(!isValid)
 
     HdfsHelper.deleteFile("src/test/resources/xml_file.txt")
@@ -502,9 +474,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
       "src/test/resources/typesafe_config.conf"
     )
 
-    val config = HdfsHelper.loadTypesafeConfigFromHdfs(
-      "src/test/resources/typesafe_config.conf"
-    )
+    val config = HdfsHelper
+      .loadTypesafeConfigFromHdfs("src/test/resources/typesafe_config.conf")
 
     assert(config.getString("config.something") === "something_else")
 
@@ -522,9 +493,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
       "src/test/resources/folder/xml_to_load.xml"
     )
 
-    val xmlContent = HdfsHelper.loadXmlFileFromHdfs(
-      "src/test/resources/folder/xml_to_load.xml"
-    )
+    val xmlContent = HdfsHelper
+      .loadXmlFileFromHdfs("src/test/resources/folder/xml_to_load.xml")
 
     assert((xmlContent \ "sometag" \ "@value").text === "something")
     assert((xmlContent \ "sometag").text === "whatever")
@@ -535,10 +505,10 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
   test("Purge Folder from too old Files/Folders") {
 
     HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
-    HdfsHelper.createEmptyHdfsFile(
-      "src/test/resources/folder_to_purge/file.txt")
-    HdfsHelper.createEmptyHdfsFile(
-      "src/test/resources/folder_to_purge/folder/file.txt")
+    HdfsHelper
+      .createEmptyHdfsFile("src/test/resources/folder_to_purge/file.txt")
+    HdfsHelper
+      .createEmptyHdfsFile("src/test/resources/folder_to_purge/folder/file.txt")
     assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
     assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
 

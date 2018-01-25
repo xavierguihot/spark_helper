@@ -91,8 +91,9 @@ object HdfsHelper extends Serializable {
 
     if (fileSystem.exists(fileToDelete)) {
 
-      require(fileSystem.isFile(fileToDelete),
-              "to delete a folder, prefer using the deleteFolder() method.")
+      require(
+        fileSystem.isFile(fileToDelete),
+        "to delete a folder, prefer using the deleteFolder() method.")
 
       fileSystem.delete(fileToDelete, true)
     }
@@ -112,8 +113,9 @@ object HdfsHelper extends Serializable {
 
     if (fileSystem.exists(folderToDelete)) {
 
-      require(!fileSystem.isFile(folderToDelete),
-              "to delete a file, prefer using the deleteFile() method.")
+      require(
+        !fileSystem.isFile(folderToDelete),
+        "to delete a file, prefer using the deleteFile() method.")
 
       fileSystem.delete(folderToDelete, true)
     }
@@ -125,9 +127,8 @@ object HdfsHelper extends Serializable {
     *
     * @param hdfsPath the path of the folder to create
     */
-  def createFolder(hdfsPath: String): Unit = {
+  def createFolder(hdfsPath: String): Unit =
     FileSystem.get(new Configuration()).mkdirs(new Path(hdfsPath))
-  }
 
   /** Checks if the file exists.
     *
@@ -189,8 +190,9 @@ object HdfsHelper extends Serializable {
     val renamedFile = new Path(newPath)
 
     if (fileSystem.exists(fileToRename))
-      require(fileSystem.isFile(fileToRename),
-              "to move a folder, prefer using the moveFolder() method.")
+      require(
+        fileSystem.isFile(fileToRename),
+        "to move a folder, prefer using the moveFolder() method.")
 
     if (overwrite)
       fileSystem.delete(renamedFile, true)
@@ -230,8 +232,9 @@ object HdfsHelper extends Serializable {
     val renamedFolder = new Path(newPath)
 
     if (fileSystem.exists(folderToRename))
-      require(!fileSystem.isFile(folderToRename),
-              "to move a file, prefer using the moveFile() method.")
+      require(
+        !fileSystem.isFile(folderToRename),
+        "to move a file, prefer using the moveFile() method.")
 
     if (overwrite)
       fileSystem.delete(renamedFolder, true)
@@ -317,9 +320,8 @@ object HdfsHelper extends Serializable {
     * string (this takes care of joining strings with "\n"s).
     * @param filePath the path of the file in which to write the content
     */
-  def writeToHdfsFile(content: Seq[String], filePath: String): Unit = {
+  def writeToHdfsFile(content: Seq[String], filePath: String): Unit =
     writeToHdfsFile(content.mkString("\n"), filePath)
-  }
 
   /** Lists file names in the specified hdfs folder.
     *
@@ -416,9 +418,8 @@ object HdfsHelper extends Serializable {
   def fileModificationDate(
       hdfsPath: String,
       format: String = "yyyyMMdd"
-  ): String = {
+  ): String =
     DateTimeFormat.forPattern(format).print(fileModificationDateTime(hdfsPath))
-  }
 
   /** Returns the joda DateTime of the last modification of the given folder.
     *
@@ -426,9 +427,8 @@ object HdfsHelper extends Serializable {
     * modification date.
     * @return the joda DateTime of the last modification of the given folder
     */
-  def folderModificationDateTime(hdfsPath: String): DateTime = {
+  def folderModificationDateTime(hdfsPath: String): DateTime =
     fileModificationDateTime(hdfsPath)
-  }
 
   /** Returns the stringified date of the last modification of the given folder.
     *
@@ -446,9 +446,8 @@ object HdfsHelper extends Serializable {
   def folderModificationDate(
       hdfsPath: String,
       format: String = "yyyyMMdd"
-  ): String = {
+  ): String =
     fileModificationDate(hdfsPath, format)
-  }
 
   /** Returns the nbr of days since the given file has been last modified.
     *
@@ -498,8 +497,7 @@ object HdfsHelper extends Serializable {
       filePath,
       Some(header),
       Some(footer),
-      workingFolderPath
-    )
+      workingFolderPath)
   }
 
   /** Appends a header to a file.
@@ -527,8 +525,7 @@ object HdfsHelper extends Serializable {
       filePath,
       Some(header),
       None,
-      workingFolderPath
-    )
+      workingFolderPath)
   }
 
   /** Appends a footer to a file.
@@ -553,8 +550,7 @@ object HdfsHelper extends Serializable {
       filePath,
       None,
       Some(footer),
-      workingFolderPath
-    )
+      workingFolderPath)
   }
 
   /** Validates an XML file on hdfs in regard to the given XSD.
@@ -733,8 +729,7 @@ object HdfsHelper extends Serializable {
 
     require(
       purgeAge >= 0,
-      "the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0."
-    )
+      "the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0.")
 
     FileSystem
       .get(new Configuration())

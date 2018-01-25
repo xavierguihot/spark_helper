@@ -393,9 +393,8 @@ class Monitor(
     * @param testSuitName the description of the task being tested
     * @return if the test is successful
     */
-  def updateByKpiValidation(test: Test, testSuitName: String): Boolean = {
+  def updateByKpiValidation(test: Test, testSuitName: String): Boolean =
     updateByKpisValidation(List(test), testSuitName)
-  }
 
   /** Saves the report in a single text file.
     *
@@ -446,10 +445,8 @@ class Monitor(
     // But we store it as well with a fixed name such as current.success:
     HdfsHelper.deleteFile(logFolder + "/current.success")
     HdfsHelper.deleteFile(logFolder + "/current.failed")
-    HdfsHelper.writeToHdfsFile(
-      finalReport,
-      logFolder + "/current" + reportExtension
-    )
+    HdfsHelper
+      .writeToHdfsFile(finalReport, logFolder + "/current" + reportExtension)
 
     // And if we "live loged", then we remove the "current.ongoing" file:
     HdfsHelper.deleteFile(logFolder + "/current.ongoing")

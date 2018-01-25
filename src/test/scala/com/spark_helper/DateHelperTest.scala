@@ -63,11 +63,8 @@ class DateHelperTest extends FunSuite {
     assert(DateHelper.nbrOfDaysBetween("20170327", "20170327") === 0)
     assert(DateHelper.nbrOfDaysBetween("20170327", "20170401") === 5)
 
-    val nbrOfDays = DateHelper.nbrOfDaysBetween(
-      "20170214_1129",
-      "20170822_0000",
-      "yyyyMMdd_HHmm"
-    )
+    val nbrOfDays = DateHelper
+      .nbrOfDaysBetween("20170214_1129", "20170822_0000", "yyyyMMdd_HHmm")
     assert(nbrOfDays === 188)
   }
 

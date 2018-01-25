@@ -99,11 +99,10 @@ object DateHelper extends Serializable {
     * @param format (default = "yyyyMMdd") the format for the returned date
     * @return today's date minus the nbrOfDaysBefore under the requested format
     */
-  def nDaysBefore(nbrOfDaysBefore: Int, format: String = "yyyyMMdd"): String = {
+  def nDaysBefore(nbrOfDaysBefore: Int, format: String = "yyyyMMdd"): String =
     DateTimeFormat
       .forPattern(format)
       .print(new DateTime().minusDays(nbrOfDaysBefore))
-  }
 
   /** Returns which date it was x days before the given date.
     *
@@ -179,12 +178,11 @@ object DateHelper extends Serializable {
     * @param utc (default false) whether it's the "local now" or the "utc now"
     * @return today's date under the requested format
     */
-  def now(format: String = "yyyyMMdd_HHmm", utc: Boolean = false): String = {
+  def now(format: String = "yyyyMMdd_HHmm", utc: Boolean = false): String =
     DateTimeFormat
       .forPattern(format)
       .print(
         if (utc) new DateTime().withZone(DateTimeZone.UTC) else new DateTime())
-  }
 
   /** Returns today's date/time under the requested format.
     *
@@ -264,9 +262,8 @@ object DateHelper extends Serializable {
     *
     * @return the current UTC timestamps (nbr of millis since 1970-01-01).
     */
-  def currentUtcTimestamp(): String = {
+  def currentUtcTimestamp(): String =
     new DateTime().withZone(DateTimeZone.UTC).getMillis().toString
-  }
 
   /** Returns for a date the date one day latter.
     *
@@ -390,9 +387,8 @@ object DateHelper extends Serializable {
     * provided.
     * @return the associated day of week, such as 2 for Tuesday
     */
-  def dayOfWeek(date: String, format: String = "yyyyMMdd"): Int = {
+  def dayOfWeek(date: String, format: String = "yyyyMMdd"): Int =
     DateTimeFormat.forPattern(format).parseDateTime(date).getDayOfWeek()
-  }
 
   /** Validates a string date is under the provided format.
     *
@@ -413,7 +409,6 @@ object DateHelper extends Serializable {
   def isDateCompliantWithFormat(
       stringValue: String,
       format: String
-  ): Boolean = {
+  ): Boolean =
     Try(DateTimeFormat.forPattern(format).parseDateTime(stringValue)).isSuccess
-  }
 }
