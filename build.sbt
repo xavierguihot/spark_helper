@@ -2,7 +2,7 @@ name := "spark_helper"
 
 version := "1.0.18"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.12"
 
 scalacOptions ++= Seq(
   "-unchecked",
@@ -16,6 +16,9 @@ assemblyJarName in assembly := name.value + "-" + version.value + ".jar"
 
 assemblyOutputPath in assembly := file(
   "./" + name.value + "-" + version.value + ".jar")
+
+testOptions in Test += Tests.Argument("-oD")
+parallelExecution in Test := false
 
 wartremoverWarnings in (Compile, compile) ++= Warts.all
 wartremoverWarnings in (Compile, compile) --= Seq(
@@ -33,7 +36,7 @@ val apacheCommonVersion = "3.5"
 val typesafeVersion = "1.3.1"
 val jodaTimeVersion = "2.9.9"
 val jodaConvertVersion = "1.9.2"
-val scalaTestVersion = "3.0.1"
+val scalaTestVersion = "3.0.4"
 val sparkTestVersion = "2.1.0_0.8.0"
 
 libraryDependencies ++= Seq(
@@ -45,8 +48,6 @@ libraryDependencies ++= Seq(
   "org.scalatest"      %% "scalatest"          % scalaTestVersion % "test",
   "com.holdenkarau"    %% "spark-testing-base" % sparkTestVersion % "test"
 )
-
-parallelExecution in Test := false
 
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
