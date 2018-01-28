@@ -9,9 +9,9 @@ import java.lang.Math.abs
   *
   * Some exemples of Test objects:
   * {{{
-  * new Test("pctOfWhatever", 0.06d, "inferior to", 0.1d, "pct")
-  * new Test("pctOfSomethingElse", 0.27d, "superior to", 0.3d, "pct")
-  * new Test("someNbr", 1235d, "equal to", 1235d, "nbr")
+  * new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
+  * new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
+  * new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
   * }}}
   *
   * @author Xavier Guihot
@@ -21,56 +21,52 @@ import java.lang.Math.abs
   *
   * Some exemples of Test objects:
   * {{{
-  * new Test("pctOfWhatever", 0.06d, "inferior to", 0.1d, "pct")
-  * new Test("pctOfSomethingElse", 0.27d, "superior to", 0.3d, "pct")
-  * new Test("someNbr", 1235d, "equal to", 1235d, "nbr")
+  * new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
+  * new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
+  * new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
   * }}}
   *
   * @param description the name/description of the KPI which will appear on the
   * validation report.
   * @param kpiValue the value for this KPI
-  * @param thresholdType the type of threshold ("superior to", "inferior to" or
-  * "equal to").
+  * @param thresholdType the type of threshold (SUPERIOR_THAN, INFERIOR_THAN or
+  * EQUAL_TO).
   * @param appliedThreshold the threshold to apply
-  * @param kpiType the type of KPI ("pct" or "nbr")
+  * @param kpiType the type of KPI (PCT or NBR)
   */
 class Test(
     description: String,
     kpiValue: Double,
-    thresholdType: String,
+    thresholdType: ThresholdType,
     appliedThreshold: Double,
-    kpiType: String
+    kpiType: KpiType
 ) {
 
-  require(
-    List("superior to", "inferior to", "equal to").contains(thresholdType),
-    "the threshold type can only be \"superior to\", \"inferior to\" or " +
-      "\"equal to\", but you used: \"" + thresholdType + "\"."
-  )
-
-  require(
-    List("pct", "nbr").contains(kpiType),
-    "the kpi type can only be \"pct\" or \"nbr\", but you used: \"" +
-      kpiType + "\".")
-
   private[monitoring] def isSuccess(): Boolean = thresholdType match {
-    case "superior to" => abs(kpiValue) >= appliedThreshold
-    case "inferior to" => abs(kpiValue) <= appliedThreshold
-    case "equal to"    => kpiValue == appliedThreshold
+    case EQUAL_TO      => kpiValue == appliedThreshold
+    case SUPERIOR_THAN => abs(kpiValue) >= appliedThreshold
+    case INFERIOR_THAN => abs(kpiValue) <= appliedThreshold
   }
 
-  private[monitoring] def stringify(): String = {
-
-    val suffix = kpiType match {
-      case "pct" => "%"
-      case "nbr" => ""
-    }
-
+  override def toString(): String =
     List(
       "\tKPI: " + description,
-      "\t\tValue: " + kpiValue.toString + suffix,
-      "\t\tMust be " + thresholdType + " " + appliedThreshold.toString + suffix,
+      "\t\tValue: " + kpiValue.toString + kpiType.name,
+      "\t\tMust be " + thresholdType.name + " " + appliedThreshold.toString + kpiType.name,
       "\t\tValidated: " + isSuccess().toString
     ).mkString("\n")
-  }
 }
+
+/** An enumeration which represents the type of threshol to use (EQUAL_TO,
+  * SUPERIOR_THAN or INFERIOR_THAN) */
+sealed trait ThresholdType { def name: String }
+
+case object EQUAL_TO extends ThresholdType { val name = "equal to" }
+case object SUPERIOR_THAN extends ThresholdType { val name = "superior than" }
+case object INFERIOR_THAN extends ThresholdType { val name = "inferior than" }
+
+/** An enumeration which represents the type of kpi to use (PCT or NBR) */
+sealed trait KpiType { def name: String }
+
+case object PCT extends KpiType { val name = "%" }
+case object NBR extends KpiType { val name = "" }

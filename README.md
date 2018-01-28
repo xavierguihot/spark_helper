@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.0.18
+Version: 1.0.19
 
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -131,7 +131,7 @@ With sbt, add these lines to your build.sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.0.18"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.0.19"
 ```
 
 With maven, add these lines to your pom.xml:
@@ -147,7 +147,7 @@ With maven, add these lines to your pom.xml:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>v1.0.18</version>
+	<version>v1.0.19</version>
 </dependency>
 ```
 
@@ -161,7 +161,7 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:v1.0.18'
+	compile 'com.github.xavierguihot:spark_helper:v1.0.19'
 }
 ```
 

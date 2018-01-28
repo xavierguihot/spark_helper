@@ -65,8 +65,8 @@ facility:</p><pre><span class="kw">val</span> sparkContext = <span class="kw">ne
   <span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
   <span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
     <span class="std">List</span>(
-      <span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
-      <span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
+      <span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), SUPERIOR_THAN, <span class="num">10</span>e6d, NBR),
+      <span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, INFERIOR_THAN, <span class="num">3</span>, PCT)
     ),
     <span class="lit">"My pipeline descirption"</span>
   )
@@ -119,11 +119,11 @@ some possible scenarios:</p><p>First scenario, problem with the input of the job
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
   KPI: Nbr of output records
     Value: <span class="num">14669071.0</span>
-    Must be superior to <span class="num">10000000.0</span>
+    Must be superior than <span class="num">10000000.0</span>
     Validated: <span class="kw">true</span>
   KPI: <span class="std">Some</span> pct of invalid output
     Value: <span class="num">0.06</span>%
-    Must be inferior to <span class="num">3.0</span>%
+    Must be inferior than <span class="num">3.0</span>%
     Validated: <span class="kw">true</span>
 [<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
 [<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>One of the good things of this facility is the catching of spark exceptions
@@ -581,11 +581,11 @@ against a threshold, the report is updated with a detailed result of the
 validation and the success status of the monitoring is set to false if the
 KPI isn't valid.</p><p>If the validation is a failure then after that the status will never be
 success again, even if you update the report with success tasks.</p><p>Using this method like this:</p><pre>monitor.updateByKpiValidation(
-  <span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>),
+  <span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT),
   <span class="lit">"Tests for whatever"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: success
   KPI: pctOfWhatever
     Value: <span class="num">0.06</span>%
-    Must be inferior to <span class="num">0.1</span>%
+    Must be inferior than <span class="num">0.1</span>%
     Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>the Test object to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if the test is successful</p></dd></dl></div>
     </li><li name="com.spark_helper.monitoring.Monitor#updateByKpisValidation" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="updateByKpisValidation(tests:List[com.spark_helper.monitoring.Test],testSuitName:String):Boolean"></a>
@@ -609,19 +609,19 @@ of the validation and the success status of the monitoring is set to false
 if at least one KPI isn't valid.</p><p>If the validation of tests is a failure then after that the status will
 never be success again, even if you update the report with success tasks.</p><p>Using this method like this:</p><pre>monitor.updateByKpisValidation(
   <span class="std">List</span>(
-    <span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>f, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>f, <span class="lit">"pct"</span>),
-    <span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>f, <span class="lit">"superior to"</span>, <span class="num">0.3</span>f, <span class="lit">"pct"</span>),
-    <span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>f, <span class="lit">"equal to"</span>, <span class="num">1235</span>f, <span class="lit">"nbr"</span>)
+    <span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT),
+    <span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>d, SUPERIOR_THAN, <span class="num">0.3</span>d, PCT),
+    <span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>d, EQUAL_TO, <span class="num">1235</span>d, NBR)
   ),
   <span class="lit">"Tests for whatever"</span>
 )</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: failed
   KPI: pctOfWhatever
     Value: <span class="num">0.06</span>%
-    Must be inferior to <span class="num">0.1</span>%
+    Must be inferior than <span class="num">0.1</span>%
     Validated: <span class="kw">true</span>
   KPI: pctOfSomethingElse
     Value: <span class="num">0.27</span>%
-    Must be superior to <span class="num">0.3</span>%
+    Must be superior than <span class="num">0.3</span>%
     Validated: <span class="kw">false</span>
   KPI: someNbr
     Value: <span class="num">1235.0</span>

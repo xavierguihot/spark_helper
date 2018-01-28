@@ -31,8 +31,8 @@ import java.lang.Throwable
   *   // Let's say you want to get some KPIs on your output before storing it:
   *   val outputIsValid = monitor.updateByKpisValidation(
   *     List(
-  *       new Test("Nbr of output records", processedData.count(), "superior to", 10e6f, "nbr"),
-  *       new Test("Some pct of invalid output", your_complex_kpi, "inferior to", 3, "pct")
+  *       new Test("Nbr of output records", processedData.count(), SUPERIOR_THAN, 10e6d, NBR),
+  *       new Test("Some pct of invalid output", your_complex_kpi, INFERIOR_THAN, 3, PCT)
   *     ),
   *     "My pipeline descirption"
   *   )
@@ -102,11 +102,11 @@ import java.lang.Throwable
   * [10:23-10:41] My pipeline descirption: success
   *   KPI: Nbr of output records
   *     Value: 14669071.0
-  *     Must be superior to 10000000.0
+  *     Must be superior than 10000000.0
   *     Validated: true
   *   KPI: Some pct of invalid output
   *     Value: 0.06%
-  *     Must be inferior to 3.0%
+  *     Must be inferior than 3.0%
   *     Validated: true
   * [10:41-10:42] My second pipeline description: success
   * [10:42] Duration: 00:19:23
@@ -310,9 +310,9 @@ class Monitor(
     * {{{
     * monitor.updateByKpisValidation(
     *   List(
-    *     new Test("pctOfWhatever", 0.06f, "inferior to", 0.1f, "pct"),
-    *     new Test("pctOfSomethingElse", 0.27f, "superior to", 0.3f, "pct"),
-    *     new Test("someNbr", 1235f, "equal to", 1235f, "nbr")
+    *     new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
+    *     new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT),
+    *     new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
     *   ),
     *   "Tests for whatever"
     * )
@@ -322,11 +322,11 @@ class Monitor(
     * [10:35-10:37] Tests for whatever: failed
     *   KPI: pctOfWhatever
     *     Value: 0.06%
-    *     Must be inferior to 0.1%
+    *     Must be inferior than 0.1%
     *     Validated: true
     *   KPI: pctOfSomethingElse
     *     Value: 0.27%
-    *     Must be superior to 0.3%
+    *     Must be superior than 0.3%
     *     Validated: false
     *   KPI: someNbr
     *     Value: 1235.0
@@ -357,7 +357,7 @@ class Monitor(
     }
 
     // The kpi report is added to the report:
-    update += tests.map(_.stringify).mkString("\n")
+    update += tests.mkString("\n")
 
     updateReport(update)
 
@@ -377,7 +377,7 @@ class Monitor(
     * Using this method like this:
     * {{{
     * monitor.updateByKpiValidation(
-    *   new Test("pctOfWhatever", 0.06f, "inferior to", 0.1f, "pct"),
+    *   new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
     *   "Tests for whatever")
     * }}}
     * will result in this to be appended to the report:
@@ -385,7 +385,7 @@ class Monitor(
     * [10:35-10:37] Tests for whatever: success
     *   KPI: pctOfWhatever
     *     Value: 0.06%
-    *     Must be inferior to 0.1%
+    *     Must be inferior than 0.1%
     *     Validated: true
     * }}}
     *

@@ -66,7 +66,24 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.spark_helper.monitoring.Monitor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.spark_helper.monitoring.KpiType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="KpiTypeextendsAnyRef"></a>
+      <a id="KpiType:KpiType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="KpiType.html"><span class="name">KpiType</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@KpiTypeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An enumeration which represents the type of kpi to use (PCT or NBR)</p>
+    </li><li name="com.spark_helper.monitoring.Monitor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MonitorextendsAnyRef"></a>
       <a id="Monitor:Monitor"></a>
       <h4 class="signature">
@@ -98,8 +115,8 @@ facility:</p><pre><span class="kw">val</span> sparkContext = <span class="kw">ne
   <span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
   <span class="kw">val</span> outputIsValid = monitor.updateByKpisValidation(
     <span class="std">List</span>(
-      <span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), <span class="lit">"superior to"</span>, <span class="num">10</span>e6f, <span class="lit">"nbr"</span>),
-      <span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, <span class="lit">"inferior to"</span>, <span class="num">3</span>, <span class="lit">"pct"</span>)
+      <span class="kw">new</span> Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), SUPERIOR_THAN, <span class="num">10</span>e6d, NBR),
+      <span class="kw">new</span> Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, INFERIOR_THAN, <span class="num">3</span>, PCT)
     ),
     <span class="lit">"My pipeline descirption"</span>
   )
@@ -152,11 +169,11 @@ some possible scenarios:</p><p>First scenario, problem with the input of the job
 [<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
   KPI: Nbr of output records
     Value: <span class="num">14669071.0</span>
-    Must be superior to <span class="num">10000000.0</span>
+    Must be superior than <span class="num">10000000.0</span>
     Validated: <span class="kw">true</span>
   KPI: <span class="std">Some</span> pct of invalid output
     Value: <span class="num">0.06</span>%
-    Must be inferior to <span class="num">3.0</span>%
+    Must be inferior than <span class="num">3.0</span>%
     Validated: <span class="kw">true</span>
 [<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
 [<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>One of the good things of this facility is the catching of spark exceptions
@@ -192,15 +209,121 @@ the possibility to easily have a look at what happened.</p><p>Source <a href="ht
       </a>
     </span>
       <p class="shortcomment cmt">A class which represents a KPI to validate.</p><div class="fullcomment"><div class="comment cmt"><p>A class which represents a KPI to validate.</p><p>This is intended to be used as parameter of Monitor.updateByKpiValidation
-and Monitor.updateByKpisValidation methods.</p><p>Some exemples of Test objects:</p><pre><span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, <span class="lit">"inferior to"</span>, <span class="num">0.1</span>d, <span class="lit">"pct"</span>)
-<span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>d, <span class="lit">"superior to"</span>, <span class="num">0.3</span>d, <span class="lit">"pct"</span>)
-<span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>d, <span class="lit">"equal to"</span>, <span class="num">1235</span>d, <span class="lit">"nbr"</span>)</pre></div><dl class="attributes block"> <dt>Since</dt><dd><p>2016-12</p></dd></dl></div>
+and Monitor.updateByKpisValidation methods.</p><p>Some exemples of Test objects:</p><pre><span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT)
+<span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>d, SUPERIOR_THAN, <span class="num">0.3</span>d, PCT)
+<span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>d, EQUAL_TO, <span class="num">1235</span>d, NBR)</pre></div><dl class="attributes block"> <dt>Since</dt><dd><p>2016-12</p></dd></dl></div>
+    </li><li name="com.spark_helper.monitoring.ThresholdType" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ThresholdTypeextendsAnyRef"></a>
+      <a id="ThresholdType:ThresholdType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ThresholdType.html"><span class="name">ThresholdType</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@ThresholdTypeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An enumeration which represents the type of threshol to use (EQUAL_TO,
+SUPERIOR_THAN or INFERIOR_THAN)</p>
     </li></ol>
             </div>
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.spark_helper.monitoring.EQUAL_TO" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EQUAL_TO"></a>
+      <a id="EQUAL_TO:EQUAL_TO"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EQUAL_TO$.html"><span class="name">EQUAL_TO</span></a><span class="result"> extends <a href="ThresholdType.html" class="extype" name="com.spark_helper.monitoring.ThresholdType">ThresholdType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@EQUAL_TO" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.spark_helper.monitoring.INFERIOR_THAN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="INFERIOR_THAN"></a>
+      <a id="INFERIOR_THAN:INFERIOR_THAN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="INFERIOR_THAN$.html"><span class="name">INFERIOR_THAN</span></a><span class="result"> extends <a href="ThresholdType.html" class="extype" name="com.spark_helper.monitoring.ThresholdType">ThresholdType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@INFERIOR_THAN" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.spark_helper.monitoring.NBR" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NBR"></a>
+      <a id="NBR:NBR"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NBR$.html"><span class="name">NBR</span></a><span class="result"> extends <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@NBR" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.spark_helper.monitoring.PCT" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PCT"></a>
+      <a id="PCT:PCT"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PCT$.html"><span class="name">PCT</span></a><span class="result"> extends <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@PCT" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.spark_helper.monitoring.SUPERIOR_THAN" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SUPERIOR_THAN"></a>
+      <a id="SUPERIOR_THAN:SUPERIOR_THAN"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SUPERIOR_THAN$.html"><span class="name">SUPERIOR_THAN</span></a><span class="result"> extends <a href="ThresholdType.html" class="extype" name="com.spark_helper.monitoring.ThresholdType">ThresholdType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.package@SUPERIOR_THAN" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
 
         
 

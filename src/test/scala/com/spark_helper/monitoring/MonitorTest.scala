@@ -136,9 +136,8 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     try {
       "a".toInt
     } catch {
-      case nfe: NumberFormatException => {
+      case nfe: NumberFormatException => 
         monitor.updateReportWithError(nfe, "Parse to integer", "my diagnostic")
-      }
     }
     // Warning, here I remove the stack trace because it depends on the
     // java/scala version! And yes this test is thus quite not usefull.
@@ -158,9 +157,9 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     var monitor = new Monitor()
     var success = monitor.updateByKpisValidation(
       List(
-        new Test("pctOfWhatever", 0.06d, "inferior to", 0.1d, "pct"),
-        new Test("pctOfSomethingElse", 0.27d, "superior to", 0.3d, "pct"),
-        new Test("someNbr", 1235d, "equal to", 1235d, "nbr")
+        new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
+        new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT),
+        new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
       ),
       "Tests for whatever"
     )
@@ -174,11 +173,11 @@ class MonitorTest extends FunSuite with SharedSparkContext {
         "[..:..-..:..] Tests for whatever: failed\n" +
         "	KPI: pctOfWhatever\n" +
         "		Value: 0.06%\n" +
-        "		Must be inferior to 0.1%\n" +
+        "		Must be inferior than 0.1%\n" +
         "		Validated: true\n" +
         "	KPI: pctOfSomethingElse\n" +
         "		Value: 0.27%\n" +
-        "		Must be superior to 0.3%\n" +
+        "		Must be superior than 0.3%\n" +
         "		Validated: false\n" +
         "	KPI: someNbr\n" +
         "		Value: 1235.0\n" +
@@ -190,7 +189,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     // 2: Single test:
     monitor = new Monitor()
     success = monitor.updateByKpiValidation(
-      new Test("someNbr", 55e6d, "superior to", 50e6d, "nbr"),
+      new Test("someNbr", 55e6d, SUPERIOR_THAN, 50e6d, NBR),
       "Tests for whatever")
 
     assert(success)
@@ -202,21 +201,10 @@ class MonitorTest extends FunSuite with SharedSparkContext {
         "[..:..-..:..] Tests for whatever: success\n" +
         "	KPI: someNbr\n" +
         "		Value: 5.5E7\n" +
-        "		Must be superior to 5.0E7\n" +
+        "		Must be superior than 5.0E7\n" +
         "		Validated: true\n"
     )
     assert(report === expectedReport)
-  }
-
-  test("Incorrect User Inputs for Test Objects") {
-    val messageThrown = intercept[IllegalArgumentException] {
-      new Test("pctOfWhatever", 0.06d, "skdjbv", 0.1d, "pct")
-    }
-    val expectedMessage = (
-      "requirement failed: the threshold type can only be \"superior " +
-        "to\", \"inferior to\" or \"equal to\", but you used: \"skdjbv\"."
-    )
-    assert(messageThrown.getMessage === expectedMessage)
   }
 
   test("Save Report") {

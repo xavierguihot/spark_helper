@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Test - com.spark_helper.monitoring.Test</title>
-          <meta name="description" content="Test - com.spark helper.monitoring.Test" />
-          <meta name="keywords" content="Test com.spark helper.monitoring.Test" />
+          <title>NBR - com.spark_helper.monitoring.NBR</title>
+          <meta name="description" content="NBR - com.spark helper.monitoring.NBR" />
+          <meta name="keywords" content="NBR com.spark helper.monitoring.NBR" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
-            var hash = 'com.spark_helper.monitoring.Test';
+            var hash = 'com.spark_helper.monitoring.NBR$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,14 +26,14 @@
    	  </script>
     
         </head>
-        <body class="type">
+        <body class="value">
       <div id="definition">
-        <img alt="Class" src="../../../lib/class_big.png" />
+        <img alt="Object" src="../../../lib/object_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="com">com</a>.<a href="../package.html" class="extype" name="com.spark_helper">spark_helper</a>.<a href="package.html" class="extype" name="com.spark_helper.monitoring">monitoring</a></p>
-        <h1>Test</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>NBR</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="com.spark_helper.monitoring">package monitoring</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -42,19 +42,16 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">Test</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">NBR</span><span class="result"> extends <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A class which represents a KPI to validate.</p><p>This is intended to be used as parameter of Monitor.updateByKpiValidation
-and Monitor.updateByKpisValidation methods.</p><p>Some exemples of Test objects:</p><pre><span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT)
-<span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>d, SUPERIOR_THAN, <span class="num">0.3</span>d, PCT)
-<span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>d, EQUAL_TO, <span class="num">1235</span>d, NBR)</pre></div><dl class="attributes block"> <dt>Since</dt><dd><p>2016-12</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -72,7 +69,7 @@ and Monitor.updateByKpisValidation methods.</p><p>Some exemples of Test objects:
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.spark_helper.monitoring.Test"><span>Test</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.spark_helper.monitoring.NBR"><span>NBR</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.spark_helper.monitoring.KpiType"><span>KpiType</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,32 +86,7 @@ and Monitor.updateByKpisValidation methods.</p><p>Some exemples of Test objects:
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.spark_helper.monitoring.Test#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(description:String,kpiValue:Double,thresholdType:com.spark_helper.monitoring.ThresholdType,appliedThreshold:Double,kpiType:com.spark_helper.monitoring.KpiType):com.spark_helper.monitoring.Test"></a>
-      <a id="&lt;init&gt;:Test"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">Test</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="kpiValue">kpiValue: <span class="extype" name="scala.Double">Double</span></span>, <span name="thresholdType">thresholdType: <a href="ThresholdType.html" class="extype" name="com.spark_helper.monitoring.ThresholdType">ThresholdType</a></span>, <span name="appliedThreshold">appliedThreshold: <span class="extype" name="scala.Double">Double</span></span>, <span name="kpiType">kpiType: <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@&lt;init&gt;(description:String,kpiValue:Double,thresholdType:com.spark_helper.monitoring.ThresholdType,appliedThreshold:Double,kpiType:com.spark_helper.monitoring.KpiType):com.spark_helper.monitoring.Test" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Creates a Test object.</p><div class="fullcomment"><div class="comment cmt"><p>Creates a Test object.
-Some exemples of Test objects:</p><pre><span class="kw">new</span> Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT)
-<span class="kw">new</span> Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>d, SUPERIOR_THAN, <span class="num">0.3</span>d, PCT)
-<span class="kw">new</span> Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>d, EQUAL_TO, <span class="num">1235</span>d, NBR)</pre></div><dl class="paramcmts block"><dt class="param">description</dt><dd class="cmt"><p>the name/description of the KPI which will appear on the
-validation report.</p></dd><dt class="param">kpiValue</dt><dd class="cmt"><p>the value for this KPI</p></dd><dt class="param">thresholdType</dt><dd class="cmt"><p>the type of threshold (SUPERIOR_THAN, INFERIOR_THAN or
-EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the threshold to apply</p></dd><dt class="param">kpiType</dt><dd class="cmt"><p>the type of KPI (PCT or NBR)</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         
 
@@ -134,7 +106,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -151,7 +123,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@##():Int" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@##():Int" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -168,7 +140,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -185,7 +157,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -202,7 +174,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@clone():Object" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@clone():Object" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -225,7 +197,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -242,7 +214,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -259,7 +231,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -282,24 +254,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@getClass():Class[_]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="hashCode():Int"></a>
-      <a id="hashCode():Int"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -316,11 +271,28 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.spark_helper.monitoring.NBR#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="name:String"></a>
+      <a id="name:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">name</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@name:String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.spark_helper.monitoring.NBR">NBR</a> → <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -333,7 +305,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -350,7 +322,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@notify():Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -367,7 +339,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -384,28 +356,11 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.spark_helper.monitoring.Test#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toString():String"></a>
-      <a id="toString():String"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@toString():String" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.spark_helper.monitoring.Test">Test</a> → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -418,7 +373,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@wait():Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -441,7 +396,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -464,7 +419,7 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#com.spark_helper.monitoring.Test@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../index.html#com.spark_helper.monitoring.NBR$@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -484,7 +439,17 @@ EQUAL_TO).</p></dd><dt class="param">appliedThreshold</dt><dd class="cmt"><p>the
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <span class="extype" name="scala.Product">Product</span></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <span class="extype" name="scala.Equals">Equals</span></h3>
+            </div><div class="parent" name="com.spark_helper.monitoring.KpiType">
+              <h3>Inherited from <a href="KpiType.html" class="extype" name="com.spark_helper.monitoring.KpiType">KpiType</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
