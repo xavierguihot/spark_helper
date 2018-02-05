@@ -9,9 +9,9 @@ import java.lang.Math.abs
   *
   * Some exemples of Test objects:
   * {{{
-  * new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
-  * new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
-  * new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
+  * Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
+  * Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
+  * Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
   * }}}
   *
   * @author Xavier Guihot
@@ -21,9 +21,9 @@ import java.lang.Math.abs
   *
   * Some exemples of Test objects:
   * {{{
-  * new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
-  * new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
-  * new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
+  * Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
+  * Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
+  * Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
   * }}}
   *
   * @param description the name/description of the KPI which will appear on the
@@ -34,7 +34,7 @@ import java.lang.Math.abs
   * @param appliedThreshold the threshold to apply
   * @param kpiType the type of KPI (PCT or NBR)
   */
-class Test(
+final case class Test(
     description: String,
     kpiValue: Double,
     thresholdType: ThresholdType,

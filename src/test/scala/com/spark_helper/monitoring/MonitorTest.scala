@@ -136,7 +136,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     try {
       "a".toInt
     } catch {
-      case nfe: NumberFormatException => 
+      case nfe: NumberFormatException =>
         monitor.updateReportWithError(nfe, "Parse to integer", "my diagnostic")
     }
     // Warning, here I remove the stack trace because it depends on the
@@ -157,9 +157,9 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     var monitor = new Monitor()
     var success = monitor.updateByKpisValidation(
       List(
-        new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
-        new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT),
-        new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
+        Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
+        Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT),
+        Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
       ),
       "Tests for whatever"
     )
@@ -189,7 +189,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     // 2: Single test:
     monitor = new Monitor()
     success = monitor.updateByKpiValidation(
-      new Test("someNbr", 55e6d, SUPERIOR_THAN, 50e6d, NBR),
+      Test("someNbr", 55e6d, SUPERIOR_THAN, 50e6d, NBR),
       "Tests for whatever")
 
     assert(success)

@@ -31,8 +31,8 @@ import java.lang.Throwable
   *   // Let's say you want to get some KPIs on your output before storing it:
   *   val outputIsValid = monitor.updateByKpisValidation(
   *     List(
-  *       new Test("Nbr of output records", processedData.count(), SUPERIOR_THAN, 10e6d, NBR),
-  *       new Test("Some pct of invalid output", your_complex_kpi, INFERIOR_THAN, 3, PCT)
+  *       Test("Nbr of output records", processedData.count(), SUPERIOR_THAN, 10e6d, NBR),
+  *       Test("Some pct of invalid output", your_complex_kpi, INFERIOR_THAN, 3, PCT)
   *     ),
   *     "My pipeline descirption"
   *   )
@@ -310,9 +310,9 @@ class Monitor(
     * {{{
     * monitor.updateByKpisValidation(
     *   List(
-    *     new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
-    *     new Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT),
-    *     new Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
+    *     Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
+    *     Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT),
+    *     Test("someNbr", 1235d, EQUAL_TO, 1235d, NBR)
     *   ),
     *   "Tests for whatever"
     * )
@@ -377,7 +377,7 @@ class Monitor(
     * Using this method like this:
     * {{{
     * monitor.updateByKpiValidation(
-    *   new Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
+    *   Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT),
     *   "Tests for whatever")
     * }}}
     * will result in this to be appended to the report:
