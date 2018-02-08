@@ -1,14 +1,14 @@
 package com.spark_helper
 
 import org.apache.spark.{HashPartitioner, SparkContext}
-import org.apache.spark.rdd.RDD
-
+import org.apache.spark.rdd.{RDD, HadoopRDD}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, FileUtil, Path}
 import org.apache.hadoop.io.compress.CompressionCodec
 import org.apache.hadoop.io.{LongWritable, NullWritable, Text}
 import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
+import org.apache.hadoop.mapred.{FileSplit, TextInputFormat => TextInputFormat2}
 
 import scala.util.Random
 
@@ -28,6 +28,10 @@ import scala.util.Random
   * // This way, xml, json, yml or any multi-line record file format can be used
   * // with Spark:
   * SparkHelper.textFileWithDelimiter("/my/input/folder/path", sparkContext, "---\n")
+  * // Same as SparkContext.textFile, but instead of returning an RDD of
+  * // records, it returns an RDD of tuples containing both the record and the
+  * // path of the file it comes from:
+  * SparkHelper.textFileWithFileName("folder", sparkContext)
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -495,6 +499,61 @@ object SparkHelper extends Serializable {
       finalCoalescenceLevel,
       sparkContext,
       Some(compressionCodec))
+  }
+
+  /** Equivalent to sparkContext.textFile(), but for each line is associated
+    * with its file path.
+    *
+    * Produces a RDD[(file_name, line)] which provides a way to know from which
+    * file a given line comes from.
+    *
+    * {{{
+    * // Considering this folder:
+    * // folder/file_1.txt whose content is data1\ndata2\ndata3
+    * // folder/file_2.txt whose content is data4\ndata4
+    * // folder/folder_1/file_3.txt whose content is data6\ndata7
+    * // then:
+    * SparkHelper.textFileWithFileName("folder", sparkContext)
+    * // will return:
+    * RDD(
+    *   ("file:/path/on/machine/folder/file_1.txt", "data1"),
+    *   ("file:/path/on/machine/folder/file_1.txt", "data2"),
+    *   ("file:/path/on/machine/folder/file_1.txt", "data3"),
+    *   ("file:/path/on/machine/folder/file_2.txt", "data4"),
+    *   ("file:/path/on/machine/folder/file_2.txt", "data5"),
+    *   ("file:/path/on/machine/folder/folder_1/file_3.txt", "data6"),
+    *   ("file:/path/on/machine/folder/folder_1/file_3.txt", "data7")
+    * )
+    * }}}
+    *
+    * @param hdfsPath the path of the folder (or structure of folders) to read
+    * @param sparkContext the SparkContext
+    * @return the RDD of records where a record is a tuple containing the path
+    * of the file the record comes from and the record itself.
+    */
+  def textFileWithFileName(
+      hdfsPath: String,
+      sparkContext: SparkContext
+  ): RDD[(String, String)] = {
+
+    // In order to go through the folder structure recursively:
+    sparkContext.hadoopConfiguration
+      .set("mapreduce.input.fileinputformat.input.dir.recursive", "true")
+
+    sparkContext
+      .hadoopFile(
+        hdfsPath,
+        classOf[TextInputFormat2],
+        classOf[LongWritable],
+        classOf[Text],
+        sparkContext.defaultMinPartitions
+      )
+      .asInstanceOf[HadoopRDD[LongWritable, Text]]
+      .mapPartitionsWithInputSplit {
+        case (inputSplit, iterator) =>
+          val file = inputSplit.asInstanceOf[FileSplit]
+          iterator.map(tpl => (file.getPath.toString, tpl._2.toString))
+      }
   }
 
   //////

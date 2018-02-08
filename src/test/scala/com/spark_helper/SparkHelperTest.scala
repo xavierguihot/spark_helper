@@ -1,6 +1,6 @@
 package com.spark_helper
 
-import com.holdenkarau.spark.testing.SharedSparkContext
+import com.holdenkarau.spark.testing.{SharedSparkContext, RDDComparisons}
 
 import org.scalatest.FunSuite
 
@@ -9,7 +9,10 @@ import org.scalatest.FunSuite
   * @author Xavier Guihot
   * @since 2017-02
   */
-class SparkHelperTest extends FunSuite with SharedSparkContext {
+class SparkHelperTest
+    extends FunSuite
+    with SharedSparkContext
+    with RDDComparisons {
 
   test("Save as Single Text File") {
 
@@ -251,5 +254,59 @@ class SparkHelperTest extends FunSuite with SharedSparkContext {
     assert(outputData === expectedOutputData)
 
     HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")
+  }
+
+  test(
+    "Extract lines of files to an RDD of tuple containing the line and file " +
+      "the line comes from") {
+
+    HdfsHelper.deleteFolder("src/test/resources/with_file_name")
+    HdfsHelper.writeToHdfsFile(
+      "data_1_a\ndata_1_b\ndata_1_c",
+      "src/test/resources/with_file_name/file_1.txt")
+    HdfsHelper.writeToHdfsFile(
+      "data_2_a\ndata_2_b",
+      "src/test/resources/with_file_name/file_2.txt")
+    HdfsHelper.writeToHdfsFile(
+      "data_3_a\ndata_3_b\ndata_3_c\ndata_3_d",
+      "src/test/resources/with_file_name/folder_1/file_3.txt")
+
+    val computedRdd = SparkHelper
+      .textFileWithFileName("src/test/resources/with_file_name", sc)
+      // We remove the part of the path which is specific to the local machine
+      // on which the test run:
+      .map {
+        case (filePath, line) =>
+          val nonLocalPath = filePath.split("src/test/") match {
+            case Array(localPartOfPath, projectRelativePath) =>
+              "file:/.../src/test/" + projectRelativePath
+          }
+          (nonLocalPath, line)
+      }
+
+    val expectedRDD = sc.parallelize(
+      Array(
+        ("file:/.../src/test/resources/with_file_name/file_1.txt", "data_1_a"),
+        ("file:/.../src/test/resources/with_file_name/file_1.txt", "data_1_b"),
+        ("file:/.../src/test/resources/with_file_name/file_1.txt", "data_1_c"),
+        (
+          "file:/.../src/test/resources/with_file_name/folder_1/file_3.txt",
+          "data_3_a"),
+        (
+          "file:/.../src/test/resources/with_file_name/folder_1/file_3.txt",
+          "data_3_b"),
+        (
+          "file:/.../src/test/resources/with_file_name/folder_1/file_3.txt",
+          "data_3_c"),
+        (
+          "file:/.../src/test/resources/with_file_name/folder_1/file_3.txt",
+          "data_3_d"),
+        ("file:/.../src/test/resources/with_file_name/file_2.txt", "data_2_a"),
+        ("file:/.../src/test/resources/with_file_name/file_2.txt", "data_2_b")
+      ))
+
+    assertRDDEquals(computedRdd, expectedRDD)
+
+    HdfsHelper.deleteFolder("src/test/resources/with_file_name")
   }
 }

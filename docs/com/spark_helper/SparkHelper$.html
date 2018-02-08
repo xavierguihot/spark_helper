@@ -57,7 +57,11 @@ SparkHelper.saveAsSingleTextFile(myOutputRDD, <span class="lit">"/my/output/file
 <span class="cmt">// line, it reads records spread over several lines.</span>
 <span class="cmt">// This way, xml, json, yml or any multi-line record file format can be used</span>
 <span class="cmt">// with Spark:</span>
-SparkHelper.textFileWithDelimiter(<span class="lit">"/my/input/folder/path"</span>, sparkContext, <span class="lit">"---\n"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+SparkHelper.textFileWithDelimiter(<span class="lit">"/my/input/folder/path"</span>, sparkContext, <span class="lit">"---\n"</span>)
+<span class="cmt">// Same as SparkContext.textFile, but instead of returning an RDD of</span>
+<span class="cmt">// records, it returns an RDD of tuples containing both the record and the</span>
+<span class="cmt">// path of the file it comes from:</span>
+SparkHelper.textFileWithFileName(<span class="lit">"folder"</span>, sparkContext)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -665,6 +669,42 @@ whole xml file is one line.</p><pre><span class="cmt">// Let's say data we want 
 assert(computedRecords == expectedRecords)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file to read (folder or file, '*' works as
 well).</p></dd><dt class="param">sparkContext</dt><dd class="cmt"><p>the SparkContext</p></dd><dt class="param">delimiter</dt><dd class="cmt"><p>the specific record delimiter which replaces &quot;\n&quot;</p></dd><dt class="param">maxRecordLength</dt><dd class="cmt"><p>the max length (not sure which unit) of a record
 before considering the record too long to fit into memory.</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD of records</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper#textFileWithFileName" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="textFileWithFileName(hdfsPath:String,sparkContext:org.apache.spark.SparkContext):org.apache.spark.rdd.RDD[(String,String)]"></a>
+      <a id="textFileWithFileName(String,SparkContext):RDD[(String,String)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textFileWithFileName</span><span class="params">(<span name="hdfsPath">hdfsPath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="sparkContext">sparkContext: <span class="extype" name="org.apache.spark.SparkContext">SparkContext</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$@textFileWithFileName(hdfsPath:String,sparkContext:org.apache.spark.SparkContext):org.apache.spark.rdd.RDD[(String,String)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Equivalent to sparkContext.textFile(), but for each line is associated
+with its file path.</p><div class="fullcomment"><div class="comment cmt"><p>Equivalent to sparkContext.textFile(), but for each line is associated
+with its file path.</p><p>Produces a RDD[(file_name, line)] which provides a way to know from which
+file a given line comes from.</p><pre><span class="cmt">// Considering this folder:</span>
+<span class="cmt">// folder/file_1.txt whose content is data1\ndata2\ndata3</span>
+<span class="cmt">// folder/file_2.txt whose content is data4\ndata4</span>
+<span class="cmt">// folder/folder_1/file_3.txt whose content is data6\ndata7</span>
+<span class="cmt">// then:</span>
+SparkHelper.textFileWithFileName(<span class="lit">"folder"</span>, sparkContext)
+<span class="cmt">// will return:</span>
+RDD(
+  (<span class="lit">"file:/path/on/machine/folder/file_1.txt"</span>, <span class="lit">"data1"</span>),
+  (<span class="lit">"file:/path/on/machine/folder/file_1.txt"</span>, <span class="lit">"data2"</span>),
+  (<span class="lit">"file:/path/on/machine/folder/file_1.txt"</span>, <span class="lit">"data3"</span>),
+  (<span class="lit">"file:/path/on/machine/folder/file_2.txt"</span>, <span class="lit">"data4"</span>),
+  (<span class="lit">"file:/path/on/machine/folder/file_2.txt"</span>, <span class="lit">"data5"</span>),
+  (<span class="lit">"file:/path/on/machine/folder/folder_1/file_3.txt"</span>, <span class="lit">"data6"</span>),
+  (<span class="lit">"file:/path/on/machine/folder/folder_1/file_3.txt"</span>, <span class="lit">"data7"</span>)
+)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder (or structure of folders) to read</p></dd><dt class="param">sparkContext</dt><dd class="cmt"><p>the SparkContext</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD of records where a record is a tuple containing the path
+of the file the record comes from and the record itself.</p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
