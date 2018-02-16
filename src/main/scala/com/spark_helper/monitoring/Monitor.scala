@@ -213,7 +213,7 @@ class Monitor(
     * @return true since it's a success
     */
   def updateReportWithSuccess(taskDescription: String): Boolean = {
-    updateReport(taskDescription + ": success")
+    updateReport(s"$taskDescription: success")
     true
   }
 
@@ -235,7 +235,7 @@ class Monitor(
     * @return false since it's a failure
     */
   def updateReportWithFailure(taskDescription: String): Boolean = {
-    updateReport(taskDescription + ": failed")
+    updateReport(s"$taskDescription: failed")
     success = false
     false
   }
@@ -282,14 +282,14 @@ class Monitor(
 
     var update = ""
 
-    if (!taskDescription.isEmpty)
-      update += taskDescription + ": failed\n"
+    if (taskDescription.nonEmpty)
+      update += s"$taskDescription: failed\n"
 
-    if (!diagnostic.isEmpty)
-      update += "\tDiagnostic: " + diagnostic + "\n"
+    if (diagnostic.nonEmpty)
+      update += s"\tDiagnostic: $diagnostic\n"
 
     update += ("\t\t" + error.toString() + "\n" +
-      error.getStackTrace.map(line => "\t\t" + line).mkString("\n") + "\n")
+      error.getStackTrace.map(line => s"\t\t$line").mkString("\n") + "\n")
 
     updateReport(update)
 
@@ -343,7 +343,7 @@ class Monitor(
       testSuitName: String
   ): Boolean = {
 
-    val testsAreValid = tests.forall(_.isSuccess())
+    val testsAreValid = tests.forall(_.isSuccess)
 
     if (!testsAreValid)
       success = false
@@ -351,9 +351,9 @@ class Monitor(
     var update = ""
 
     // A title in the report for the kpi validation:
-    if (!testSuitName.isEmpty) {
+    if (testSuitName.nonEmpty) {
       val validation = if (testsAreValid) "success" else "failed"
-      update += testSuitName + ": " + validation + "\n"
+      update += s"$testSuitName: $validation\n"
     }
 
     // The kpi report is added to the report:
@@ -433,23 +433,23 @@ class Monitor(
       report + DateHelper.now("[HH:mm]") + " Duration: " + jobDuration
 
     // The extension of the report depending on the success:
-    val reportExtension = if (isSuccess) ".success" else ".failed"
+    val reportExtension = if (isSuccess) "success" else "failed"
 
     // And we store the file as a simple text file with a name based on the
     // timestamp:
     HdfsHelper.writeToHdfsFile(
       finalReport,
       logFolder + "/" +
-        DateHelper.now("yyyyMMdd_HHmmss") + ".log" + reportExtension)
+        DateHelper.now("yyyyMMdd_HHmmss") + ".log." + reportExtension)
 
     // But we store it as well with a fixed name such as current.success:
-    HdfsHelper.deleteFile(logFolder + "/current.success")
-    HdfsHelper.deleteFile(logFolder + "/current.failed")
+    HdfsHelper.deleteFile(s"$logFolder/current.success")
+    HdfsHelper.deleteFile(s"$logFolder/current.failed")
     HdfsHelper
-      .writeToHdfsFile(finalReport, logFolder + "/current" + reportExtension)
+      .writeToHdfsFile(finalReport, s"$logFolder/current.$reportExtension")
 
     // And if we "live loged", then we remove the "current.ongoing" file:
-    HdfsHelper.deleteFile(logFolder + "/current.ongoing")
+    HdfsHelper.deleteFile(s"$logFolder/current.ongoing")
 
     if (purgeLogs)
       purgeOutdatedLogs(logFolder, purgeWindow)
@@ -460,21 +460,21 @@ class Monitor(
     // If there was a current.success or a current.failed in the log folder
     // remaining from the previous run, we delete it:
 
-    if (!logFolder.isEmpty) {
-      HdfsHelper.deleteFile(logFolder + "/current.success")
-      HdfsHelper.deleteFile(logFolder + "/current.failed")
+    if (logFolder.nonEmpty) {
+      HdfsHelper.deleteFile(s"$logFolder/current.success")
+      HdfsHelper.deleteFile(s"$logFolder/current.failed")
     }
 
     // And we initiate the report with it's title and basic infos:
 
     var initialReport = ""
 
-    if (!reportTitle.isEmpty)
-      initialReport += "\t\t\t\t\t" + reportTitle + "\n\n"
-    if (!pointOfContact.isEmpty)
-      initialReport += "Point of contact: " + pointOfContact + "\n"
-    if (!additionalInfo.isEmpty)
-      initialReport += additionalInfo + "\n"
+    if (reportTitle.nonEmpty)
+      initialReport += s"\t\t\t\t\t$reportTitle\n\n"
+    if (pointOfContact.nonEmpty)
+      initialReport += s"Point of contact: $pointOfContact\n"
+    if (additionalInfo.nonEmpty)
+      initialReport += s"$additionalInfo\n"
 
     initialReport += DateHelper.now("[HH:mm]") + " Begining"
 
@@ -488,25 +488,23 @@ class Monitor(
 
     lastReportUpdate = now
 
-    val update =
-      if (withTimestamp) "[" + before + "-" + now + "]" + " " + text
-      else text
+    val update = if (withTimestamp) s"[$before-$now] $text" else text
 
-    report += update + "\n"
+    report += s"$update\n"
 
     // We print the update to also have it within yarn logs:
-    println("MONITOR: " + update)
+    println(s"MONITOR: $update")
 
     // And if the logFolder parameter was used to instantiate the Monitor
     // object, we also update live the log file:
-    if (!logFolder.isEmpty) {
+    if (logFolder.nonEmpty) {
 
       val ongoingReport = (report + "\n" +
         "WARNING: Do not base yourself on this file to check if your job is " +
         "still running. This file might persist if your job has been killed " +
         "and thus couldn't reach your call to the saveReport() method.")
 
-      HdfsHelper.writeToHdfsFile(ongoingReport, logFolder + "/current.ongoing")
+      HdfsHelper.writeToHdfsFile(ongoingReport, s"$logFolder/current.ongoing")
     }
   }
 
@@ -516,12 +514,9 @@ class Monitor(
 
     if (HdfsHelper.folderExists(logFolder))
       HdfsHelper
-        .listFileNamesInFolder(logFolder)
-        .filter(logName => !logName.startsWith("current"))
-        .filter { logName => // 20170327_1545.log.success
-          val logDate = logName.substring(0, 8) // 20170327
-          logDate < nDaysAgo
-        }
-        .foreach(logName => HdfsHelper.deleteFile(logFolder + "/" + logName))
+        .listFileNamesInFolder(logFolder) // 20170327_1545.log.success
+        .filter(!_.startsWith("current"))
+        .filter(_.substring(0, 8) < nDaysAgo)
+        .foreach(logName => HdfsHelper.deleteFile(s"$logFolder/$logName"))
   }
 }

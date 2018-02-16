@@ -101,14 +101,12 @@ object SparkHelper extends Serializable {
       outputRDD: RDD[String],
       outputFile: String,
       workingFolder: String
-  ): Unit = {
-
+  ): Unit =
     saveAsSingleTextFileWithWorkingFolderInternal(
       outputRDD,
       outputFile,
       workingFolder,
       None)
-  }
 
   /** Saves an RDD in exactly one file.
     *
@@ -140,14 +138,12 @@ object SparkHelper extends Serializable {
       outputFile: String,
       workingFolder: String,
       compressionCodec: Class[_ <: CompressionCodec]
-  ): Unit = {
-
+  ): Unit =
     saveAsSingleTextFileWithWorkingFolderInternal(
       outputRDD,
       outputFile,
       workingFolder,
       Some(compressionCodec))
-  }
 
   /** Equivalent to sparkContext.textFile(), but for a specific record delimiter.
     *
@@ -347,15 +343,13 @@ object SparkHelper extends Serializable {
       lowerCoalescenceLevelFolder: String,
       finalCoalescenceLevel: Int,
       sparkContext: SparkContext
-  ): Unit = {
-
+  ): Unit =
     decreaseCoalescenceInternal(
       highCoalescenceLevelFolder,
       lowerCoalescenceLevelFolder,
       finalCoalescenceLevel,
       sparkContext,
       None)
-  }
 
   /** Decreases the nbr of partitions of a folder.
     *
@@ -393,15 +387,13 @@ object SparkHelper extends Serializable {
       finalCoalescenceLevel: Int,
       sparkContext: SparkContext,
       compressionCodec: Class[_ <: CompressionCodec]
-  ): Unit = {
-
+  ): Unit =
     decreaseCoalescenceInternal(
       highCoalescenceLevelFolder,
       lowerCoalescenceLevelFolder,
       finalCoalescenceLevel,
       sparkContext,
       Some(compressionCodec))
-  }
 
   /** Saves as text file, but by decreasing the nbr of partitions of the output.
     *
@@ -556,9 +548,7 @@ object SparkHelper extends Serializable {
       }
   }
 
-  //////
   // Internal core:
-  //////
 
   private def saveAsSingleTextFileWithWorkingFolderInternal(
       outputRDD: RDD[String],

@@ -271,13 +271,8 @@ object HdfsHelper extends Serializable {
     *
     * @param filePath the path of the empty file to create
     */
-  def createEmptyHdfsFile(filePath: String): Unit = {
-
-    val emptyFile =
-      FileSystem.get(new Configuration()).create(new Path(filePath))
-
-    emptyFile.close()
-  }
+  def createEmptyHdfsFile(filePath: String): Unit =
+    FileSystem.get(new Configuration()).create(new Path(filePath)).close()
 
   /** Saves text in a file when content is too small to really require an RDD.
     *
@@ -357,8 +352,7 @@ object HdfsHelper extends Serializable {
           listFileNamesInFolder(
             hdfsPath + "/" + status.getPath.getName,
             true,
-            onlyName
-          )
+            onlyName)
         // If it's a dir and we're not in a recursive option:
         else
           Nil
@@ -376,8 +370,7 @@ object HdfsHelper extends Serializable {
     * @param hdfsPath the path of the folder for which to list folder names
     * @return the list of folder names in the specified folder
     */
-  def listFolderNamesInFolder(hdfsPath: String): List[String] = {
-
+  def listFolderNamesInFolder(hdfsPath: String): List[String] =
     FileSystem
       .get(new Configuration())
       .listStatus(new Path(hdfsPath))
@@ -385,7 +378,6 @@ object HdfsHelper extends Serializable {
       .map(_.getPath.getName)
       .toList
       .sorted
-  }
 
   /** Returns the joda DateTime of the last modification of the given file.
     *
@@ -393,14 +385,12 @@ object HdfsHelper extends Serializable {
     * modification date.
     * @return the joda DateTime of the last modification of the given file
     */
-  def fileModificationDateTime(hdfsPath: String): DateTime = {
-
+  def fileModificationDateTime(hdfsPath: String): DateTime =
     new DateTime(
       FileSystem
         .get(new Configuration())
         .getFileStatus(new Path(hdfsPath))
         .getModificationTime())
-  }
 
   /** Returns the stringified date of the last modification of the given file.
     *
@@ -459,15 +449,10 @@ object HdfsHelper extends Serializable {
     * since the last modification.
     * @return the nbr of days since the given file has been last modified
     */
-  def nbrOfDaysSinceFileWasLastModified(hdfsPath: String): Int = {
-
+  def nbrOfDaysSinceFileWasLastModified(hdfsPath: String): Int =
     Days
-      .daysBetween(
-        fileModificationDateTime(hdfsPath),
-        new DateTime()
-      )
+      .daysBetween(fileModificationDateTime(hdfsPath), new DateTime())
       .getDays()
-  }
 
   /** Appends a header and a footer to a file.
     *
@@ -491,14 +476,12 @@ object HdfsHelper extends Serializable {
       header: String,
       footer: String,
       workingFolderPath: String = ""
-  ): Unit = {
-
+  ): Unit =
     appendHeaderAndFooterInternal(
       filePath,
       Some(header),
       Some(footer),
       workingFolderPath)
-  }
 
   /** Appends a header to a file.
     *
@@ -519,14 +502,12 @@ object HdfsHelper extends Serializable {
       filePath: String,
       header: String,
       workingFolderPath: String = ""
-  ): Unit = {
-
+  ): Unit =
     appendHeaderAndFooterInternal(
       filePath,
       Some(header),
       None,
       workingFolderPath)
-  }
 
   /** Appends a footer to a file.
     *
@@ -544,14 +525,12 @@ object HdfsHelper extends Serializable {
       filePath: String,
       footer: String,
       workingFolderPath: String = ""
-  ): Unit = {
-
+  ): Unit =
     appendHeaderAndFooterInternal(
       filePath,
       None,
       Some(footer),
       workingFolderPath)
-  }
 
   /** Validates an XML file on hdfs in regard to the given XSD.
     *
@@ -737,21 +716,18 @@ object HdfsHelper extends Serializable {
       .filter(path => {
 
         val fileAgeInDays = Days
-          .daysBetween(
-            new DateTime(path.getModificationTime()),
-            new DateTime()
-          )
+          .daysBetween(new DateTime(path.getModificationTime()), new DateTime())
           .getDays()
 
         fileAgeInDays >= purgeAge
 
       })
-      .foreach(path => {
-        if (path.isFile)
+      .foreach {
+        case path if path.isFile =>
           deleteFile(folderPath + "/" + path.getPath.getName)
-        else
+        case path =>
           deleteFolder(folderPath + "/" + path.getPath.getName)
-      })
+      }
   }
 
   /** Internal implementation of the addition to a file of header and footer.
@@ -780,11 +756,8 @@ object HdfsHelper extends Serializable {
     val inputFile = fileSystem.open(new Path(filePath))
     val tmpOutputFile = fileSystem.create(new Path(tmpOutputPath))
 
-    header match {
-      case Some(header) =>
-        tmpOutputFile.write((header + "\n").getBytes("UTF-8"))
-      case None => ()
-    }
+    // If there is an header, we add it to the file:
+    header.foreach(h => tmpOutputFile.write((h + "\n").getBytes("UTF-8")))
 
     try {
       IOUtils.copyBytes(inputFile, tmpOutputFile, new Configuration(), false)
@@ -792,10 +765,8 @@ object HdfsHelper extends Serializable {
       inputFile.close()
     }
 
-    footer match {
-      case Some(footer) => tmpOutputFile.write(footer.getBytes("UTF-8"))
-      case None         => ()
-    }
+    // If there is a footer, we append it to the file:
+    footer.foreach(f => tmpOutputFile.write((f + "\n").getBytes("UTF-8")))
 
     deleteFile(filePath)
     moveFile(tmpOutputPath, filePath)

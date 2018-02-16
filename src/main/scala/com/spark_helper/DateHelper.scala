@@ -77,9 +77,8 @@ object DateHelper extends Serializable {
       jodaLastDate: DateTime
   ): List[DateTime] = {
 
-    val nbrOfDaysWithinRange = Days
-      .daysBetween(jodaFirstDate, jodaLastDate)
-      .getDays()
+    val nbrOfDaysWithinRange =
+      Days.daysBetween(jodaFirstDate, jodaLastDate).getDays()
 
     (0 to nbrOfDaysWithinRange).toList.map(jodaFirstDate.plusDays)
   }
@@ -240,12 +239,10 @@ object DateHelper extends Serializable {
       date: String,
       inputFormat: String,
       outputFormat: String
-  ): String = {
-
+  ): String =
     DateTimeFormat
       .forPattern(outputFormat)
       .print(DateTimeFormat.forPattern(inputFormat).parseDateTime(date))
-  }
 
   /** Returns the current local timestamp.
     *
