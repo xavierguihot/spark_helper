@@ -14,7 +14,7 @@ class SparkHelperTest
     with SharedSparkContext
     with RDDComparisons {
 
-  test("Save as Single Text File") {
+  test("Save as single text file") {
 
     // 1: Without an intermediate working dir:
 
@@ -64,7 +64,7 @@ class SparkHelperTest
     HdfsHelper.deleteFolder("src/test/resources/tmp")
   }
 
-  test("Read Text File with Specific Record Delimiter") {
+  test("Read text file with specific record delimiter") {
 
     // 1: Let's read a file where a record begins with a line begining with
     // 3 and other lines begining by 4:
@@ -152,7 +152,7 @@ class SparkHelperTest
     HdfsHelper.deleteFile("src/test/resources/some_basic_xml.xml")
   }
 
-  test("Save as Text File by Key") {
+  test("Save as text file by key") {
 
     HdfsHelper.deleteFolder("src/test/resources/key_value_storage")
 
@@ -206,7 +206,7 @@ class SparkHelperTest
     HdfsHelper.deleteFolder("src/test/resources/key_value_storage")
   }
 
-  test("Decrease Coalescence Level") {
+  test("Decrease coalescence level") {
 
     HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_input")
     HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")

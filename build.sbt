@@ -1,6 +1,6 @@
 name := "spark_helper"
 
-version := "1.0.21"
+version := "1.1.0"
 
 scalaVersion := "2.11.12"
 
@@ -26,7 +26,8 @@ wartremoverWarnings in (Compile, compile) --= Seq(
   Wart.Nothing,
   Wart.Equals,
   Wart.NonUnitStatements,
-  Wart.Overloading
+  Wart.Overloading,
+  Wart.Option2Iterable
 )
 
 scalafmtOnCompile := true

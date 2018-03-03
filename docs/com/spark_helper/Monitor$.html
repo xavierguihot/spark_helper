@@ -1,0 +1,905 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Monitor - com.spark_helper.Monitor</title>
+          <meta name="description" content="Monitor - com.spark helper.Monitor" />
+          <meta name="keywords" content="Monitor com.spark helper.Monitor" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../lib/template.js"></script>
+      <script type="text/javascript" src="../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../index.html';
+            var hash = 'com.spark_helper.Monitor$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Object" src="../../lib/object_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="com">com</a>.<a href="package.html" class="extype" name="com.spark_helper">spark_helper</a></p>
+        <h1>Monitor</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.spark_helper">package spark_helper</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Monitor</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A logger dedicated to Spak jobs.</p><p>It's a simple logger/report which contains a report that one can update from
+the driver and a success state. The idea is to persist job executions logs
+and errors (and forget about grepping unreadable yarn logs).</p><p>It's designed for perdiodic spark jobs (handles storage and purge of logs)
+and provides a way to handle kpis validation.</p><p>Logs are stored on the go which means one can have a direct real time access
+of the job logs/status and it's current state (which can overwise be a pain
+if it means going through yarn logs, or even for certain production
+environments going through additional layers of software logs to get to yarn
+logs).</p><p>One of the issues this logger aims at tackling is the handling of exceptions
+reported from executors. An exception within a Spark pipeline doesn't always
+mean one want to make the job fail. Or if it's the case, one might still
+want to perform a few actions before letting the job crash. The idea is thus
+to surround (driver side) a Spark pipeline within a try catch and redirect
+the exception to the logger for a clean logging.</p><p>This is a &quot;driver-only&quot; logger and is not intended at logging concurrent
+actions from executors.</p><p>Produced reports can easily be inserted in a notification email whenerver
+the job fails, which saves a lot of time to maintainers operating on heavy
+production environements.</p><p>The produced persisted report is also a way for downstream jobs to know the
+status of their input data.</p><p>Let's go through a simple Spark job example monitored with this Monitor
+facility:</p><pre>Monitor.setTitle(<span class="lit">"My job title"</span>)
+Monitor.addDescription(
+  <span class="lit">"My job description (whatever you want); for instance:\n"</span> +
+  <span class="lit">"Documentation: https://github.com/xavierguihot/spark_helper"</span>)
+Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
+
+<span class="kw">try</span> {
+
+  <span class="cmt">// Let's perform a spark pipeline which might go wrong:</span>
+  <span class="kw">val</span> processedData = sc.textFile(<span class="lit">"file.json"</span>).map(<span class="cmt">/**whatever*/</span>)
+
+  <span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
+  <span class="kw">val</span> outputIsValid = Monitor.kpis(
+    <span class="std">List</span>(
+      Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), SUPERIOR_THAN, <span class="num">10</span>e6d, NBR),
+      Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, INFERIOR_THAN, <span class="num">3</span>, PCT)
+    ),
+    <span class="lit">"My pipeline descirption"</span>
+  )
+
+  <span class="kw">if</span> (outputIsValid)
+    processedData.saveAsTextFile(<span class="lit">"wherever.csv"</span>)
+
+} <span class="kw">catch</span> {
+  <span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span>
+    Monitor.error(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+  <span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span>
+    Monitor.error(e, <span class="lit">"My pipeline descirption"</span>) <span class="cmt">// whatever unexpected error</span>
+}
+
+<span class="kw">if</span> (Monitor.isSuccess()) {
+  <span class="kw">val</span> doMore = <span class="lit">"Let's do some more stuff!"</span>
+  Monitor.log(<span class="lit">"My second pipeline description: success"</span>)
+}
+
+<span class="cmt">// At the end of the different steps of the job, we can store the report in</span>
+<span class="cmt">// HDFS (this saves the logs in the folder set with Monitor.setLogFolder):</span>
+Monitor.store()
+
+<span class="cmt">// At the end of the job, if the job isn't successfull, you might want to</span>
+<span class="cmt">// crash it (for instance to get a notification from your scheduler):</span>
+<span class="kw">if</span> (!Monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception() <span class="cmt">// or send an email, or ...</span></pre><p>At any time during the job, logs can be accessed from file
+path/to/log/folder/current.ongoing</p><p>If we were to read the stored report after this simple pipeline, here are
+some possible reports:</p><p>First scenario, problem with the input of the job:</p><pre>          My job title
+
+My job description (whatever you want); <span class="kw">for</span> instance:
+Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
+  Diagnostic: No input data!
+    org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+    at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+    at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+    ...
+[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>          My job title
+
+My job description (whatever you want); <span class="kw">for</span> instance:
+Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
+    java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
+    java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
+    java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
+    ...
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>          My job title
+
+My job description (whatever you want); <span class="kw">for</span> instance:
+Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
+  KPI: Nbr of output records
+    Value: <span class="num">14669071.0</span>
+    Must be superior than <span class="num">10000000.0</span>
+    Validated: <span class="kw">true</span>
+  KPI: <span class="std">Some</span> pct of invalid output
+    Value: <span class="num">0.06</span>%
+    Must be inferior than <span class="num">3.0</span>%
+    Validated: <span class="kw">true</span>
+[<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
+[<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.spark_helper.Monitor"><span>Monitor</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@##():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#addContacts" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addContacts(contacts:List[String]):Unit"></a>
+      <a id="addContacts(List[String]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addContacts</span><span class="params">(<span name="contacts">contacts: <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@addContacts(contacts:List[String]):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets the report's contact list.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the report's contact list.</p><p>This will appear within the first lines of the report:</p><pre><span class="cmt">// Using:</span>
+Monitor.setReportTitle(<span class="lit">"My Simple Job"</span>)
+Monitor.addContacts(<span class="std">List</span>(<span class="lit">"x.guihot@gmail.com"</span>, <span class="lit">"smbdy@gmail.com"</span>))
+<span class="cmt">// Produces this at the begining of the report:</span>
+<span class="lit">"          My Simple Job"</span>
+<span class="lit">""</span>
+<span class="lit">"Point of contact: x.guihot@gmail.com, smbdy@gmail.com"</span></pre></div><dl class="paramcmts block"><dt class="param">contacts</dt><dd class="cmt"><p>the list of points of contact</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#addDescription" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addDescription(description:String):Unit"></a>
+      <a id="addDescription(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addDescription</span><span class="params">(<span name="description">description: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@addDescription(description:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets the report's description.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the report's description.</p><p>This will appear within the first lines of the report:</p><pre><span class="cmt">// Using:</span>
+Monitor.setReportTitle(<span class="lit">"My Simple Job"</span>)
+Monitor.addDescription(<span class="lit">"Documentation: https://github.com/xavierguihot/spark_helper"</span>)
+<span class="cmt">// Produces this at the begining of the report:</span>
+<span class="lit">"          My Simple Job"</span>
+<span class="lit">""</span>
+<span class="lit">"Documentation: https://github.com/xavierguihot/spark_helper"</span></pre></div><dl class="paramcmts block"><dt class="param">description</dt><dd class="cmt"><p>the description of the Spark job (or whatever)</p></dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@clone():Object" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#error" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="error(exception:Throwable,taskDescription:String,diagnostic:String):Boolean"></a>
+      <a id="error(Throwable,String,String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error</span><span class="params">(<span name="exception">exception: <span class="extype" name="java.lang.Throwable">Throwable</span></span>, <span name="taskDescription">taskDescription: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="diagnostic">diagnostic: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@error(exception:Throwable,taskDescription:String,diagnostic:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the report with the stack trace of an error.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with the stack trace of an error.</p><p>This sets the status of the monitoring to false. After that the status
+will never be success again, even if you update the report with success
+tasks.</p><p>The main idea is to surround a Spark pipeline on the driver in order to
+catch whatever exception from executors and thus log the exact error while
+still being able to keep on with the job or end it properly.</p><p>Catching an error like this:</p><pre>monitor.error(
+  invalidInputException,
+  <span class="lit">"My pipeline descirption"</span>,
+  diagnostic = <span class="lit">"No input data!"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">24</span>] My pipeline descirption: failed
+  Diagnostic: No input data!
+    org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+    at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+    at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+    ...</pre></div><dl class="paramcmts block"><dt class="param">taskDescription</dt><dd class="cmt"><p>the description of the step which failed</p></dd><dt class="param">diagnostic</dt><dd class="cmt"><p>(optional) the message one want to add to clarify the
+source of the problem.</p></dd><dt>returns</dt><dd class="cmt"><p>false since it's a failure</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#error" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="error(taskDescription:String):Boolean"></a>
+      <a id="error(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error</span><span class="params">(<span name="taskDescription">taskDescription: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@error(taskDescription:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the report with some text and a failure.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with some text and a failure.</p><p>This sets the status of the monitoring to false. After that the status
+will never be success again, even if you update the report with success().</p><p>Using this method like this:</p><pre>monitor.error(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text: failure\n"</span></pre><p>Once the monitoring is a failure, then whatever following successfull
+action won't change the failed status of the monitoring.
+</p></div><dl class="paramcmts block"><dt class="param">taskDescription</dt><dd class="cmt"><p>the text to append to the report</p></dd><dt>returns</dt><dd class="cmt"><p>false since it's a failure</p></dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#isSuccess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSuccess():Boolean"></a>
+      <a id="isSuccess():Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSuccess</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@isSuccess():Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns if at that point of the job, all previous stages were successful.</p><div class="fullcomment"><div class="comment cmt"><p>Returns if at that point of the job, all previous stages were successful.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>if your spark job is successful.</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#kpi" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kpi(test:com.spark_helper.monitoring.Test,testSuitName:String):Boolean"></a>
+      <a id="kpi(Test,String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kpi</span><span class="params">(<span name="test">test: <a href="monitoring/Test.html" class="extype" name="com.spark_helper.monitoring.Test">Test</a></span>, <span name="testSuitName">testSuitName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@kpi(test:com.spark_helper.monitoring.Test,testSuitName:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the report by the validation of a single kpi.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report by the validation of a single kpi.</p><p>By providing a <a href="monitoring/Test.html" class="extype" name="com.spark_helper.monitoring.Test">com.spark_helper.monitoring.Test</a> object to validate
+against a threshold, the report is updated with a detailed result of the
+validation and the success status of the monitoring is set to false if the
+KPI isn't valid.</p><p>If the validation is a failure then after that the status will never be
+success again, even if you update the report with success tasks.</p><p>Using this method like this:</p><pre>monitor.kpi(
+  Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT),
+  <span class="lit">"Tests for whatever"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: success
+  KPI: pctOfWhatever
+    Value: <span class="num">0.06</span>%
+    Must be inferior than <span class="num">0.1</span>%
+    Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">test</dt><dd class="cmt"><p>the Test object to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if the test is successful</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#kpis" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kpis(tests:List[com.spark_helper.monitoring.Test],testSuitName:String):Boolean"></a>
+      <a id="kpis(List[Test],String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kpis</span><span class="params">(<span name="tests">tests: <span class="extype" name="scala.List">List</span>[<a href="monitoring/Test.html" class="extype" name="com.spark_helper.monitoring.Test">Test</a>]</span>, <span name="testSuitName">testSuitName: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@kpis(tests:List[com.spark_helper.monitoring.Test],testSuitName:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the report with the validation of a list of kpis/tests.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with the validation of a list of kpis/tests.</p><p>By providing a list of <a href="monitoring/Test.html" class="extype" name="com.spark_helper.monitoring.Test">com.spark_helper.monitoring.Test</a> objects to
+validate against thresholds, the report is updated with a detailed result
+of the validation and the success status of the monitoring is set to false
+if at least one if the tested KPIs isn't valid.</p><p>If the validation of tests is a failure then after that the status will
+never be success again, even if you update the report with success().</p><p>Using this method like this:</p><pre>monitor.kpis(
+  <span class="std">List</span>(
+    Test(<span class="lit">"pctOfWhatever"</span>, <span class="num">0.06</span>d, INFERIOR_THAN, <span class="num">0.1</span>d, PCT),
+    Test(<span class="lit">"pctOfSomethingElse"</span>, <span class="num">0.27</span>d, SUPERIOR_THAN, <span class="num">0.3</span>d, PCT),
+    Test(<span class="lit">"someNbr"</span>, <span class="num">1235</span>d, EQUAL_TO, <span class="num">1235</span>d, NBR)
+  ),
+  <span class="lit">"Tests for whatever"</span>
+)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">35</span>-<span class="num">10</span>:<span class="num">37</span>] Tests <span class="kw">for</span> whatever: failed
+  KPI: pctOfWhatever
+    Value: <span class="num">0.06</span>%
+    Must be inferior than <span class="num">0.1</span>%
+    Validated: <span class="kw">true</span>
+  KPI: pctOfSomethingElse
+    Value: <span class="num">0.27</span>%
+    Must be superior than <span class="num">0.3</span>%
+    Validated: <span class="kw">false</span>
+  KPI: someNbr
+    Value: <span class="num">1235.0</span>
+    Must be equal to <span class="num">1235.0</span>
+    Validated: <span class="kw">true</span></pre></div><dl class="paramcmts block"><dt class="param">tests</dt><dd class="cmt"><p>the list of Test objects to validate</p></dd><dt class="param">testSuitName</dt><dd class="cmt"><p>the description of the task being tested</p></dd><dt>returns</dt><dd class="cmt"><p>if all tests were successful</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log(text:String):Unit"></a>
+      <a id="log(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="params">(<span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@log(text:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the report with some text.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with some text.</p><p>Using this method like this:</p><pre>monitor.log(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text\n"</span></pre></div><dl class="paramcmts block"><dt class="param">text</dt><dd class="cmt"><p>the text to append to the report</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#logs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logs():String"></a>
+      <a id="logs():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logs</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@logs():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the current state of the monitoring report.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the current state of the monitoring report.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the report.</p></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#setLogFolder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setLogFolder(logFolder:String):Unit"></a>
+      <a id="setLogFolder(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setLogFolder</span><span class="params">(<span name="logFolder">logFolder: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@setLogFolder(logFolder:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets the folder in which logs are stored.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the folder in which logs are stored.</p><p>Reports are persisted with this format:</p><pre>src/test/resources/logs/<span class="num">20170326</span>_110643.log.failed
+src/test/resources/logs/<span class="num">20170327</span>_105423.log.success
+src/test/resources/logs/current.success</pre><p>where current.success actually contains same logs a</p><pre><span class="num">20170327</span>_105423.log.success</pre><p>During the execution of the job, logs are persisted and can be accessed
+from:</p><pre>src/test/resources/logs/current.ongoing</pre></div><dl class="paramcmts block"><dt class="param">logFolder</dt><dd class="cmt"><p>the folder in which reports are stored</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#setTitle" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setTitle(title:String):Unit"></a>
+      <a id="setTitle(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setTitle</span><span class="params">(<span name="title">title: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@setTitle(title:String):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets the report's title.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the report's title.</p><p>This will be the first line of the report:</p><pre><span class="cmt">// Using:</span>
+Monitor.setReportTitle(<span class="lit">"My Simple Job"</span>)
+<span class="cmt">// Produces this at the begining of the report:</span>
+<span class="lit">"          My Simple Job"</span>
+<span class="lit">""</span></pre></div><dl class="paramcmts block"><dt class="param">title</dt><dd class="cmt"><p>the title of the report</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#store" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="store():Unit"></a>
+      <a id="store():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">store</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@store():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Persists the report as a text file.</p><div class="fullcomment"><div class="comment cmt"><p>Persists the report as a text file.</p><p>This report will be stored in the folder provided with
+<span style="background-color: #eff0f1">Monitor.setLogFolder()</span> and
+its name will be either <span style="background-color: #eff0f1">
+yyyyMMdd_HHmmss.log.success</span> or
+<span style="background-color: #eff0f1">yyyyMMdd_HHmmss.log.failed</span>
+depending on the monitoring status.</p><p>In addition to storing the report with a timestamp-based name, it is also
+stored under the name <span style="background-color: #eff0f1">
+current.success</span> or <span style="background-color: #eff0f1">
+current.failed</span> in the same folder in order to give it a fixed name
+for downstream projects to look for. Obviously if the new status is
+success, and the previous was failed, the previous current.failed file is
+deleted and vis et versa.</p><p>For high frequency jobs, it might be good not to keep all logs
+indefinitely. One activate a purge of logs with
+<span style="background-color: #eff0f1">Monitor.withPurge(nbrOfDays: Int)
+</span>.
+</p></div></div>
+    </li><li name="com.spark_helper.Monitor#success" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="success(taskDescription:String):Boolean"></a>
+      <a id="success(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">success</span><span class="params">(<span name="taskDescription">taskDescription: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@success(taskDescription:String):Boolean" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Updates the report with some text and a success.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with some text and a success.</p><p>If the status of the monitoring was success, then it stays success. If it
+was failure, then it stays a failure.</p><p>Using this method like this:</p><pre>monitor.success(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text: success\n"</span></pre></div><dl class="paramcmts block"><dt class="param">taskDescription</dt><dd class="cmt"><p>the text to append to the report</p></dd><dt>returns</dt><dd class="cmt"><p>true since it's a success</p></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@toString():String" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.spark_helper.Monitor#withPurge" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withPurge(window:Int):Unit"></a>
+      <a id="withPurge(Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withPurge</span><span class="params">(<span name="window">window: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.Monitor$@withPurge(window:Int):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Activates the purge of logs and sets the purge window.</p><div class="fullcomment"><div class="comment cmt"><p>Activates the purge of logs and sets the purge window.
+</p></div><dl class="paramcmts block"><dt class="param">window</dt><dd class="cmt"><p>the nbr of days of logs retention</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

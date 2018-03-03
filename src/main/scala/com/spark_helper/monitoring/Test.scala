@@ -42,7 +42,7 @@ final case class Test(
     kpiType: KpiType
 ) {
 
-  private[monitoring] def isSuccess(): Boolean = thresholdType match {
+  private[spark_helper] def isSuccess(): Boolean = thresholdType match {
     case EQUAL_TO      => kpiValue == appliedThreshold
     case SUPERIOR_THAN => abs(kpiValue) >= appliedThreshold
     case INFERIOR_THAN => abs(kpiValue) <= appliedThreshold

@@ -154,6 +154,121 @@ HdfsHelper.writeToHdfsFile(
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+    </li><li name="com.spark_helper.Monitor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Monitor"></a>
+      <a id="Monitor:Monitor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Monitor$.html"><span class="name">Monitor</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.package@Monitor" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A logger dedicated to Spak jobs.</p><div class="fullcomment"><div class="comment cmt"><p>A logger dedicated to Spak jobs.</p><p>It's a simple logger/report which contains a report that one can update from
+the driver and a success state. The idea is to persist job executions logs
+and errors (and forget about grepping unreadable yarn logs).</p><p>It's designed for perdiodic spark jobs (handles storage and purge of logs)
+and provides a way to handle kpis validation.</p><p>Logs are stored on the go which means one can have a direct real time access
+of the job logs/status and it's current state (which can overwise be a pain
+if it means going through yarn logs, or even for certain production
+environments going through additional layers of software logs to get to yarn
+logs).</p><p>One of the issues this logger aims at tackling is the handling of exceptions
+reported from executors. An exception within a Spark pipeline doesn't always
+mean one want to make the job fail. Or if it's the case, one might still
+want to perform a few actions before letting the job crash. The idea is thus
+to surround (driver side) a Spark pipeline within a try catch and redirect
+the exception to the logger for a clean logging.</p><p>This is a &quot;driver-only&quot; logger and is not intended at logging concurrent
+actions from executors.</p><p>Produced reports can easily be inserted in a notification email whenerver
+the job fails, which saves a lot of time to maintainers operating on heavy
+production environements.</p><p>The produced persisted report is also a way for downstream jobs to know the
+status of their input data.</p><p>Let's go through a simple Spark job example monitored with this Monitor
+facility:</p><pre>Monitor.setTitle(<span class="lit">"My job title"</span>)
+Monitor.addDescription(
+  <span class="lit">"My job description (whatever you want); for instance:\n"</span> +
+  <span class="lit">"Documentation: https://github.com/xavierguihot/spark_helper"</span>)
+Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
+
+<span class="kw">try</span> {
+
+  <span class="cmt">// Let's perform a spark pipeline which might go wrong:</span>
+  <span class="kw">val</span> processedData = sc.textFile(<span class="lit">"file.json"</span>).map(<span class="cmt">/**whatever*/</span>)
+
+  <span class="cmt">// Let's say you want to get some KPIs on your output before storing it:</span>
+  <span class="kw">val</span> outputIsValid = Monitor.kpis(
+    <span class="std">List</span>(
+      Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), SUPERIOR_THAN, <span class="num">10</span>e6d, NBR),
+      Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, INFERIOR_THAN, <span class="num">3</span>, PCT)
+    ),
+    <span class="lit">"My pipeline descirption"</span>
+  )
+
+  <span class="kw">if</span> (outputIsValid)
+    processedData.saveAsTextFile(<span class="lit">"wherever.csv"</span>)
+
+} <span class="kw">catch</span> {
+  <span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span>
+    Monitor.error(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+  <span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span>
+    Monitor.error(e, <span class="lit">"My pipeline descirption"</span>) <span class="cmt">// whatever unexpected error</span>
+}
+
+<span class="kw">if</span> (Monitor.isSuccess()) {
+  <span class="kw">val</span> doMore = <span class="lit">"Let's do some more stuff!"</span>
+  Monitor.log(<span class="lit">"My second pipeline description: success"</span>)
+}
+
+<span class="cmt">// At the end of the different steps of the job, we can store the report in</span>
+<span class="cmt">// HDFS (this saves the logs in the folder set with Monitor.setLogFolder):</span>
+Monitor.store()
+
+<span class="cmt">// At the end of the job, if the job isn't successfull, you might want to</span>
+<span class="cmt">// crash it (for instance to get a notification from your scheduler):</span>
+<span class="kw">if</span> (!Monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception() <span class="cmt">// or send an email, or ...</span></pre><p>At any time during the job, logs can be accessed from file
+path/to/log/folder/current.ongoing</p><p>If we were to read the stored report after this simple pipeline, here are
+some possible reports:</p><p>First scenario, problem with the input of the job:</p><pre>          My job title
+
+My job description (whatever you want); <span class="kw">for</span> instance:
+Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
+  Diagnostic: No input data!
+    org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
+    at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
+    at org.apache.hadoop.mapred.FileInputFormat.listStatus(FileInputFormat.java:<span class="num">228</span>)
+    ...
+[<span class="num">10</span>:<span class="num">23</span>] Duration: <span class="num">00</span>:<span class="num">00</span>:<span class="num">00</span></pre><p>Another scenario, unexpected problem:</p><pre>          My job title
+
+My job description (whatever you want); <span class="kw">for</span> instance:
+Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
+    java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
+    java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
+    java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
+    ...
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>          My job title
+
+My job description (whatever you want); <span class="kw">for</span> instance:
+Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
+[<span class="num">10</span>:<span class="num">23</span>] Begining
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
+  KPI: Nbr of output records
+    Value: <span class="num">14669071.0</span>
+    Must be superior than <span class="num">10000000.0</span>
+    Validated: <span class="kw">true</span>
+  KPI: <span class="std">Some</span> pct of invalid output
+    Value: <span class="num">0.06</span>%
+    Must be inferior than <span class="num">3.0</span>%
+    Validated: <span class="kw">true</span>
+[<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
+[<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+/main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
     </li><li name="com.spark_helper.SparkHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SparkHelper"></a>
       <a id="SparkHelper:SparkHelper"></a>

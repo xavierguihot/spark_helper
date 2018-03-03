@@ -11,7 +11,7 @@ import org.scalatest.FunSuite
   */
 class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
-  test("Delete File/Folder") {
+  test("Delete file/folder") {
 
     // Let's try to delete a file:
 
@@ -51,7 +51,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(!HdfsHelper.folderExists("src/test/resources/folder_to_delete"))
   }
 
-  test("File/Folder Exists") {
+  test("File/folder exists") {
 
     HdfsHelper.deleteFile("src/test/resources/file_to_check.txt")
     HdfsHelper.deleteFolder("src/test/resources/folder_to_check")
@@ -97,7 +97,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/folder_to_check")
   }
 
-  test("Create an empty File on Hdfs") {
+  test("Create an empty file on hdfs") {
 
     HdfsHelper.deleteFile("src/test/resources/empty_file.token")
 
@@ -117,7 +117,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
   }
 
   test(
-    "Save Text in HDFS File with the FileSystem API instead of the Spark API") {
+    "Save text in HDFS file with the fileSystem API instead of the Spark API") {
 
     // 1: Stores using a "\n"-joined string:
 
@@ -163,7 +163,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/folder")
   }
 
-  test("List File Names in Hdfs Folder") {
+  test("List file names in Hdfs folder") {
 
     HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_1.txt")
     HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_2.csv")
@@ -206,7 +206,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/folder_1")
   }
 
-  test("List Folder Names in Hdfs Folder") {
+  test("List folder names in Hdfs folder") {
 
     HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_1.txt")
     HdfsHelper
@@ -224,7 +224,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/folder_1")
   }
 
-  test("Move File") {
+  test("Move file") {
 
     // Let's remove possible previous stuff:
     HdfsHelper.deleteFile("src/test/resources/some_file.txt")
@@ -294,7 +294,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFile("src/test/resources/renamed_file.txt")
   }
 
-  test("Move Folder") {
+  test("Move folder") {
 
     // Let's remove possible previous stuff:
     HdfsHelper.deleteFolder("src/test/resources/some_folder_to_move")
@@ -358,7 +358,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/renamed_folder")
   }
 
-  test("Append Header and Footer to File") {
+  test("Append header and footer to file") {
 
     // 1: Without the tmp/working folder:
 
@@ -425,7 +425,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/header_footer_tmp")
   }
 
-  test("Validate Xml Hdfs File with Xsd") {
+  test("Validate Xml Hdfs file with Xsd") {
 
     // 1: Valid xml:
     HdfsHelper.deleteFile("src/test/resources/xml_file.txt")
@@ -482,7 +482,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFile("src/test/resources/typesafe_config.conf")
   }
 
-  test("Load Xml File from Hdfs") {
+  test("Load Xml file from Hdfs") {
 
     HdfsHelper.deleteFile("src/test/resources/folder/xml_to_load.xml")
 
@@ -502,7 +502,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder("src/test/resources/folder/")
   }
 
-  test("Purge Folder from too old Files/Folders") {
+  test("Purge folder from too old files/folders") {
 
     HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
     HdfsHelper
