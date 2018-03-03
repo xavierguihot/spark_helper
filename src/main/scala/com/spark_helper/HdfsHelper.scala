@@ -541,14 +541,13 @@ object HdfsHelper extends Serializable {
     * getClass.getResource("/my_file.xsd").
     * @return if the xml is compliant with the xsd
     */
-  def isHdfsXmlCompliantWithXsd(hdfsXmlPath: String, xsdFile: URL): Boolean = {
+  def isHdfsXmlCompliantWithXsd(hdfsXmlPath: String, xsdFile: URL): Boolean =
     try {
       validateHdfsXmlWithXsd(hdfsXmlPath, xsdFile)
       true
     } catch {
       case saxe: SAXException => false
     }
-  }
 
   /** Validates an XML file on hdfs in regard to the given XSD.
     *

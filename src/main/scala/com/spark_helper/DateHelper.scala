@@ -310,14 +310,13 @@ object DateHelper extends Serializable {
     * @param format (default = "yyyyMMdd") the format of the provided date
     * @return the nbr of days between today and the given date
     */
-  def nbrOfDaysSince(date: String, format: String = "yyyyMMdd"): Int = {
+  def nbrOfDaysSince(date: String, format: String = "yyyyMMdd"): Int =
     Days
       .daysBetween(
         DateTimeFormat.forPattern(format).parseDateTime(date),
         new DateTime()
       )
       .getDays()
-  }
 
   /** Returns the nbr of days between the two given dates.
     *
@@ -366,12 +365,10 @@ object DateHelper extends Serializable {
   def dateFromTimestamp(
       timestamp: Long,
       format: String = "yyyyMMdd"
-  ): String = {
-
+  ): String =
     DateTimeFormat
       .forPattern(format)
       .print(new DateTime(timestamp * 1000L, DateTimeZone.UTC))
-  }
 
   /** Returns the day of week for a date under the given format.
     *

@@ -639,7 +639,6 @@ private class KeyBasedOutput extends MultipleTextOutputFormat[Any, Any] {
       key: Any,
       value: Any,
       name: String
-  ): String = {
+  ): String =
     key.asInstanceOf[String]
-  }
 }
