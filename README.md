@@ -30,7 +30,8 @@ Compatible with Spark 2.
 
 ### HdfsHelper:
 
-The full list of methods is available at [HdfsHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.HdfsHelper$).
+The full list of methods is available at
+[HdfsHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.HdfsHelper$).
 
 Contains basic file-related methods mostly based on hdfs apache Hadoop
 FileSystem API [org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html).
@@ -69,7 +70,8 @@ HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
 
 ### SparkHelper:
 
-The full list of methods is available at [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$).
+The full list of methods is available at
+[SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$).
 
 Contains basic file/RRD-related methods based on the Spark APIs.
 
@@ -100,7 +102,8 @@ RDD(
 
 ### DateHelper:
 
-The full list of methods is available at [DateHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.DateHelper$).
+The full list of methods is available at
+[DateHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.DateHelper$).
 
 Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for
 data-mining classic dates manipulations.
@@ -122,8 +125,8 @@ assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
 
 ### Monitor:
 
-Have a look at the [scaladoc](http://xavierguihot.com/spark_helper/#com.spark_helper.Monitor)
-for a cool exemple.
+The full list of methods is available at
+[scaladoc](http://xavierguihot.com/spark_helper/#com.spark_helper.Monitor$)
 
 It's a simple logger/report which contains a report that one can update from
 the driver and a success state. The idea is to persist job executions logs and
