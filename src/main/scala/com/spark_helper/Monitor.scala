@@ -185,6 +185,7 @@ object Monitor {
   def setTitle(title: String): Unit = {
     reportTitle = Some(title)
     reportHeader = buildReportHeader()
+    storeCurrent()
   }
 
   /** Sets the report's contact list.
@@ -206,6 +207,7 @@ object Monitor {
   def addContacts(contacts: List[String]): Unit = {
     pointsOfContact = Some(contacts)
     reportHeader = buildReportHeader()
+    storeCurrent()
   }
 
   /** Sets the report's description.
@@ -227,6 +229,7 @@ object Monitor {
   def addDescription(description: String): Unit = {
     reportDescription = Some(description)
     reportHeader = buildReportHeader()
+    storeCurrent()
   }
 
   /** Sets the folder in which logs are stored.
@@ -250,6 +253,7 @@ object Monitor {
   def setLogFolder(logFolder: String): Unit = {
     logDirectory = Some(logFolder)
     prepareLogFolder()
+    storeCurrent()
   }
 
   /** Activates the purge of logs and sets the purge window.
@@ -573,6 +577,12 @@ object Monitor {
 
     // And if the logFolder parameter has been set, we also update live the log
     // file:
+    storeCurrent()
+  }
+
+  /** Updates the current stored version of logs in file
+    * logFolder/current.ongoing */
+  private def storeCurrent(): Unit =
     logDirectory.foreach {
       case logFolder => {
 
@@ -588,7 +598,6 @@ object Monitor {
         HdfsHelper.writeToHdfsFile(ongoingReport, s"$logFolder/current.ongoing")
       }
     }
-  }
 
   private def purgeOutdatedLogs(logFolder: String, window: Int): Unit = {
 

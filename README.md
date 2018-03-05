@@ -5,7 +5,7 @@
 ## Overview
 
 
-Version: 1.1.0
+Version: 1.1.1
 
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
@@ -126,7 +126,7 @@ assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
 ### Monitor:
 
 The full list of methods is available at
-[scaladoc](http://xavierguihot.com/spark_helper/#com.spark_helper.Monitor$)
+[Monitor](http://xavierguihot.com/spark_helper/#com.spark_helper.Monitor$)
 
 It's a simple logger/report which contains a report that one can update from
 the driver and a success state. The idea is to persist job executions logs and
@@ -253,7 +253,7 @@ With sbt, add these lines to your build.sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.1.0"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.1.1"
 ```
 
 With maven, add these lines to your pom.xml:
@@ -269,7 +269,7 @@ With maven, add these lines to your pom.xml:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>v1.1.0</version>
+	<version>v1.1.1</version>
 </dependency>
 ```
 
@@ -283,6 +283,6 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:v1.1.0'
+	compile 'com.github.xavierguihot:spark_helper:v1.1.1'
 }
 ```
