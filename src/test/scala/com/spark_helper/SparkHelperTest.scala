@@ -34,19 +34,9 @@ class SparkHelperTest
 
     // 1: Without an intermediate working dir:
 
-    SparkHelper.saveAsSingleTextFile(rddToStore, singleTextFilePath)
-
-    var singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
-
-    assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
-
-    HdfsHelper.deleteFolder(testFolder)
-
-    // 1-bis: same, but using the implicit RDD extension:
-
     rddToStore.saveAsSingleTextFile(singleTextFilePath)
 
-    singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
+    var singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
 
     assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
 
@@ -56,10 +46,10 @@ class SparkHelperTest
     // Notice as well that we test by moving the single file in a folder
     // which doesn't exists.
 
-    SparkHelper.saveAsSingleTextFile(
-      rddToStore,
+    rddToStore.saveAsSingleTextFile(
       singleTextFilePath,
-      workingFolder = tmpFolder)
+      workingFolder = tmpFolder
+    )
 
     singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
 
@@ -229,15 +219,18 @@ class SparkHelperTest
     HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")
 
     // Let's create the folder with high level of coalescence (3 files):
-    SparkHelper.saveAsSingleTextFile(
-      sc.parallelize[String](Array("data_1_a", "data_1_b", "data_1_c")),
-      "src/test/resources/re_coalescence_test_input/input_file_1")
-    SparkHelper.saveAsSingleTextFile(
-      sc.parallelize[String](Array("data_2_a", "data_2_b")),
-      "src/test/resources/re_coalescence_test_input/input_file_2")
-    SparkHelper.saveAsSingleTextFile(
-      sc.parallelize[String](Array("data_3_a", "data_3_b", "data_3_c")),
-      "src/test/resources/re_coalescence_test_input/input_file_3")
+    sc.parallelize[String](Array("data_1_a", "data_1_b", "data_1_c"))
+      .saveAsSingleTextFile(
+        "src/test/resources/re_coalescence_test_input/input_file_1"
+      )
+    sc.parallelize[String](Array("data_2_a", "data_2_b"))
+      .saveAsSingleTextFile(
+        "src/test/resources/re_coalescence_test_input/input_file_2"
+      )
+    sc.parallelize[String](Array("data_3_a", "data_3_b", "data_3_c"))
+      .saveAsSingleTextFile(
+        "src/test/resources/re_coalescence_test_input/input_file_3"
+      )
 
     // Let's decrease the coalescence level in order to only have 2 files:
     SparkHelper.decreaseCoalescence(
