@@ -1,6 +1,7 @@
 package com.spark_helper
 
-import com.spark_helper.SparkHelper.{RDDExtensions, SparkContextExtensions}
+import com.spark_helper.SparkHelper.{RDDExtensions, PairRDDExtensions}
+import com.spark_helper.SparkHelper.SparkContextExtensions
 
 import org.apache.hadoop.io.compress.GzipCodec
 
@@ -150,7 +151,11 @@ class SparkHelperTest
 
   test("Save as text file by key") {
 
-    HdfsHelper.deleteFolder("src/test/resources/key_value_storage")
+    val keyValueFolder = s"$resourceFolder/key_value_storage"
+
+    // 1: Let's strore key values per file:
+
+    HdfsHelper.deleteFolder(keyValueFolder)
 
     val someKeyValueRdd = sc.parallelize[(String, String)](
       Array(
@@ -164,42 +169,61 @@ class SparkHelperTest
       )
     )
 
-    SparkHelper.saveAsTextFileByKey(
-      someKeyValueRdd,
-      "src/test/resources/key_value_storage",
-      3)
+    someKeyValueRdd.saveAsTextFileByKey(keyValueFolder, 3)
 
     // The folder key_value_storage has been created:
-    assert(HdfsHelper.folderExists("src/test/resources/key_value_storage"))
+    assert(HdfsHelper.folderExists(keyValueFolder))
 
     // And it contains one file per key:
-    val genratedKeyFiles = HdfsHelper
-      .listFileNamesInFolder("src/test/resources/key_value_storage")
-    val expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
+    var genratedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
+    var expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
     assert(genratedKeyFiles === expectedKeyFiles)
 
-    val valuesForKey1 = sc
-      .textFile("src/test/resources/key_value_storage/key_1")
-      .collect()
-      .sorted
-
+    var valuesForKey1 = sc.textFile(s"$keyValueFolder/key_1").collect().sorted
     assert(valuesForKey1 === Array("value_a", "value_b"))
 
-    val valuesForKey2 = sc
-      .textFile("src/test/resources/key_value_storage/key_2")
-      .collect()
-      .sorted
-
+    val valuesForKey2 = sc.textFile(s"$keyValueFolder/key_2").collect().sorted
     assert(valuesForKey2 === Array("value_b", "value_c", "value_d"))
 
-    val valuesForKey3 = sc
-      .textFile("src/test/resources/key_value_storage/key_3")
-      .collect()
-      .sorted
-
+    val valuesForKey3 = sc.textFile(s"$keyValueFolder/key_3").collect().sorted
     assert(valuesForKey3 === Array("value_a", "value_b"))
 
-    HdfsHelper.deleteFolder("src/test/resources/key_value_storage")
+    // 2: Let's strore key values per file; but without providing the nbr of
+    // keys:
+
+    HdfsHelper.deleteFolder(keyValueFolder)
+
+    someKeyValueRdd.saveAsTextFileByKey(keyValueFolder)
+
+    // The folder key_value_storage has been created:
+    assert(HdfsHelper.folderExists(keyValueFolder))
+
+    // And it contains one file per key:
+    genratedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
+    expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
+    assert(genratedKeyFiles === expectedKeyFiles)
+
+    valuesForKey1 = sc.textFile(s"$keyValueFolder/key_1").collect().sorted
+    assert(valuesForKey1 === Array("value_a", "value_b"))
+
+    // 3: Let's strore key values per file and compress these files:
+
+    HdfsHelper.deleteFolder(keyValueFolder)
+
+    someKeyValueRdd.saveAsTextFileByKey(keyValueFolder, 3, classOf[GzipCodec])
+
+    // The folder key_value_storage has been created:
+    assert(HdfsHelper.folderExists(keyValueFolder))
+
+    // And it contains one file per key:
+    genratedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
+    expectedKeyFiles = List("_SUCCESS", "key_1.gz", "key_2.gz", "key_3.gz")
+    assert(genratedKeyFiles === expectedKeyFiles)
+
+    valuesForKey1 = sc.textFile(s"$keyValueFolder/key_1.gz").collect().sorted
+    assert(valuesForKey1 === Array("value_a", "value_b"))
+
+    HdfsHelper.deleteFolder(keyValueFolder)
   }
 
   test("Decrease coalescence level") {

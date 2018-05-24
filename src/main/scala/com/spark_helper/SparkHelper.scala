@@ -64,15 +64,14 @@ object SparkHelper extends Serializable {
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", classOf[BZip2Codec]) }}}
       *
       * @param outputFile the path of the produced file
-      * @param compressionCodec the type of compression to use (for instance
+      * @param codec the type of compression to use (for instance
       * classOf[BZip2Codec] or classOf[GzipCodec]))
       */
     def saveAsSingleTextFile(
         outputFile: String,
-        compressionCodec: Class[_ <: CompressionCodec]
+        codec: Class[_ <: CompressionCodec]
     ): Unit =
-      SparkHelper
-        .saveAsSingleTextFileInternal(rdd, outputFile, Some(compressionCodec))
+      SparkHelper.saveAsSingleTextFileInternal(rdd, outputFile, Some(codec))
 
     /** Saves an RDD in exactly one file.
       *
@@ -115,20 +114,116 @@ object SparkHelper extends Serializable {
       * @param outputFile the path of the produced file
       * @param workingFolder the path where file manipulations will temporarily
       * happen.
-      * @param compressionCodec the type of compression to use (for instance
+      * @param codec the type of compression to use (for instance
       * classOf[BZip2Codec] or classOf[GzipCodec]))
       */
     def saveAsSingleTextFile(
         outputFile: String,
         workingFolder: String,
-        compressionCodec: Class[_ <: CompressionCodec]
+        codec: Class[_ <: CompressionCodec]
     ): Unit =
       SparkHelper.saveAsSingleTextFileWithWorkingFolderInternal(
         rdd,
         outputFile,
         workingFolder,
-        Some(compressionCodec)
+        Some(codec)
       )
+
+  }
+
+  implicit class PairRDDExtensions(val rdd: RDD[(String, String)])
+      extends AnyVal {
+
+    /** Saves and repartitions a key/value RDD on files whose name is the key.
+      *
+      * Within the provided path, there will be one file per key in the given
+      * keyValueRDD. And within a file for a given key are only stored values
+      * for this key.
+      *
+      * As this internally needs to know the nbr of keys, this will have to
+      * compute it. If this nbr of keys is known beforehand, it would spare
+      * resources to use saveAsTextFileByKey(path: String, keyNbr: Int)
+      * instead.
+      *
+      * This is not scalable. This shouldn't be considered for any data flow
+      * with normal or big volumes.
+      *
+      * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path") }}}
+      *
+      * @param path the folder where will be storrred key files
+      */
+    def saveAsTextFileByKey(path: String): Unit =
+      SparkHelper.saveAsTextFileByKeyInternal(rdd, path, None, None)
+
+    /** Saves and repartitions a key/value RDD on files whose name is the key.
+      *
+      * Within the provided path, there will be one file per key in the given
+      * keyValueRDD. And within a file for a given key are only stored values
+      * for this key.
+      *
+      * This is not scalable. This shouldn't be considered for any data flow
+      * with normal or big volumes.
+      *
+      * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path", 12) }}}
+      *
+      * @param path the folder where will be storrred key files
+      * @param keyNbr the nbr of expected keys (which is the nbr of outputed
+      * files)
+      */
+    def saveAsTextFileByKey(path: String, keyNbr: Int): Unit =
+      SparkHelper.saveAsTextFileByKeyInternal(rdd, path, Some(keyNbr), None)
+
+    /** Saves and repartitions a key/value RDD on files whose name is the key.
+      *
+      * Within the provided path, there will be one file per key in the given
+      * keyValueRDD. And within a file for a given key are only stored values
+      * for this key.
+      *
+      * As this internally needs to know the nbr of keys, this will have to
+      * compute it. If this nbr of keys is known beforehand, it would spare
+      * resources to use
+      * saveAsTextFileByKey(path: String, keyNbr: Int, codec: Class[_ <: CompressionCodec])
+      * instead.
+      *
+      * This is not scalable. This shouldn't be considered for any data flow
+      * with normal or big volumes.
+      *
+      * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path", classOf[BZip2Codec]) }}}
+      *
+      * @param path the folder where will be storrred key files
+      * @param codec the type of compression to use (for instance
+      * classOf[BZip2Codec] or classOf[GzipCodec]))
+      */
+    def saveAsTextFileByKey(
+        path: String,
+        codec: Class[_ <: CompressionCodec]
+    ): Unit =
+      SparkHelper.saveAsTextFileByKeyInternal(rdd, path, None, Some(codec))
+
+    /** Saves and repartitions a key/value RDD on files whose name is the key.
+      *
+      * Within the provided path, there will be one file per key in the given
+      * keyValueRDD. And within a file for a given key are only stored values
+      * for this key.
+      *
+      * This is not scalable. This shouldn't be considered for any data flow
+      * with normal or big volumes.
+      *
+      * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path", 12, classOf[BZip2Codec]) }}}
+      *
+      * @param path the folder where will be storrred key files
+      * @param keyNbr the nbr of expected keys (which is the nbr of outputed
+      * files)
+      * @param codec the type of compression to use (for instance
+      * classOf[BZip2Codec] or classOf[GzipCodec]))
+      */
+    def saveAsTextFileByKey(
+        path: String,
+        keyNbr: Int,
+        codec: Class[_ <: CompressionCodec]
+    ): Unit =
+      SparkHelper
+        .saveAsTextFileByKeyInternal(rdd, path, Some(keyNbr), Some(codec))
   }
 
   implicit class SparkContextExtensions(val sc: SparkContext) extends AnyVal {
@@ -210,92 +305,6 @@ object SparkHelper extends Serializable {
     }
   }
 
-  /** Saves and repartitions a key/value RDD on files whose name is the key.
-    *
-    * Within the provided outputFolder, will be one file per key in your
-    * keyValueRDD. And within a file for a given key are only values for this
-    * key.
-    *
-    * You need to know the nbr of keys beforehand (in general you use this to
-    * split your dataset in subsets, or to output one file per client, so you
-    * know how many keys you have). So you need to put as keyNbr the exact nbr
-    * of keys you'll have.
-    *
-    * This is not scalable. This shouldn't be considered for any data flow with
-    * normal or big volumes.
-    *
-    * {{{
-    * SparkHelper.saveAsTextFileByKey(
-    *   myKeyValueRddToStore, "/my/output/folder/path", 12)
-    * }}}
-    *
-    * @param keyValueRDD the key/value RDD
-    * @param outputFolder the foldder where will be storrred key files
-    * @param keyNbr the nbr of expected keys (which is the nbr of outputed files)
-    */
-  def saveAsTextFileByKey(
-      keyValueRDD: RDD[(String, String)],
-      outputFolder: String,
-      keyNbr: Int
-  ): Unit = {
-
-    HdfsHelper.deleteFolder(outputFolder)
-
-    keyValueRDD
-      .partitionBy(new HashPartitioner(keyNbr))
-      .saveAsHadoopFile(
-        outputFolder,
-        classOf[String],
-        classOf[String],
-        classOf[KeyBasedOutput]
-      )
-  }
-
-  /** Saves and repartitions a key/value RDD on files whose name is the key.
-    *
-    * Within the provided outputFolder, will be one file per key in your
-    * keyValueRDD. And within a file for a given key are only values for this
-    * key.
-    *
-    * You need to know the nbr of keys beforehand (in general you use this to
-    * split your dataset in subsets, or to output one file per client, so you
-    * know how many keys you have). So you need to put as keyNbr the exact nbr
-    * of keys you'll have.
-    *
-    * This is not scalable. This shouldn't be considered for any data flow with
-    * normal or big volumes.
-    *
-    * {{{
-    * SparkHelper.saveAsTextFileByKey(
-    *   myKeyValueRddToStore, "/my/output/folder/path", 12, classOf[BZip2Codec])
-    * }}}
-    *
-    * @param keyValueRDD the key/value RDD
-    * @param outputFolder the foldder where will be storrred key files
-    * @param keyNbr the nbr of expected keys (which is the nbr of outputed files)
-    * @param compressionCodec the type of compression to use (for instance
-    * classOf[BZip2Codec] or classOf[GzipCodec]))
-    */
-  def saveAsTextFileByKey(
-      keyValueRDD: RDD[(String, String)],
-      outputFolder: String,
-      keyNbr: Int,
-      compressionCodec: Class[_ <: CompressionCodec]
-  ): Unit = {
-
-    HdfsHelper.deleteFolder(outputFolder)
-
-    keyValueRDD
-      .partitionBy(new HashPartitioner(keyNbr))
-      .saveAsHadoopFile(
-        outputFolder,
-        classOf[String],
-        classOf[String],
-        classOf[KeyBasedOutput],
-        compressionCodec
-      )
-  }
-
   /** Decreases the nbr of partitions of a folder.
     *
     * This is often handy when the last step of your job needs to run on
@@ -363,7 +372,7 @@ object SparkHelper extends Serializable {
     * @param finalCoalescenceLevel the nbr of files within the folder at the end
     * of this method.
     * @param sparkContext the SparkContext
-    * @param compressionCodec the type of compression to use (for instance
+    * @param codec the type of compression to use (for instance
     * classOf[BZip2Codec] or classOf[GzipCodec]))
     */
   def decreaseCoalescence(
@@ -371,14 +380,15 @@ object SparkHelper extends Serializable {
       lowerCoalescenceLevelFolder: String,
       finalCoalescenceLevel: Int,
       sparkContext: SparkContext,
-      compressionCodec: Class[_ <: CompressionCodec]
+      codec: Class[_ <: CompressionCodec]
   ): Unit =
     decreaseCoalescenceInternal(
       highCoalescenceLevelFolder,
       lowerCoalescenceLevelFolder,
       finalCoalescenceLevel,
       sparkContext,
-      Some(compressionCodec))
+      Some(codec)
+    )
 
   /** Saves as text file, but by decreasing the nbr of partitions of the output.
     *
@@ -423,7 +433,8 @@ object SparkHelper extends Serializable {
       outputFolder,
       finalCoalescenceLevel,
       sparkContext,
-      None)
+      None
+    )
   }
 
   /** Saves as text file, but by decreasing the nbr of partitions of the output.
@@ -448,14 +459,14 @@ object SparkHelper extends Serializable {
     * finalCoalescenceLevel parameter).
     * @param finalCoalescenceLevel the nbr of files within the folder at the end
     * of this method.
-    * @param compressionCodec the type of compression to use (for instance
+    * @param codec the type of compression to use (for instance
     * classOf[BZip2Codec] or classOf[GzipCodec]))
     */
   def saveAsTextFileAndCoalesce(
       outputRDD: RDD[String],
       outputFolder: String,
       finalCoalescenceLevel: Int,
-      compressionCodec: Class[_ <: CompressionCodec]
+      codec: Class[_ <: CompressionCodec]
   ): Unit = {
 
     val sparkContext = outputRDD.context
@@ -475,7 +486,8 @@ object SparkHelper extends Serializable {
       outputFolder,
       finalCoalescenceLevel,
       sparkContext,
-      Some(compressionCodec))
+      Some(codec)
+    )
   }
 
   /** Equivalent to sparkContext.textFile(), but for each line is associated
@@ -539,7 +551,7 @@ object SparkHelper extends Serializable {
       outputRDD: RDD[String],
       outputFile: String,
       workingFolder: String,
-      compressionCodec: Option[Class[_ <: CompressionCodec]]
+      codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
     // We chose a random name for the temporary file:
@@ -547,7 +559,7 @@ object SparkHelper extends Serializable {
     val temporaryFile = s"$workingFolder/$temporaryName"
 
     // We perform the merge into a temporary single text file:
-    saveAsSingleTextFileInternal(outputRDD, temporaryFile, compressionCodec)
+    saveAsSingleTextFileInternal(outputRDD, temporaryFile, codec)
 
     // And then only we put the resulting file in its final real location:
     HdfsHelper.moveFile(temporaryFile, outputFile, overwrite = true)
@@ -565,7 +577,7 @@ object SparkHelper extends Serializable {
   private def saveAsSingleTextFileInternal(
       outputRDD: RDD[String],
       outputFile: String,
-      compressionCodec: Option[Class[_ <: CompressionCodec]]
+      codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
     val hadoopConfiguration = outputRDD.sparkContext.hadoopConfiguration
@@ -573,9 +585,9 @@ object SparkHelper extends Serializable {
 
     // Classic saveAsTextFile in a temporary folder:
     HdfsHelper.deleteFolder(s"$outputFile.tmp")
-    compressionCodec match {
-      case Some(compressionCodec) =>
-        outputRDD.saveAsTextFile(s"$outputFile.tmp", compressionCodec)
+    codec match {
+      case Some(codec) =>
+        outputRDD.saveAsTextFile(s"$outputFile.tmp", codec)
       case None =>
         outputRDD.saveAsTextFile(s"$outputFile.tmp")
     }
@@ -593,22 +605,68 @@ object SparkHelper extends Serializable {
     HdfsHelper.deleteFolder(s"$outputFile.tmp")
   }
 
+  private def saveAsTextFileByKeyInternal(
+      rdd: RDD[(String, String)],
+      path: String,
+      optKeyNbr: Option[Int],
+      codec: Option[Class[_ <: CompressionCodec]]
+  ): Unit = {
+
+    HdfsHelper.deleteFolder(path)
+
+    // Whether the rdd was already cached or not (used to unpersist it if we
+    // have to get the nbr of keys):
+    val isCached = rdd.getStorageLevel.useMemory
+
+    // If the nbr of keys isn't provided, we have to get it ourselves:
+    val keyNbr = optKeyNbr match {
+      case Some(keyNbr) =>
+        keyNbr
+      case None =>
+        if (!isCached)
+          rdd.cache()
+        rdd.keys.distinct.count.toInt
+    }
+
+    val prdd = rdd.partitionBy(new HashPartitioner(keyNbr))
+
+    codec match {
+      case Some(codec) =>
+        prdd.saveAsHadoopFile(
+          path,
+          classOf[String],
+          classOf[String],
+          classOf[KeyBasedOutput],
+          codec
+        )
+      case None =>
+        prdd.saveAsHadoopFile(
+          path,
+          classOf[String],
+          classOf[String],
+          classOf[KeyBasedOutput]
+        )
+    }
+
+    if (optKeyNbr.isEmpty && !isCached)
+      rdd.unpersist()
+  }
+
   private def decreaseCoalescenceInternal(
       highCoalescenceLevelFolder: String,
       lowerCoalescenceLevelFolder: String,
       finalCoalescenceLevel: Int,
       sparkContext: SparkContext,
-      compressionCodec: Option[Class[_ <: CompressionCodec]]
+      codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
     val intermediateRDD = sparkContext
       .textFile(highCoalescenceLevelFolder)
       .coalesce(finalCoalescenceLevel)
 
-    compressionCodec match {
-      case Some(compressionCodec) =>
-        intermediateRDD
-          .saveAsTextFile(lowerCoalescenceLevelFolder, compressionCodec)
+    codec match {
+      case Some(codec) =>
+        intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder, codec)
       case None =>
         intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder)
     }
