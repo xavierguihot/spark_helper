@@ -545,7 +545,7 @@ object SparkHelper extends Serializable {
 
     // We chose a random name for the temporary file:
     val temporaryName = Random.alphanumeric.take(10).mkString("")
-    val temporaryFile = workingFolder + "/" + temporaryName
+    val temporaryFile = s"$workingFolder/$temporaryName"
 
     // We perform the merge into a temporary single text file:
     saveAsSingleTextFileInternal(outputRDD, temporaryFile, compressionCodec)
@@ -569,28 +569,29 @@ object SparkHelper extends Serializable {
       compressionCodec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
+    val hadoopConfiguration = outputRDD.sparkContext.hadoopConfiguration
+    val fileSystem = FileSystem.get(hadoopConfiguration)
 
     // Classic saveAsTextFile in a temporary folder:
-    HdfsHelper.deleteFolder(outputFile + ".tmp")
+    HdfsHelper.deleteFolder(s"$outputFile.tmp")
     compressionCodec match {
       case Some(compressionCodec) =>
-        outputRDD.saveAsTextFile(outputFile + ".tmp", compressionCodec)
+        outputRDD.saveAsTextFile(s"$outputFile.tmp", compressionCodec)
       case None =>
-        outputRDD.saveAsTextFile(outputFile + ".tmp")
+        outputRDD.saveAsTextFile(s"$outputFile.tmp")
     }
 
     // Merge the folder into a single file:
     HdfsHelper.deleteFile(outputFile)
     FileUtil.copyMerge(
       fileSystem,
-      new Path(outputFile + ".tmp"),
+      new Path(s"$outputFile.tmp"),
       fileSystem,
       new Path(outputFile),
       true,
-      new Configuration(),
+      hadoopConfiguration,
       null)
-    HdfsHelper.deleteFolder(outputFile + ".tmp")
+    HdfsHelper.deleteFolder(s"$outputFile.tmp")
   }
 
   private def decreaseCoalescenceInternal(
