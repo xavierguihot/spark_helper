@@ -42,6 +42,85 @@ import scala.util.Random
   */
 object SparkHelper extends Serializable {
 
+  implicit class RDDExtensions(val rdd: RDD[String]) extends AnyVal {
+
+    /** Saves an RDD in exactly one file.
+      *
+      * Allows one to save an RDD in one file, while keeping the processing
+      * parallelized.
+      *
+      * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt") }}}
+      *
+      * @param outputFile the path of the produced file
+      */
+    def saveAsSingleTextFile(outputFile: String): Unit =
+      SparkHelper.saveAsSingleTextFile(rdd, outputFile)
+
+    /** Saves an RDD in exactly one file.
+      *
+      * Allows one to save an RDD in one file, while keeping the processing
+      * parallelized.
+      *
+      * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", classOf[BZip2Codec]) }}}
+      *
+      * @param outputFile the path of the produced file
+      * @param compressionCodec the type of compression to use (for instance
+      * classOf[BZip2Codec] or classOf[GzipCodec]))
+      */
+    def saveAsSingleTextFile(
+        outputFile: String,
+        compressionCodec: Class[_ <: CompressionCodec]
+    ): Unit =
+      SparkHelper.saveAsSingleTextFile(rdd, outputFile, compressionCodec)
+
+    /** Saves an RDD in exactly one file.
+      *
+      * Allows one to save an RDD in one file, while keeping the processing
+      * parallelized.
+      *
+      * This variant of saveAsSingleTextFile performs the storage in a temporary
+      * folder instead of directly in the final output folder. This way the
+      * risks of having corrupted files in the real output folder due to cluster
+      * interruptions is minimized.
+      *
+      * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", "/my/working/folder/path") }}}
+      *
+      * @param outputFile the path of the produced file
+      * @param workingFolder the path where file manipulations will temporarily
+      * happen.
+      */
+    def saveAsSingleTextFile(outputFile: String, workingFolder: String): Unit =
+      SparkHelper.saveAsSingleTextFile(rdd, outputFile, workingFolder)
+
+    /** Saves an RDD in exactly one file.
+      *
+      * Allows one to save an RDD in one file, while keeping the processing
+      * parallelized.
+      *
+      * This variant of saveAsSingleTextFile performs the storage in a temporary
+      * folder instead of directly in the final output folder. This way the risks
+      * of having corrupted files in the real output folder due to cluster
+      * interruptions is minimized.
+      *
+      * {{{
+      * rdd.saveAsSingleTextFile("/my/file/path.txt", "/my/working/folder/path", classOf[BZip2Codec])
+      * }}}
+      *
+      * @param outputFile the path of the produced file
+      * @param workingFolder the path where file manipulations will temporarily
+      * happen.
+      * @param compressionCodec the type of compression to use (for instance
+      * classOf[BZip2Codec] or classOf[GzipCodec]))
+      */
+    def saveAsSingleTextFile(
+        outputFile: String,
+        workingFolder: String,
+        compressionCodec: Class[_ <: CompressionCodec]
+    ): Unit =
+      SparkHelper
+        .saveAsSingleTextFile(rdd, outputFile, workingFolder, compressionCodec)
+  }
+
   /** Saves an RDD in exactly one file.
     *
     * Allows one to save an RDD in one file, while keeping the processing

@@ -1,5 +1,9 @@
 package com.spark_helper
 
+import com.spark_helper.SparkHelper.RDDExtensions
+
+import org.apache.hadoop.io.compress.GzipCodec
+
 import com.holdenkarau.spark.testing.{SharedSparkContext, RDDComparisons}
 
 import org.scalatest.FunSuite
@@ -14,54 +18,67 @@ class SparkHelperTest
     with SharedSparkContext
     with RDDComparisons {
 
+  val resourceFolder = "src/test/resources"
+
   test("Save as single text file") {
+
+    val testFolder = s"$resourceFolder/folder"
+    val singleTextFilePath = s"$testFolder/single_text_file.txt"
+    val tmpFolder = s"$resourceFolder/tmp"
+
+    HdfsHelper.deleteFolder(testFolder)
+    HdfsHelper.deleteFolder(tmpFolder)
+
+    val rddToStore =
+      sc.parallelize(Array("data_a", "data_b", "data_c")).repartition(3)
 
     // 1: Without an intermediate working dir:
 
-    var repartitionedDataToStore = sc
-      .parallelize(Array("data_a", "data_b", "data_c"))
-      .repartition(3)
+    SparkHelper.saveAsSingleTextFile(rddToStore, singleTextFilePath)
 
-    HdfsHelper.deleteFile("src/test/resources/single_text_file.txt")
-    SparkHelper.saveAsSingleTextFile(
-      repartitionedDataToStore,
-      "src/test/resources/single_text_file.txt")
-
-    var singleFileStoredData = sc
-      .textFile("src/test/resources/single_text_file.txt")
-      .collect()
-      .sorted
+    var singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
 
     assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
 
-    HdfsHelper.deleteFile("src/test/resources/single_text_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
+
+    // 1-bis: same, but using the implicit RDD extension:
+
+    rddToStore.saveAsSingleTextFile(singleTextFilePath)
+
+    singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
+
+    assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
+
+    HdfsHelper.deleteFolder(testFolder)
 
     // 2: With an intermediate working dir:
     // Notice as well that we test by moving the single file in a folder
     // which doesn't exists.
 
-    repartitionedDataToStore = sc
-      .parallelize(Array("data_a", "data_b", "data_c"))
-      .repartition(3)
-
-    HdfsHelper.deleteFile("src/test/resources/folder/single_text_file.txt")
-    HdfsHelper.deleteFolder("src/test/resources/folder")
     SparkHelper.saveAsSingleTextFile(
-      repartitionedDataToStore,
-      "src/test/resources/folder/single_text_file.txt",
-      workingFolder = "src/test/resources/tmp")
-    assert(
-      HdfsHelper.fileExists("src/test/resources/folder/single_text_file.txt"))
+      rddToStore,
+      singleTextFilePath,
+      workingFolder = tmpFolder)
 
-    singleFileStoredData = sc
-      .textFile("src/test/resources/folder/single_text_file.txt")
-      .collect()
-      .sorted
+    singleFileStoredData = sc.textFile(singleTextFilePath).collect().sorted
 
     assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
 
-    HdfsHelper.deleteFolder("src/test/resources/folder")
-    HdfsHelper.deleteFolder("src/test/resources/tmp")
+    HdfsHelper.deleteFolder(testFolder)
+    HdfsHelper.deleteFolder(tmpFolder)
+
+    // 3: With a compression codec:
+
+    rddToStore
+      .saveAsSingleTextFile(s"$singleTextFilePath.gz", classOf[GzipCodec])
+
+    singleFileStoredData =
+      sc.textFile(s"$singleTextFilePath.gz").collect().sorted
+
+    assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
+
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("Read text file with specific record delimiter") {
