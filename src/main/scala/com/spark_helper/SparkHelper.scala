@@ -131,84 +131,83 @@ object SparkHelper extends Serializable {
       )
   }
 
-  /** Equivalent to sparkContext.textFile(), but for a specific record delimiter.
-    *
-    * By default, sparkContext.textFile() will provide one record per line. But
-    * what if the format you want to read considers that one record (one entity)
-    * is stored in more than one line (yml, xml, ...)?
-    *
-    * For instance in order to read a yml file, which is a format for which a
-    * record (a single entity) is spread other several lines, you can modify the
-    * record delimiter with "---\n" instead of "\n". Same goes when reading an
-    * xml file where a record might be spread over several lines or worse the
-    * whole xml file is one line.
-    *
-    * {{{
-    * // Let's say data we want to use with Spark looks like this (one record is
-    * // a customer, but it's spread over several lines):
-    * <Customers>\n
-    * <Customer>\n
-    * <Address>34 thingy street, someplace, sometown</Address>\n
-    * </Customer>\n
-    * <Customer>\n
-    * <Address>12 thingy street, someplace, sometown</Address>\n
-    * </Customer>\n
-    * </Customers>
-    * //Then you can use it this way:
-    * val computedRecords = SparkHelper.textFileWithDelimiter(
-    *   "my/path/to/customers.xml", sparkContext, <Customer>\n
-    * ).collect()
-    * val expectedRecords = Array(
-    *   <Customers>\n,
-    *   (
-    *     <Address>34 thingy street, someplace, sometown</Address>\n +
-    *     </Customer>\n
-    *   ),
-    *   (
-    *     <Address>12 thingy street, someplace, sometown</Address>\n +
-    *     </Customer>\n +
-    *     </Customers>
-    *   )
-    * )
-    * assert(computedRecords == expectedRecords)
-    * }}}
-    *
-    * @param hdfsPath the path of the file to read (folder or file, '*' works as
-    * well).
-    * @param sparkContext the SparkContext
-    * @param delimiter the specific record delimiter which replaces "\n"
-    * @param maxRecordLength the max length (not sure which unit) of a record
-    * before considering the record too long to fit into memory.
-    * @return the RDD of records
-    */
-  def textFileWithDelimiter(
-      hdfsPath: String,
-      sparkContext: SparkContext,
-      delimiter: String,
-      maxRecordLength: String = "1000000"
-  ): RDD[String] = {
+  implicit class SparkContextExtensions(val sc: SparkContext) extends AnyVal {
 
-    val conf = new Configuration(sparkContext.hadoopConfiguration)
+    /** Equivalent to sparkContext.textFile(), but for a specific record delimiter.
+      *
+      * By default, sparkContext.textFile() will provide one record per line
+      * (per '\n'). But what if the format to read considers that one record
+      * is stored in more than one line (yml, custom format, ...)?
+      *
+      * For instance in order to read a yml file, which is a format for which a
+      * record (a single entity) is spread other several lines, you can modify
+      * the record delimiter with "---\n" instead of "\n". Same goes when
+      * reading an xml file where a record might be spread over several lines or
+      * worse the whole xml file is one line.
+      *
+      * {{{
+      * // Let's say data we want to use with Spark looks like this (one record
+      * // is a customer, but it's spread over several lines):
+      * <Customers>\n
+      * <Customer>\n
+      * <Address>34 thingy street, someplace, sometown</Address>\n
+      * </Customer>\n
+      * <Customer>\n
+      * <Address>12 thingy street, someplace, sometown</Address>\n
+      * </Customer>\n
+      * </Customers>
+      * //Then you can use it this way:
+      * val computedRecords = sc.textFile("my/path/to/customers.xml", "<Customer>\n")
+      * val expectedRecords = RDD(
+      *   <Customers>\n,
+      *   (
+      *     <Address>34 thingy street, someplace, sometown</Address>\n +
+      *     </Customer>\n
+      *   ),
+      *   (
+      *     <Address>12 thingy street, someplace, sometown</Address>\n +
+      *     </Customer>\n +
+      *     </Customers>
+      *   )
+      * )
+      * assert(computedRecords == expectedRecords)
+      * }}}
+      *
+      * @param hdfsPath the path of the file to read (folder or file, '*' works
+      * as well).
+      * @param delimiter the specific record delimiter which replaces "\n"
+      * @param maxRecordLength the max length (not sure which unit) of a record
+      * before considering the record too long to fit into memory.
+      * @return the RDD of records
+      */
+    def textFile(
+        hdfsPath: String,
+        delimiter: String,
+        maxRecordLength: String = "1000000"
+    ): RDD[String] = {
 
-    // This configuration sets the record delimiter:
-    conf.set("textinputformat.record.delimiter", delimiter)
+      val conf = new Configuration(sc.hadoopConfiguration)
 
-    // and this one limits the size of one record. This is necessary in order to
-    // avoid reading from a corrupted file from which a record could be too long
-    // to fit in memory. This way, when reading a corrupted file, this will
-    // throw an exception (java.io.IOException - thus catchable) rather than
-    // having a messy out of memory which will stop the sparkContext:
-    conf.set("mapreduce.input.linerecordreader.line.maxlength", maxRecordLength)
+      // This configuration sets the record delimiter:
+      conf.set("textinputformat.record.delimiter", delimiter)
 
-    sparkContext
-      .newAPIHadoopFile(
-        hdfsPath,
-        classOf[TextInputFormat],
-        classOf[LongWritable],
-        classOf[Text],
-        conf
-      )
-      .map { case (_, text) => text.toString }
+      // and this one limits the size of one record. This is necessary in order
+      // to avoid reading from a corrupted file from which a record could be too
+      // long to fit in memory. This way, when reading a corrupted file, this
+      // will throw an exception (java.io.IOException - thus catchable) rather
+      // than having a messy out of memory which will stop the sparkContext:
+      conf
+        .set("mapreduce.input.linerecordreader.line.maxlength", maxRecordLength)
+
+      sc.newAPIHadoopFile(
+          hdfsPath,
+          classOf[TextInputFormat],
+          classOf[LongWritable],
+          classOf[Text],
+          conf
+        )
+        .map { case (_, text) => text.toString }
+    }
   }
 
   /** Saves and repartitions a key/value RDD on files whose name is the key.

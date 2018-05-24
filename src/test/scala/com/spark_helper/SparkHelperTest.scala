@@ -1,6 +1,6 @@
 package com.spark_helper
 
-import com.spark_helper.SparkHelper.RDDExtensions
+import com.spark_helper.SparkHelper.{RDDExtensions, SparkContextExtensions}
 
 import org.apache.hadoop.io.compress.GzipCodec
 
@@ -73,10 +73,12 @@ class SparkHelperTest
 
   test("Read text file with specific record delimiter") {
 
+    val weirdFormatFilePath = s"$resourceFolder/some_weird_format.txt"
+
     // 1: Let's read a file where a record begins with a line begining with
     // 3 and other lines begining by 4:
 
-    HdfsHelper.deleteFile("src/test/resources/some_weird_format.txt")
+    HdfsHelper.deleteFile(weirdFormatFilePath)
 
     val textContent = (
       "3 first line of the first record\n" +
@@ -87,16 +89,9 @@ class SparkHelperTest
         "4 another line for the third record"
     )
 
-    HdfsHelper
-      .writeToHdfsFile(textContent, "src/test/resources/some_weird_format.txt")
+    HdfsHelper.writeToHdfsFile(textContent, weirdFormatFilePath)
 
-    var computedRecords = SparkHelper
-      .textFileWithDelimiter(
-        "src/test/resources/some_weird_format.txt",
-        sc,
-        "\n3"
-      )
-      .collect()
+    var computedRecords = sc.textFile(weirdFormatFilePath, "\n3").collect()
 
     var expectedRecords = Array(
       (
@@ -113,13 +108,15 @@ class SparkHelperTest
 
     assert(computedRecords === expectedRecords)
 
-    HdfsHelper.deleteFile("src/test/resources/some_weird_format.txt")
+    HdfsHelper.deleteFile(weirdFormatFilePath)
 
     // 2: Let's read an xml file:
 
-    HdfsHelper.deleteFile("src/test/resources/some_basic_xml.xml")
+    val xmlFilePath = s"$resourceFolder/some_basic_xml.xml"
 
-    val xmlTextContent = (
+    HdfsHelper.deleteFile(xmlFilePath)
+
+    val xmlTextContent =
       "<Customers>\n" +
         "<Customer>\n" +
         "<Address>34 thingy street, someplace, sometown</Address>\n" +
@@ -128,18 +125,10 @@ class SparkHelperTest
         "<Address>12 thingy street, someplace, sometown</Address>\n" +
         "</Customer>\n" +
         "</Customers>"
-    )
 
-    HdfsHelper
-      .writeToHdfsFile(xmlTextContent, "src/test/resources/some_basic_xml.xml")
+    HdfsHelper.writeToHdfsFile(xmlTextContent, xmlFilePath)
 
-    computedRecords = SparkHelper
-      .textFileWithDelimiter(
-        "src/test/resources/some_basic_xml.xml",
-        sc,
-        "<Customer>\n"
-      )
-      .collect()
+    computedRecords = sc.textFile(xmlFilePath, "<Customer>\n").collect()
 
     expectedRecords = Array(
       "<Customers>\n",
@@ -156,7 +145,7 @@ class SparkHelperTest
 
     assert(computedRecords === expectedRecords)
 
-    HdfsHelper.deleteFile("src/test/resources/some_basic_xml.xml")
+    HdfsHelper.deleteFile(xmlFilePath)
   }
 
   test("Save as text file by key") {
