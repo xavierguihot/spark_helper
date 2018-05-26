@@ -342,7 +342,7 @@ class SparkHelperTest
           (nonLocalPath, line)
       }
 
-    val expectedRDD = sc.parallelize(
+    val expectedRdd = sc.parallelize(
       Array(
         ("file:/.../src/test/resources/with_file_name/file_1.txt", "data_1_a"),
         ("file:/.../src/test/resources/with_file_name/file_1.txt", "data_1_b"),
@@ -363,7 +363,32 @@ class SparkHelperTest
         ("file:/.../src/test/resources/with_file_name/file_2.txt", "data_2_b")
       ))
 
-    assertRDDEquals(computedRdd, expectedRDD)
+    assertRDDEquals(computedRdd, expectedRdd)
+
+    HdfsHelper.deleteFolder(testFolder)
+  }
+
+  test("textFile with files containing commas in their path") {
+
+    val testFolder = s"$resourceFolder/files_containing_commas"
+
+    HdfsHelper.deleteFolder(testFolder)
+
+    HdfsHelper.writeToHdfsFile(
+      "data_1_a\ndata_1_b",
+      s"$testFolder/file,1.txt"
+    )
+    HdfsHelper.writeToHdfsFile(
+      "data_2_a\ndata_2_b",
+      s"$testFolder/file_2.txt"
+    )
+
+    val computedRdd =
+      sc.textFile(List(s"$testFolder/file,1.txt", s"$testFolder/file_2.txt"))
+    val expectedRdd =
+      sc.parallelize("data_1_a\ndata_1_b\ndata_2_a\ndata_2_b".split("\n"))
+
+    assertRDDEquals(computedRdd, expectedRdd)
 
     HdfsHelper.deleteFolder(testFolder)
   }

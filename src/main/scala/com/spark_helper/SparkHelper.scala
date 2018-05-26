@@ -1,5 +1,7 @@
 package com.spark_helper
 
+import org.apache.spark.TextFileOverwrite
+
 import org.apache.spark.{HashPartitioner, SparkContext}
 import org.apache.spark.rdd.{RDD, HadoopRDD}
 import org.apache.hadoop.conf.Configuration
@@ -449,6 +451,43 @@ object SparkHelper extends Serializable {
         }
     }
 
+    /** A replacement for <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sc.textFile()</code>
+      * when files contains commas in their name.
+      *
+      * As <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sc.textFile()</code>
+      * allows to provide several files at once by giving them as a string which
+      * is a list of strings joined with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">,</code>,
+      * we can't give it files containing commas in their name.
+      *
+      * This method aims at bypassing this limitation by passing paths as a
+      * sequence of strings.
+      *
+      * {{{ sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt")) }}}
+      *
+      * @param paths the paths of the file(s)/folder(s) to read
+      */
+    def textFile(paths: Seq[String]): RDD[String] =
+      TextFileOverwrite.textFile(paths, sc.defaultMinPartitions, sc)
+
+    /** A replacement for <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sc.textFile()</code>
+      * when files contains commas in their name.
+      *
+      * As <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sc.textFile()</code>
+      * allows to provide several files at once by giving them as a string which
+      * is a list of strings joined with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">,</code>,
+      * we can't give it files containing commas in their name.
+      *
+      * This method aims at bypassing this limitation by passing paths as a
+      * sequence of strings.
+      *
+      * {{{ sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt")) }}}
+      *
+      * @param paths the paths of the file(s)/folder(s) to read
+      * @param minPartitions the nbr of partitions in which to split the input
+      */
+    def textFile(paths: Seq[String], minPartitions: Int): RDD[String] =
+      TextFileOverwrite.textFile(paths, minPartitions, sc)
+
     /** Decreases the nbr of partitions of a folder.
       *
       * This comes in handy when the last step of your job needs to run on
@@ -643,11 +682,11 @@ object SparkHelper extends Serializable {
       highCoalescenceLevelFolder: String,
       lowerCoalescenceLevelFolder: String,
       finalCoalesceLevel: Int,
-      sparkContext: SparkContext,
+      sc: SparkContext,
       codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
-    val intermediateRDD = sparkContext
+    val intermediateRDD = sc
       .textFile(highCoalescenceLevelFolder)
       .coalesce(finalCoalesceLevel)
 
