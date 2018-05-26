@@ -268,42 +268,30 @@ class SparkHelperTest
 
   test("Decrease coalescence level") {
 
-    HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_input")
-    HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")
+    val inputTestFolder = s"$resourceFolder/re_coalescence_test_input"
+    val outputTestFolder = s"$resourceFolder/re_coalescence_test_output"
+
+    HdfsHelper.deleteFolder(inputTestFolder)
+    HdfsHelper.deleteFolder(outputTestFolder)
 
     // Let's create the folder with high level of coalescence (3 files):
-    sc.parallelize[String](Array("data_1_a", "data_1_b", "data_1_c"))
-      .saveAsSingleTextFile(
-        "src/test/resources/re_coalescence_test_input/input_file_1"
-      )
-    sc.parallelize[String](Array("data_2_a", "data_2_b"))
-      .saveAsSingleTextFile(
-        "src/test/resources/re_coalescence_test_input/input_file_2"
-      )
-    sc.parallelize[String](Array("data_3_a", "data_3_b", "data_3_c"))
-      .saveAsSingleTextFile(
-        "src/test/resources/re_coalescence_test_input/input_file_3"
-      )
+    sc.parallelize(Array("data_1_a", "data_1_b", "data_1_c"))
+      .saveAsSingleTextFile(s"$inputTestFolder/input_file_1")
+    sc.parallelize(Array("data_2_a", "data_2_b"))
+      .saveAsSingleTextFile(s"$inputTestFolder/input_file_2")
+    sc.parallelize(Array("data_3_a", "data_3_b", "data_3_c"))
+      .saveAsSingleTextFile(s"$inputTestFolder/input_file_3")
 
     // Let's decrease the coalescence level in order to only have 2 files:
-    SparkHelper.decreaseCoalescence(
-      "src/test/resources/re_coalescence_test_input",
-      "src/test/resources/re_coalescence_test_output",
-      2,
-      sc)
+    sc.decreaseCoalescence(inputTestFolder, outputTestFolder, 2)
 
     // And we check we have two files in output:
-    val outputFileList = HdfsHelper
-      .listFileNamesInFolder("src/test/resources/re_coalescence_test_output")
+    val outputFileList = HdfsHelper.listFileNamesInFolder(outputTestFolder)
     val expectedFileList = List("_SUCCESS", "part-00000", "part-00001")
     assert(outputFileList === expectedFileList)
 
     // And that all input data is in the output:
-    val outputData = sc
-      .textFile("src/test/resources/re_coalescence_test_output")
-      .collect
-      .sorted
-
+    val outputData = sc.textFile(outputTestFolder).collect.sorted
     val expectedOutputData = Array(
       "data_1_a",
       "data_1_b",
@@ -316,7 +304,8 @@ class SparkHelperTest
     )
     assert(outputData === expectedOutputData)
 
-    HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_output")
+    HdfsHelper.deleteFolder(inputTestFolder)
+    HdfsHelper.deleteFolder(outputTestFolder)
   }
 
   test(

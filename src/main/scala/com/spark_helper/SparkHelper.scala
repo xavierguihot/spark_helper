@@ -395,92 +395,89 @@ object SparkHelper extends Serializable {
         )
         .map { case (_, text) => text.toString }
     }
+
+    /** Decreases the nbr of partitions of a folder.
+      *
+      * This comes in handy when the last step of your job needs to run on
+      * thousands of files, but you want to store your final output on let's say
+      * only 30 files.
+      *
+      * It's like a <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileUtil.copyMerge()</code>
+      * , but the merging produces more than one file.
+      *
+      * Be aware that this methods deletes the provided input folder.
+      *
+      * {{{
+      * sc.decreaseCoalescence(
+      *   "/folder/path/with/2000/files",
+      *   "/produced/folder/path/with/only/30/files",
+      *   30
+      * )
+      * }}}
+      *
+      * @param highCoalescenceLevelFolder the folder which contains 10000 files
+      * @param lowerCoalescenceLevelFolder the folder which will contain the same
+      * data as highCoalescenceLevelFolder but spread on only 30 files (where 30
+      * is the finalCoalesceLevel parameter).
+      * @param finalCoalesceLevel the nbr of files within the folder at the end
+      * of this method.
+      */
+    def decreaseCoalescence(
+        highCoalescenceLevelFolder: String,
+        lowerCoalescenceLevelFolder: String,
+        finalCoalesceLevel: Int
+    ): Unit =
+      SparkHelper.decreaseCoalescenceInternal(
+        highCoalescenceLevelFolder,
+        lowerCoalescenceLevelFolder,
+        finalCoalesceLevel,
+        sc,
+        None
+      )
+
+    /** Decreases the nbr of partitions of a folder.
+      *
+      * This comes in handy when the last step of your job needs to run on
+      * thousands of files, but you want to store your final output on let's say
+      * only 30 files.
+      *
+      * It's like a <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileUtil.copyMerge()</code>
+      * , but the merging produces more than one file.
+      *
+      * Be aware that this methods deletes the provided input folder.
+      *
+      * {{{
+      * sc.decreaseCoalescence(
+      *   "/folder/path/with/2000/files",
+      *   "/produced/folder/path/with/only/30/files",
+      *   30,
+      *   classOf[BZip2Codec]
+      * )
+      * }}}
+      *
+      * @param highCoalescenceLevelFolder the folder which contains 10000 files
+      * @param lowerCoalescenceLevelFolder the folder which will contain the same
+      * data as highCoalescenceLevelFolder but spread on only 30 files (where 30
+      * is the finalCoalesceLevel parameter).
+      * @param finalCoalesceLevel the nbr of files within the folder at the end
+      * of this method.
+      * @param codec the type of compression to use (for instance
+      * classOf[BZip2Codec] or classOf[GzipCodec]))
+      */
+    def decreaseCoalescence(
+        highCoalescenceLevelFolder: String,
+        lowerCoalescenceLevelFolder: String,
+        finalCoalesceLevel: Int,
+        codec: Class[_ <: CompressionCodec]
+    ): Unit =
+      SparkHelper.decreaseCoalescenceInternal(
+        highCoalescenceLevelFolder,
+        lowerCoalescenceLevelFolder,
+        finalCoalesceLevel,
+        sc,
+        Some(codec)
+      )
   }
-
-  /** Decreases the nbr of partitions of a folder.
-    *
-    * This is often handy when the last step of your job needs to run on
-    * thousands of files, but you want to store your final output on let's say
-    * only 300 files.
-    *
-    * It's like a FileUtil.copyMerge, but the merging produces more than one
-    * file.
-    *
-    * Be aware that this methods deletes the provided input folder.
-    *
-    * {{{
-    * SparkHelper.decreaseCoalescence(
-    *   "/folder/path/with/2000/files",
-    *   "/produced/folder/path/with/only/300/files",
-    *   300,
-    *   sparkContext)
-    * }}}
-    *
-    * @param highCoalescenceLevelFolder the folder which contains 10000 files
-    * @param lowerCoalescenceLevelFolder the folder which will contain the same
-    * data as highCoalescenceLevelFolder but spread on only 300 files (where 300
-    * is the finalCoalesceLevel parameter).
-    * @param finalCoalesceLevel the nbr of files within the folder at the end
-    * of this method.
-    * @param sparkContext the SparkContext
-    */
-  def decreaseCoalescence(
-      highCoalescenceLevelFolder: String,
-      lowerCoalescenceLevelFolder: String,
-      finalCoalesceLevel: Int,
-      sparkContext: SparkContext
-  ): Unit =
-    decreaseCoalescenceInternal(
-      highCoalescenceLevelFolder,
-      lowerCoalescenceLevelFolder,
-      finalCoalesceLevel,
-      sparkContext,
-      None)
-
-  /** Decreases the nbr of partitions of a folder.
-    *
-    * This is often handy when the last step of your job needs to run on
-    * thousands of files, but you want to store your final output on let's say
-    * only 300 files.
-    *
-    * It's like a FileUtil.copyMerge, but the merging produces more than one
-    * file.
-    *
-    * Be aware that this methods deletes the provided input folder.
-    *
-    * {{{
-    * SparkHelper.decreaseCoalescence(
-    *   "/folder/path/with/2000/files",
-    *   "/produced/folder/path/with/only/300/files",
-    *   300,
-    *   sparkContext,
-    *   classOf[BZip2Codec])
-    * }}}
-    *
-    * @param highCoalescenceLevelFolder the folder which contains 10000 files
-    * @param lowerCoalescenceLevelFolder the folder which will contain the same
-    * data as highCoalescenceLevelFolder but spread on only 300 files (where 300
-    * is the finalCoalesceLevel parameter).
-    * @param finalCoalesceLevel the nbr of files within the folder at the end
-    * of this method.
-    * @param sparkContext the SparkContext
-    * @param codec the type of compression to use (for instance
-    * classOf[BZip2Codec] or classOf[GzipCodec]))
-    */
-  def decreaseCoalescence(
-      highCoalescenceLevelFolder: String,
-      lowerCoalescenceLevelFolder: String,
-      finalCoalesceLevel: Int,
-      sparkContext: SparkContext,
-      codec: Class[_ <: CompressionCodec]
-  ): Unit =
-    decreaseCoalescenceInternal(
-      highCoalescenceLevelFolder,
-      lowerCoalescenceLevelFolder,
-      finalCoalesceLevel,
-      sparkContext,
-      Some(codec)
-    )
 
   /** Equivalent to sparkContext.textFile(), but for each line is associated
     * with its file path.
