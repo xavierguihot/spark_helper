@@ -226,6 +226,46 @@ class SparkHelperTest
     HdfsHelper.deleteFolder(keyValueFolder)
   }
 
+  test("Save as text file and reduce nbr of partitions") {
+
+    val testFolder = s"$resourceFolder/folder"
+
+    HdfsHelper.deleteFolder(testFolder)
+
+    val rddToStore =
+      sc.parallelize(Array("data_a", "data_b", "data_c")).repartition(3)
+
+    // 1: Without compressing:
+
+    rddToStore.saveAsTextFileAndCoalesce(testFolder, 2)
+
+    // Let's check the nbr of partitions:
+    var genratedKeyFiles = HdfsHelper.listFileNamesInFolder(testFolder)
+    var expectedKeyFiles = List("_SUCCESS", "part-00000", "part-00001")
+    assert(genratedKeyFiles === expectedKeyFiles)
+
+    // And let's check the content:
+    var singleFileStoredData = sc.textFile(testFolder).collect().sorted
+    assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
+
+    HdfsHelper.deleteFolder(testFolder)
+
+    // 2: By compressing:
+
+    rddToStore.saveAsTextFileAndCoalesce(testFolder, 2, classOf[GzipCodec])
+
+    // Let's check the nbr of partitions:
+    genratedKeyFiles = HdfsHelper.listFileNamesInFolder(testFolder)
+    expectedKeyFiles = List("_SUCCESS", "part-00000.gz", "part-00001.gz")
+    assert(genratedKeyFiles === expectedKeyFiles)
+
+    // And let's check the content:
+    singleFileStoredData = sc.textFile(testFolder).collect().sorted
+    assert(singleFileStoredData === Array("data_a", "data_b", "data_c"))
+
+    HdfsHelper.deleteFolder(testFolder)
+  }
+
   test("Decrease coalescence level") {
 
     HdfsHelper.deleteFolder("src/test/resources/re_coalescence_test_input")

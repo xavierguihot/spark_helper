@@ -51,10 +51,10 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt") }}}
       *
-      * @param outputFile the path of the produced file
+      * @param path the path of the produced file
       */
-    def saveAsSingleTextFile(outputFile: String): Unit =
-      SparkHelper.saveAsSingleTextFileInternal(rdd, outputFile, None)
+    def saveAsSingleTextFile(path: String): Unit =
+      SparkHelper.saveAsSingleTextFileInternal(rdd, path, None)
 
     /** Saves an RDD in exactly one file.
       *
@@ -63,15 +63,15 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", classOf[BZip2Codec]) }}}
       *
-      * @param outputFile the path of the produced file
+      * @param path the path of the produced file
       * @param codec the type of compression to use (for instance
       * classOf[BZip2Codec] or classOf[GzipCodec]))
       */
     def saveAsSingleTextFile(
-        outputFile: String,
+        path: String,
         codec: Class[_ <: CompressionCodec]
     ): Unit =
-      SparkHelper.saveAsSingleTextFileInternal(rdd, outputFile, Some(codec))
+      SparkHelper.saveAsSingleTextFileInternal(rdd, path, Some(codec))
 
     /** Saves an RDD in exactly one file.
       *
@@ -85,14 +85,14 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", "/my/working/folder/path") }}}
       *
-      * @param outputFile the path of the produced file
+      * @param path the path of the produced file
       * @param workingFolder the path where file manipulations will temporarily
       * happen.
       */
-    def saveAsSingleTextFile(outputFile: String, workingFolder: String): Unit =
+    def saveAsSingleTextFile(path: String, workingFolder: String): Unit =
       SparkHelper.saveAsSingleTextFileWithWorkingFolderInternal(
         rdd,
-        outputFile,
+        path,
         workingFolder,
         None
       )
@@ -111,24 +111,116 @@ object SparkHelper extends Serializable {
       * rdd.saveAsSingleTextFile("/my/file/path.txt", "/my/working/folder/path", classOf[BZip2Codec])
       * }}}
       *
-      * @param outputFile the path of the produced file
+      * @param path the path of the produced file
       * @param workingFolder the path where file manipulations will temporarily
       * happen.
       * @param codec the type of compression to use (for instance
       * classOf[BZip2Codec] or classOf[GzipCodec]))
       */
     def saveAsSingleTextFile(
-        outputFile: String,
+        path: String,
         workingFolder: String,
         codec: Class[_ <: CompressionCodec]
     ): Unit =
       SparkHelper.saveAsSingleTextFileWithWorkingFolderInternal(
         rdd,
-        outputFile,
+        path,
         workingFolder,
         Some(codec)
       )
 
+    /** Saves as text file, but by decreasing the nbr of partitions of the output.
+      *
+      * Same as <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.saveAsTextFile()</code>
+      * , but decreases the nbr of partitions in the output folder before doing
+      * so.
+      *
+      * The result is equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.coalesce(x).saveAsTextFile()</code>
+      * , but if <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">x</code>
+      * is very low, <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">coalesce</code>
+      * would make the processing time explode, wherease this methods keeps the
+      * processing parallelized, save as text file and then only merges the
+      * result in a lower nbr of partitions.
+      *
+      * {{{ rdd.saveAsTextFileAndCoalesce("/produced/folder/path/with/only/30/files", 30) }}}
+      *
+      * @param path the folder where will finally be stored the RDD but spread
+      * on only 30 files (where 30 is the value of the finalCoalesceLevel
+      * parameter).
+      * @param finalCoalesceLevel the nbr of files within the folder at the end
+      * of this method.
+      */
+    def saveAsTextFileAndCoalesce(
+        path: String,
+        finalCoalesceLevel: Int
+    ): Unit = {
+
+      // We remove folders where to store data in case they already exist:
+      HdfsHelper.deleteFolder(s"${path}_tmp")
+      HdfsHelper.deleteFolder(path)
+
+      // We first save the rdd with the level of coalescence used during the
+      // processing. This way the processing is done with the right level of
+      // tasks:
+      rdd.saveAsTextFile(s"${path}_tmp")
+
+      // Then we read back this tmp folder, apply the coalesce and store it back:
+      SparkHelper.decreaseCoalescenceInternal(
+        s"${path}_tmp",
+        path,
+        finalCoalesceLevel,
+        rdd.context,
+        None
+      )
+    }
+
+    /** Saves as text file, but by decreasing the nbr of partitions of the output.
+      *
+      * Same as <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.saveAsTextFile()</code>
+      * , but decreases the nbr of partitions in the output folder before doing
+      * so.
+      *
+      * The result is equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.coalesce(x).saveAsTextFile()</code>
+      * , but if <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">x</code>
+      * is very low, <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">coalesce</code>
+      * would make the processing time explode, wherease this methods keeps the
+      * processing parallelized, save as text file and then only merges the
+      * result in a lower nbr of partitions.
+      *
+      * {{{ rdd.saveAsTextFileAndCoalesce("/produced/folder/path/with/only/30/files", 30, classOf[BZip2Codec]) }}}
+      *
+      * @param path the folder where will finally be stored the RDD but spread
+      * on only 30 files (where 30 is the value of the finalCoalesceLevel
+      * parameter).
+      * @param finalCoalesceLevel the nbr of files within the folder at the end
+      * of this method.
+      * @param codec the type of compression to use (for instance
+      * classOf[BZip2Codec] or classOf[GzipCodec]))
+      */
+    def saveAsTextFileAndCoalesce(
+        path: String,
+        finalCoalesceLevel: Int,
+        codec: Class[_ <: CompressionCodec]
+    ): Unit = {
+
+      // We remove folders where to store data in case they already exist:
+      HdfsHelper.deleteFolder(s"${path}_tmp")
+      HdfsHelper.deleteFolder(path)
+
+      // We first save the rdd with the level of coalescence used during the
+      // processing. This way the processing is done with the right level of
+      // tasks:
+      rdd.saveAsTextFile(s"${path}_tmp")
+
+      // Then we read back this tmp folder, apply the coalesce and store it back:
+      decreaseCoalescenceInternal(
+        s"${path}_tmp",
+        path,
+        finalCoalesceLevel,
+        rdd.context,
+        Some(codec)
+      )
+    }
   }
 
   implicit class PairRDDExtensions(val rdd: RDD[(String, String)])
@@ -268,7 +360,7 @@ object SparkHelper extends Serializable {
       * assert(computedRecords == expectedRecords)
       * }}}
       *
-      * @param hdfsPath the path of the file to read (folder or file, '*' works
+      * @param path the path of the file to read (folder or file, '*' works
       * as well).
       * @param delimiter the specific record delimiter which replaces "\n"
       * @param maxRecordLength the max length (not sure which unit) of a record
@@ -276,7 +368,7 @@ object SparkHelper extends Serializable {
       * @return the RDD of records
       */
     def textFile(
-        hdfsPath: String,
+        path: String,
         delimiter: String,
         maxRecordLength: String = "1000000"
     ): RDD[String] = {
@@ -295,7 +387,7 @@ object SparkHelper extends Serializable {
         .set("mapreduce.input.linerecordreader.line.maxlength", maxRecordLength)
 
       sc.newAPIHadoopFile(
-          hdfsPath,
+          path,
           classOf[TextInputFormat],
           classOf[LongWritable],
           classOf[Text],
@@ -327,21 +419,21 @@ object SparkHelper extends Serializable {
     * @param highCoalescenceLevelFolder the folder which contains 10000 files
     * @param lowerCoalescenceLevelFolder the folder which will contain the same
     * data as highCoalescenceLevelFolder but spread on only 300 files (where 300
-    * is the finalCoalescenceLevel parameter).
-    * @param finalCoalescenceLevel the nbr of files within the folder at the end
+    * is the finalCoalesceLevel parameter).
+    * @param finalCoalesceLevel the nbr of files within the folder at the end
     * of this method.
     * @param sparkContext the SparkContext
     */
   def decreaseCoalescence(
       highCoalescenceLevelFolder: String,
       lowerCoalescenceLevelFolder: String,
-      finalCoalescenceLevel: Int,
+      finalCoalesceLevel: Int,
       sparkContext: SparkContext
   ): Unit =
     decreaseCoalescenceInternal(
       highCoalescenceLevelFolder,
       lowerCoalescenceLevelFolder,
-      finalCoalescenceLevel,
+      finalCoalesceLevel,
       sparkContext,
       None)
 
@@ -368,8 +460,8 @@ object SparkHelper extends Serializable {
     * @param highCoalescenceLevelFolder the folder which contains 10000 files
     * @param lowerCoalescenceLevelFolder the folder which will contain the same
     * data as highCoalescenceLevelFolder but spread on only 300 files (where 300
-    * is the finalCoalescenceLevel parameter).
-    * @param finalCoalescenceLevel the nbr of files within the folder at the end
+    * is the finalCoalesceLevel parameter).
+    * @param finalCoalesceLevel the nbr of files within the folder at the end
     * of this method.
     * @param sparkContext the SparkContext
     * @param codec the type of compression to use (for instance
@@ -378,117 +470,17 @@ object SparkHelper extends Serializable {
   def decreaseCoalescence(
       highCoalescenceLevelFolder: String,
       lowerCoalescenceLevelFolder: String,
-      finalCoalescenceLevel: Int,
+      finalCoalesceLevel: Int,
       sparkContext: SparkContext,
       codec: Class[_ <: CompressionCodec]
   ): Unit =
     decreaseCoalescenceInternal(
       highCoalescenceLevelFolder,
       lowerCoalescenceLevelFolder,
-      finalCoalescenceLevel,
+      finalCoalesceLevel,
       sparkContext,
       Some(codec)
     )
-
-  /** Saves as text file, but by decreasing the nbr of partitions of the output.
-    *
-    * Same as decreaseCoalescence, but the storage of the RDD in an intermediate
-    * folder is included.
-    *
-    * This still makes the processing parallelized, but the output is coalesced.
-    *
-    * {{{
-    * SparkHelper.saveAsTextFileAndCoalesce(
-    *   myRddToStore, "/produced/folder/path/with/only/300/files", 300)
-    * }}}
-    *
-    * @param outputRDD the RDD to store, processed for instance on 10000 tasks
-    * (which would thus be stored as 10000 files).
-    * @param outputFolder the folder where will finally be stored the RDD but
-    * spread on only 300 files (where 300 is the value of the
-    * finalCoalescenceLevel parameter).
-    * @param finalCoalescenceLevel the nbr of files within the folder at the end
-    * of this method.
-    */
-  def saveAsTextFileAndCoalesce(
-      outputRDD: RDD[String],
-      outputFolder: String,
-      finalCoalescenceLevel: Int
-  ): Unit = {
-
-    val sparkContext = outputRDD.context
-
-    // We remove folders where to store data in case they already exist:
-    HdfsHelper.deleteFolder(outputFolder + "_tmp")
-    HdfsHelper.deleteFolder(outputFolder)
-
-    // We first save the rdd with the level of coalescence used during the
-    // processing. This way the processing is done with the right level of
-    // tasks:
-    outputRDD.saveAsTextFile(outputFolder + "_tmp")
-
-    // Then we read back this tmp folder, apply the coalesce and store it back:
-    decreaseCoalescenceInternal(
-      outputFolder + "_tmp",
-      outputFolder,
-      finalCoalescenceLevel,
-      sparkContext,
-      None
-    )
-  }
-
-  /** Saves as text file, but by decreasing the nbr of partitions of the output.
-    *
-    * Same as decreaseCoalescence, but the storage of the RDD in an intermediate
-    * folder is included.
-    *
-    * This still makes the processing parallelized, but the output is coalesced.
-    *
-    * {{{
-    * SparkHelper.saveAsTextFileAndCoalesce(
-    *   myRddToStore,
-    *   "/produced/folder/path/with/only/300/files",
-    *   300,
-    *   classOf[BZip2Codec])
-    * }}}
-    *
-    * @param outputRDD the RDD to store, processed for instance on 10000 tasks
-    * (which would thus be stored as 10000 files).
-    * @param outputFolder the folder where will finally be stored the RDD but
-    * spread on only 300 files (where 300 is the value of the
-    * finalCoalescenceLevel parameter).
-    * @param finalCoalescenceLevel the nbr of files within the folder at the end
-    * of this method.
-    * @param codec the type of compression to use (for instance
-    * classOf[BZip2Codec] or classOf[GzipCodec]))
-    */
-  def saveAsTextFileAndCoalesce(
-      outputRDD: RDD[String],
-      outputFolder: String,
-      finalCoalescenceLevel: Int,
-      codec: Class[_ <: CompressionCodec]
-  ): Unit = {
-
-    val sparkContext = outputRDD.context
-
-    // We remove folders where to store data in case they already exist:
-    HdfsHelper.deleteFolder(outputFolder + "_tmp")
-    HdfsHelper.deleteFolder(outputFolder)
-
-    // We first save the rdd with the level of coalescence used during the
-    // processing. This way the processing is done with the right level of
-    // tasks:
-    outputRDD.saveAsTextFile(outputFolder + "_tmp")
-
-    // Then we read back this tmp folder, apply the coalesce and store it back:
-    decreaseCoalescenceInternal(
-      outputFolder + "_tmp",
-      outputFolder,
-      finalCoalescenceLevel,
-      sparkContext,
-      Some(codec)
-    )
-  }
 
   /** Equivalent to sparkContext.textFile(), but for each line is associated
     * with its file path.
@@ -515,13 +507,13 @@ object SparkHelper extends Serializable {
     * )
     * }}}
     *
-    * @param hdfsPath the path of the folder (or structure of folders) to read
+    * @param path the path of the folder (or structure of folders) to read
     * @param sparkContext the SparkContext
     * @return the RDD of records where a record is a tuple containing the path
     * of the file the record comes from and the record itself.
     */
   def textFileWithFileName(
-      hdfsPath: String,
+      path: String,
       sparkContext: SparkContext
   ): RDD[(String, String)] = {
 
@@ -531,7 +523,7 @@ object SparkHelper extends Serializable {
 
     sparkContext
       .hadoopFile(
-        hdfsPath,
+        path,
         classOf[TextInputFormat2],
         classOf[LongWritable],
         classOf[Text],
@@ -549,7 +541,7 @@ object SparkHelper extends Serializable {
 
   private def saveAsSingleTextFileWithWorkingFolderInternal(
       outputRDD: RDD[String],
-      outputFile: String,
+      path: String,
       workingFolder: String,
       codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
@@ -562,7 +554,7 @@ object SparkHelper extends Serializable {
     saveAsSingleTextFileInternal(outputRDD, temporaryFile, codec)
 
     // And then only we put the resulting file in its final real location:
-    HdfsHelper.moveFile(temporaryFile, outputFile, overwrite = true)
+    HdfsHelper.moveFile(temporaryFile, path, overwrite = true)
   }
 
   /** Saves RDD in exactly one file.
@@ -571,12 +563,12 @@ object SparkHelper extends Serializable {
     * the processing parallelized.
     *
     * @param outputRDD the RDD of strings to save as text file
-    * @param outputFile the path where to save the file
+    * @param path the path where to save the file
     * @param compression the compression codec to use (can be left to None)
     */
   private def saveAsSingleTextFileInternal(
       outputRDD: RDD[String],
-      outputFile: String,
+      path: String,
       codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
@@ -584,25 +576,25 @@ object SparkHelper extends Serializable {
     val fileSystem = FileSystem.get(hadoopConfiguration)
 
     // Classic saveAsTextFile in a temporary folder:
-    HdfsHelper.deleteFolder(s"$outputFile.tmp")
+    HdfsHelper.deleteFolder(s"$path.tmp")
     codec match {
       case Some(codec) =>
-        outputRDD.saveAsTextFile(s"$outputFile.tmp", codec)
+        outputRDD.saveAsTextFile(s"$path.tmp", codec)
       case None =>
-        outputRDD.saveAsTextFile(s"$outputFile.tmp")
+        outputRDD.saveAsTextFile(s"$path.tmp")
     }
 
     // Merge the folder into a single file:
-    HdfsHelper.deleteFile(outputFile)
+    HdfsHelper.deleteFile(path)
     FileUtil.copyMerge(
       fileSystem,
-      new Path(s"$outputFile.tmp"),
+      new Path(s"$path.tmp"),
       fileSystem,
-      new Path(outputFile),
+      new Path(path),
       true,
       hadoopConfiguration,
       null)
-    HdfsHelper.deleteFolder(s"$outputFile.tmp")
+    HdfsHelper.deleteFolder(s"$path.tmp")
   }
 
   private def saveAsTextFileByKeyInternal(
@@ -655,14 +647,14 @@ object SparkHelper extends Serializable {
   private def decreaseCoalescenceInternal(
       highCoalescenceLevelFolder: String,
       lowerCoalescenceLevelFolder: String,
-      finalCoalescenceLevel: Int,
+      finalCoalesceLevel: Int,
       sparkContext: SparkContext,
       codec: Option[Class[_ <: CompressionCodec]]
   ): Unit = {
 
     val intermediateRDD = sparkContext
       .textFile(highCoalescenceLevelFolder)
-      .coalesce(finalCoalescenceLevel)
+      .coalesce(finalCoalesceLevel)
 
     codec match {
       case Some(codec) =>
