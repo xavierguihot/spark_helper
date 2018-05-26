@@ -21,8 +21,8 @@ import scala.util.Random
   * A few exemples:
   *
   * {{{
-  * // Same as SparkContext.saveAsTextFile, but the result is a single file:
-  * SparkHelper.saveAsSingleTextFile(myOutputRDD, "/my/output/file/path.txt")
+  * // Same as sc.saveAsTextFile(path), but the result is a single file:
+  * rdd.saveAsSingleTextFile("/my/output/file/path.txt")
   * // Same as SparkContext.textFile, but instead of reading one record per
   * // line, it reads records spread over several lines.
   * // This way, xml, json, yml or any multi-line record file format can be used
@@ -78,10 +78,10 @@ object SparkHelper extends Serializable {
       * Allows one to save an RDD in one file, while keeping the processing
       * parallelized.
       *
-      * This variant of saveAsSingleTextFile performs the storage in a temporary
-      * folder instead of directly in the final output folder. This way the
-      * risks of having corrupted files in the real output folder due to cluster
-      * interruptions is minimized.
+      * This variant of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsSingleTextFile</code>
+      * performs the storage in a temporary folder instead of directly in the
+      * final output folder. This way the risks of having corrupted files in the
+      * real output folder due to cluster interruptions is minimized.
       *
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", "/my/working/folder/path") }}}
       *
@@ -102,10 +102,10 @@ object SparkHelper extends Serializable {
       * Allows one to save an RDD in one file, while keeping the processing
       * parallelized.
       *
-      * This variant of saveAsSingleTextFile performs the storage in a temporary
-      * folder instead of directly in the final output folder. This way the risks
-      * of having corrupted files in the real output folder due to cluster
-      * interruptions is minimized.
+      * This variant of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsSingleTextFile</code>
+      * performs the storage in a temporary folder instead of directly in the
+      * final output folder. This way the risks of having corrupted files in the
+      * real output folder due to cluster interruptions is minimized.
       *
       * {{{
       * rdd.saveAsSingleTextFile("/my/file/path.txt", "/my/working/folder/path", classOf[BZip2Codec])
@@ -174,7 +174,7 @@ object SparkHelper extends Serializable {
       )
     }
 
-    /** Saves as text file, but by decreasing the nbr of partitions of the output.
+    /** Saves as text file, and decreases the nbr of output partitions.
       *
       * Same as <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.saveAsTextFile()</code>
       * , but decreases the nbr of partitions in the output folder before doing
@@ -234,7 +234,7 @@ object SparkHelper extends Serializable {
       *
       * As this internally needs to know the nbr of keys, this will have to
       * compute it. If this nbr of keys is known beforehand, it would spare
-      * resources to use saveAsTextFileByKey(path: String, keyNbr: Int)
+      * resources to use <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsTextFileByKey(path: String, keyNbr: Int)</code>
       * instead.
       *
       * This is not scalable. This shouldn't be considered for any data flow
@@ -274,7 +274,7 @@ object SparkHelper extends Serializable {
       * As this internally needs to know the nbr of keys, this will have to
       * compute it. If this nbr of keys is known beforehand, it would spare
       * resources to use
-      * saveAsTextFileByKey(path: String, keyNbr: Int, codec: Class[_ <: CompressionCodec])
+      * <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsTextFileByKey(path: String, keyNbr: Int, codec: Class[_ <: CompressionCodec])</code>
       * instead.
       *
       * This is not scalable. This shouldn't be considered for any data flow
@@ -320,17 +320,20 @@ object SparkHelper extends Serializable {
 
   implicit class SparkContextExtensions(val sc: SparkContext) extends AnyVal {
 
-    /** Equivalent to sparkContext.textFile(), but for a specific record delimiter.
+    /** Equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sparkContext.textFile()</code>
+      * , but for a specific record delimiter.
       *
-      * By default, sparkContext.textFile() will provide one record per line
-      * (per '\n'). But what if the format to read considers that one record
-      * is stored in more than one line (yml, custom format, ...)?
+      * By default, <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sparkContext.textFile()</code>
+      * will provide one record per line (per <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">'\n'</code>).
+      * But what if the format to read considers that one record is stored in
+      * more than one line (yml, custom format, ...)?
       *
       * For instance in order to read a yml file, which is a format for which a
       * record (a single entity) is spread other several lines, you can modify
-      * the record delimiter with "---\n" instead of "\n". Same goes when
-      * reading an xml file where a record might be spread over several lines or
-      * worse the whole xml file is one line.
+      * the record delimiter with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">"---\n"</code>
+      * instead of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">"\n"</code>.
+      * Same goes when reading an xml file where a record might be spread over
+      * several lines or worse the whole xml file is one line.
       *
       * {{{
       * // Let's say data we want to use with Spark looks like this (one record
