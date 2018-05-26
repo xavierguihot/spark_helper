@@ -396,6 +396,56 @@ object SparkHelper extends Serializable {
         .map { case (_, text) => text.toString }
     }
 
+    /** Equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sparkContext.textFile()</code>
+      * , but each record is associated with the file path it comes from.
+      *
+      * Produces an <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[(file_name, line)]</code>
+      * which provides a way to know from which file a given line comes from.
+      *
+      * {{{
+      * // Considering this folder:
+      * // folder/file_1.txt whose content is data1\ndata2\ndata3
+      * // folder/file_2.txt whose content is data4\ndata4
+      * // folder/folder_1/file_3.txt whose content is data6\ndata7
+      * // then:
+      * sc.textFileWithFileName("folder")
+      * // will return:
+      * RDD(
+      *   ("file:/path/on/machine/folder/file_1.txt", "data1"),
+      *   ("file:/path/on/machine/folder/file_1.txt", "data2"),
+      *   ("file:/path/on/machine/folder/file_1.txt", "data3"),
+      *   ("file:/path/on/machine/folder/file_2.txt", "data4"),
+      *   ("file:/path/on/machine/folder/file_2.txt", "data5"),
+      *   ("file:/path/on/machine/folder/folder_1/file_3.txt", "data6"),
+      *   ("file:/path/on/machine/folder/folder_1/file_3.txt", "data7")
+      * )
+      * }}}
+      *
+      * @param path the path of the folder (or structure of folders) to read
+      * @return the RDD of records where a record is a tuple containing the path
+      * of the file the record comes from and the record itself.
+      */
+    def textFileWithFileName(path: String): RDD[(String, String)] = {
+
+      // In order to go through the folder structure recursively:
+      sc.hadoopConfiguration
+        .set("mapreduce.input.fileinputformat.input.dir.recursive", "true")
+
+      sc.hadoopFile(
+          path,
+          classOf[TextInputFormat2],
+          classOf[LongWritable],
+          classOf[Text],
+          sc.defaultMinPartitions
+        )
+        .asInstanceOf[HadoopRDD[LongWritable, Text]]
+        .mapPartitionsWithInputSplit {
+          case (inputSplit, iterator) =>
+            val file = inputSplit.asInstanceOf[FileSplit]
+            iterator.map(tpl => (file.getPath.toString, tpl._2.toString))
+        }
+    }
+
     /** Decreases the nbr of partitions of a folder.
       *
       * This comes in handy when the last step of your job needs to run on
@@ -477,61 +527,6 @@ object SparkHelper extends Serializable {
         sc,
         Some(codec)
       )
-  }
-
-  /** Equivalent to sparkContext.textFile(), but for each line is associated
-    * with its file path.
-    *
-    * Produces a RDD[(file_name, line)] which provides a way to know from which
-    * file a given line comes from.
-    *
-    * {{{
-    * // Considering this folder:
-    * // folder/file_1.txt whose content is data1\ndata2\ndata3
-    * // folder/file_2.txt whose content is data4\ndata4
-    * // folder/folder_1/file_3.txt whose content is data6\ndata7
-    * // then:
-    * SparkHelper.textFileWithFileName("folder", sparkContext)
-    * // will return:
-    * RDD(
-    *   ("file:/path/on/machine/folder/file_1.txt", "data1"),
-    *   ("file:/path/on/machine/folder/file_1.txt", "data2"),
-    *   ("file:/path/on/machine/folder/file_1.txt", "data3"),
-    *   ("file:/path/on/machine/folder/file_2.txt", "data4"),
-    *   ("file:/path/on/machine/folder/file_2.txt", "data5"),
-    *   ("file:/path/on/machine/folder/folder_1/file_3.txt", "data6"),
-    *   ("file:/path/on/machine/folder/folder_1/file_3.txt", "data7")
-    * )
-    * }}}
-    *
-    * @param path the path of the folder (or structure of folders) to read
-    * @param sparkContext the SparkContext
-    * @return the RDD of records where a record is a tuple containing the path
-    * of the file the record comes from and the record itself.
-    */
-  def textFileWithFileName(
-      path: String,
-      sparkContext: SparkContext
-  ): RDD[(String, String)] = {
-
-    // In order to go through the folder structure recursively:
-    sparkContext.hadoopConfiguration
-      .set("mapreduce.input.fileinputformat.input.dir.recursive", "true")
-
-    sparkContext
-      .hadoopFile(
-        path,
-        classOf[TextInputFormat2],
-        classOf[LongWritable],
-        classOf[Text],
-        sparkContext.defaultMinPartitions
-      )
-      .asInstanceOf[HadoopRDD[LongWritable, Text]]
-      .mapPartitionsWithInputSplit {
-        case (inputSplit, iterator) =>
-          val file = inputSplit.asInstanceOf[FileSplit]
-          iterator.map(tpl => (file.getPath.toString, tpl._2.toString))
-      }
   }
 
   // Internal core:

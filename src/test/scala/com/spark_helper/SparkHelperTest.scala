@@ -312,19 +312,25 @@ class SparkHelperTest
     "Extract lines of files to an RDD of tuple containing the line and file " +
       "the line comes from") {
 
-    HdfsHelper.deleteFolder("src/test/resources/with_file_name")
+    val testFolder = s"$resourceFolder/with_file_name"
+
+    HdfsHelper.deleteFolder(testFolder)
+
     HdfsHelper.writeToHdfsFile(
       "data_1_a\ndata_1_b\ndata_1_c",
-      "src/test/resources/with_file_name/file_1.txt")
+      s"$testFolder/file_1.txt"
+    )
     HdfsHelper.writeToHdfsFile(
       "data_2_a\ndata_2_b",
-      "src/test/resources/with_file_name/file_2.txt")
+      s"$testFolder/file_2.txt"
+    )
     HdfsHelper.writeToHdfsFile(
       "data_3_a\ndata_3_b\ndata_3_c\ndata_3_d",
-      "src/test/resources/with_file_name/folder_1/file_3.txt")
+      s"$testFolder/folder_1/file_3.txt"
+    )
 
-    val computedRdd = SparkHelper
-      .textFileWithFileName("src/test/resources/with_file_name", sc)
+    val computedRdd = sc
+      .textFileWithFileName(testFolder)
       // We remove the part of the path which is specific to the local machine
       // on which the test run:
       .map {
@@ -359,6 +365,6 @@ class SparkHelperTest
 
     assertRDDEquals(computedRdd, expectedRDD)
 
-    HdfsHelper.deleteFolder("src/test/resources/with_file_name")
+    HdfsHelper.deleteFolder(testFolder)
   }
 }
