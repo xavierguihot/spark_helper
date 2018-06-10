@@ -11,6 +11,8 @@ import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
 import org.apache.hadoop.mapred.{FileSplit, TextInputFormat => TextInputFormat2}
 
+import scala.reflect.ClassTag
+
 import scala.util.Random
 
 /** A facility to deal with RDD/file manipulations based on the Spark API.
@@ -36,7 +38,7 @@ import scala.util.Random
   * }}}
   *
   * @todo some kind of partialMap:
-  * 
+  *
   * {{{
   * RDD(1, 3, 2, 7, 8).partMap{ case a if a % 2 == 0 => 2 * a }
   * res: RDD(1, 3, 4, 7, 16)
@@ -233,6 +235,34 @@ object SparkHelper extends Serializable {
         Some(codec)
       )
     }
+  }
+
+  implicit class SeqRDDExtensions[T: ClassTag](val rdd: RDD[Seq[T]]) {
+
+    /** Flattens an <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[Seq[T]]</code>
+      * to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.
+      *
+      * {{{ sc.parallelize(Array(Seq(1, 2, 3), Nil, Seq(4))).flatten == sc.parallelize(Array(Seq(1, 2, 3, 4))) }}}
+      *
+      * @return the flat RDD as <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD.flatMap(identity)</code>
+      * or <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">List.flatten</code>
+      * would have.
+      */
+    def flatten(): RDD[T] = rdd.flatMap(identity)
+  }
+
+  implicit class OptionRDDExtensions[T: ClassTag](val rdd: RDD[Option[T]]) {
+
+    /** Flattens an <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[Option[T]]</code>
+      * to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.
+      *
+      * {{{ sc.parallelize(Array(Some(1), None, Some(2))).flatten == sc.parallelize(Array(Seq(1, 2))) }}}
+      *
+      * @return the flat RDD as <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD.flatMap(x => x)</code>
+      * or <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">List.flatten</code>
+      * would have.
+      */
+    def flatten(): RDD[T] = rdd.flatMap(o => o)
   }
 
   implicit class PairRDDExtensions(val rdd: RDD[(String, String)])
@@ -461,16 +491,16 @@ object SparkHelper extends Serializable {
         }
 
       /* An other way of doing would be:
-       *
-       * import org.apache.spark.sql.functions.input_file_name
-       * import spark.implicits._
-       * 
-       * spark.read
-       *   .text(testFolder)
-       *   .select(input_file_name, $"value")
-       *   .as[(String, String)]
-       *   .rdd
-       */
+     *
+     * import org.apache.spark.sql.functions.input_file_name
+     * import spark.implicits._
+     *
+     * spark.read
+     *   .text(testFolder)
+     *   .select(input_file_name, $"value")
+     *   .as[(String, String)]
+     *   .rdd
+     */
     }
 
     /** A replacement for <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sc.textFile()</code>

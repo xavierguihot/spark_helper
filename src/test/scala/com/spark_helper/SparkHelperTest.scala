@@ -1,6 +1,7 @@
 package com.spark_helper
 
 import com.spark_helper.SparkHelper.{RDDExtensions, PairRDDExtensions}
+import com.spark_helper.SparkHelper.{SeqRDDExtensions, OptionRDDExtensions}
 import com.spark_helper.SparkHelper.SparkContextExtensions
 
 import org.apache.hadoop.io.compress.GzipCodec
@@ -147,6 +148,21 @@ class SparkHelperTest
     assert(computedRecords === expectedRecords)
 
     HdfsHelper.deleteFile(xmlFilePath)
+  }
+
+  test("Flatten RDD") {
+
+    var in = sc.parallelize(Array(Seq(1, 2, 3), Seq(), Nil, Seq(4), Seq(5, 6)))
+    var out = sc.parallelize(Array(1, 2, 3, 4, 5, 6))
+    assertRDDEquals(in.flatten, out)
+
+    in = sc.parallelize(Array(List(1, 2, 3), List(), Nil, List(4), List(5, 6)))
+    out = sc.parallelize(Array(1, 2, 3, 4, 5, 6))
+    assertRDDEquals(in.flatten, out)
+
+    val in2 = sc.parallelize(Array(Option(1), None, Option(2)))
+    val out2 = sc.parallelize(Array(1, 2))
+    assertRDDEquals(in2.flatten, out2)
   }
 
   test("Save as text file by key") {
