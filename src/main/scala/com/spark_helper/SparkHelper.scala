@@ -1,7 +1,6 @@
 package com.spark_helper
 
 import org.apache.spark.TextFileOverwrite
-
 import org.apache.spark.{HashPartitioner, SparkContext}
 import org.apache.spark.rdd.{RDD, HadoopRDD}
 import org.apache.hadoop.conf.Configuration
@@ -35,6 +34,17 @@ import scala.util.Random
   * // path of the file it comes from:
   * SparkHelper.textFileWithFileName("folder", sparkContext)
   * }}}
+  *
+  * @todo some kind of partialMap:
+  * 
+  * {{{
+  * RDD(1, 3, 2, 7, 8).partMap{ case a if a % 2 == 0 => 2 * a }
+  * res: RDD(1, 3, 4, 7, 16)
+  * in order to avoid:
+  * RDD(1, 3, 2, 7, 8).partMap{ case a if a % 2 == 0 => 2 * a; case a => a }
+  * }}}
+  *
+  * @todo sc.parallelize[T](elmts: T*) instead of sc.parallelize[T](elmts: Array[T])
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
