@@ -37,26 +37,48 @@ import scala.util.Random
   * SparkHelper.textFileWithFileName("folder", sparkContext)
   * }}}
   *
-  * @todo some kind of partialMap:
-  *
-  * {{{
-  * RDD(1, 3, 2, 7, 8).partMap{ case a if a % 2 == 0 => 2 * a }
-  * res: RDD(1, 3, 4, 7, 16)
-  * in order to avoid:
-  * RDD(1, 3, 2, 7, 8).partMap{ case a if a % 2 == 0 => 2 * a; case a => a }
-  * }}}
-  *
-  * @todo sc.parallelize[T](elmts: T*) instead of sc.parallelize[T](elmts: Array[T])
-  *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
   *
+  * @todo sc.parallelize[T](elmts: T*) instead of sc.parallelize[T](elmts: Array[T])
   * @author Xavier Guihot
   * @since 2017-02
   */
 object SparkHelper extends Serializable {
 
-  implicit class RDDExtensions(val rdd: RDD[String]) extends AnyVal {
+  implicit class RDDExtensions[T: ClassTag](val rdd: RDD[T]) {
+
+    /** Map an RDD to the same type, by applying a partial function and the
+      * identity otherwise.
+      *
+      * Avoids having <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">case x => x</code>.
+      *
+      * Similar idea to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">.collect</code>,
+      * but instead of skipping non-matching items, keeps then as-is.
+      *
+      * {{{
+      * sc.parallelize(Array(1, 3, 2, 7, 8)).partialMap { case a if a % 2 == 0 => 2 * a }
+      * // is equivalent to:
+      * sc.parallelize(Array(1, 3, 2, 7, 8)).map {
+      *   case a if a % 2 == 0 => 2 * a
+      *   case a               => a
+      * }
+      * // in order to map to:
+      * sc.parallelize(Array(1, 3, 4, 7, 16))
+      * }}}
+      *
+      * @param pf the partial function to apply
+      * @return an rdd of the same type, for which each element is either the
+      * application of the partial function where defined or the identity.
+      */
+    def partialMap(pf: PartialFunction[T, T]): RDD[T] =
+      rdd.map {
+        case x if pf.isDefinedAt(x) => pf(x)
+        case x                      => x
+      }
+  }
+
+  implicit class StringRDDExtensions(val rdd: RDD[String]) extends AnyVal {
 
     /** Saves an RDD in exactly one file.
       *

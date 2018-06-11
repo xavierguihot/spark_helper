@@ -1,8 +1,8 @@
 package com.spark_helper
 
-import com.spark_helper.SparkHelper.{RDDExtensions, PairRDDExtensions}
+import com.spark_helper.SparkHelper.{RDDExtensions, StringRDDExtensions}
 import com.spark_helper.SparkHelper.{SeqRDDExtensions, OptionRDDExtensions}
-import com.spark_helper.SparkHelper.SparkContextExtensions
+import com.spark_helper.SparkHelper.{SparkContextExtensions, PairRDDExtensions}
 
 import org.apache.hadoop.io.compress.GzipCodec
 
@@ -407,5 +407,13 @@ class SparkHelperTest
     assertRDDEquals(computedRdd, expectedRdd)
 
     HdfsHelper.deleteFolder(testFolder)
+  }
+
+  test("Partial map") {
+
+    val in = sc.parallelize(Array(1, 3, 2, 7, 8))
+    val computedOut = in.partialMap { case a if a % 2 == 0 => 2 * a }
+    val expetcedOut = sc.parallelize(Array(1, 3, 4, 7, 16))
+    assertRDDEquals(computedOut, expetcedOut)
   }
 }
