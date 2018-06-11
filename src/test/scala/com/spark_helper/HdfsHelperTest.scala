@@ -1,5 +1,7 @@
 package com.spark_helper
 
+import org.apache.hadoop.io.compress.GzipCodec
+
 import com.holdenkarau.spark.testing.SharedSparkContext
 
 import org.scalatest.FunSuite
@@ -10,6 +12,8 @@ import org.scalatest.FunSuite
   * @since 2017-02
   */
 class HdfsHelperTest extends FunSuite with SharedSparkContext {
+
+  val resourceFolder = "src/test/resources"
 
   test("Delete file/folder") {
 
@@ -537,5 +541,25 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
       !HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
 
     HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
+  }
+
+  test("Compress hdfs file") {
+
+    val testFolder = s"$resourceFolder/folder"
+    val filePath = s"$testFolder/file.txt"
+
+    HdfsHelper.deleteFile(filePath)
+
+    HdfsHelper.writeToHdfsFile("hello\nworld", filePath)
+    HdfsHelper.compressFile(filePath, classOf[GzipCodec], true)
+
+    assert(HdfsHelper.fileExists(s"$filePath.gz"))
+
+    // Easy to test with spark, as reading a file with the ".gz" extention
+    // forces the read with the compression codec:
+    val content = sc.textFile(s"$filePath.gz").collect.sorted
+    assert(content === Array("hello", "world"))
+
+    HdfsHelper.deleteFolder(testFolder)
   }
 }

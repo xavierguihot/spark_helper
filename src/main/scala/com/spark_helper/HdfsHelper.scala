@@ -340,8 +340,7 @@ object HdfsHelper extends Serializable {
     FileSystem
       .get(new Configuration())
       .listStatus(new Path(hdfsPath))
-      .flatMap(status => {
-
+      .flatMap { status =>
         // If it's a file:
         if (status.isFile) {
           if (onlyName) List(status.getPath.getName)
@@ -352,11 +351,12 @@ object HdfsHelper extends Serializable {
           listFileNamesInFolder(
             hdfsPath + "/" + status.getPath.getName,
             true,
-            onlyName)
+            onlyName
+          )
         // If it's a dir and we're not in a recursive option:
         else
           Nil
-      })
+      }
       .toList
       .sorted
   }
@@ -661,8 +661,8 @@ object HdfsHelper extends Serializable {
     val ClassOfBZip2 = classOf[BZip2Codec]
 
     val outputPath = compressionCodec match {
-      case ClassOfGzip  => inputPath + ".gz"
-      case ClassOfBZip2 => inputPath + ".bz2"
+      case ClassOfGzip  => s"$inputPath.gz"
+      case ClassOfBZip2 => s"$inputPath.bz2"
     }
 
     val inputStream = fileSystem.open(new Path(inputPath))
@@ -747,8 +747,8 @@ object HdfsHelper extends Serializable {
     val fileSystem = FileSystem.get(new Configuration())
 
     val tmpOutputPath = workingFolderPath match {
-      case "" => filePath + ".tmp"
-      case _  => workingFolderPath + "/xml.tmp"
+      case "" => s"$filePath.tmp"
+      case _  => s"$workingFolderPath/xml.tmp"
     }
     deleteFile(tmpOutputPath)
 

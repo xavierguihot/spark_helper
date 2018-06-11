@@ -54,7 +54,7 @@ object SparkHelper extends Serializable {
       * Avoids having <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">case x => x</code>.
       *
       * Similar idea to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">.collect</code>,
-      * but instead of skipping non-matching items, keeps then as-is.
+      * but instead of skipping non-matching items, it keeps them as-is.
       *
       * {{{
       * sc.parallelize(Array(1, 3, 2, 7, 8)).partialMap { case a if a % 2 == 0 => 2 * a }
