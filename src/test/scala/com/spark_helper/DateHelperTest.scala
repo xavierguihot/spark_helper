@@ -2,6 +2,8 @@ package com.spark_helper
 
 import org.scalatest.FunSuite
 
+import com.spark_helper.{DateHelper => DH}
+
 /** Testing facility for date helpers.
   *
   * @author Xavier Guihot
@@ -37,25 +39,20 @@ class DateHelperTest extends FunSuite {
   }
 
   test("Reformat date") {
-    assert(
-      DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") === "170327")
-    assert(
-      DateHelper.reformatDate("20170327", "yyyyMMdd", "MMddyy") === "032717")
+    assert(DH.reformatDate("20170327", "yyyyMMdd", "yyMMdd") === "170327")
+    assert(DH.reformatDate("20170327", "yyyyMMdd", "MMddyy") === "032717")
   }
 
   test("Next day") {
-    assert(DateHelper.nextDay("20170310") === "20170311")
-    assert(DateHelper.nextDay("170310", "yyMMdd") === "170311")
-    assert(
-      DateHelper.nextDay("20170310_0000", "yyyyMMdd_HHmm") === "20170311_0000")
+    assert(DH.nextDay("20170310") === "20170311")
+    assert(DH.nextDay("170310", "yyMMdd") === "170311")
+    assert(DH.nextDay("20170310_0000", "yyyyMMdd_HHmm") === "20170311_0000")
   }
 
   test("Previous day") {
-    assert(DateHelper.previousDay("20170310") === "20170309")
-    assert(DateHelper.previousDay("170310", "yyMMdd") === "170309")
-    assert(
-      DateHelper
-        .previousDay("20170310_0000", "yyyyMMdd_HHmm") === "20170309_0000")
+    assert(DH.previousDay("20170310") === "20170309")
+    assert(DH.previousDay("170310", "yyMMdd") === "170309")
+    assert(DH.previousDay("20170310_0000", "yyyyMMdd_HHmm") === "20170309_0000")
   }
 
   test("Nbr of days between two dates") {
