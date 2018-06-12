@@ -6,6 +6,8 @@ import org.apache.hadoop.io.compress.{CompressionCodec, CompressionCodecFactory}
 import org.apache.hadoop.io.compress.{GzipCodec, BZip2Codec}
 import org.apache.hadoop.io.IOUtils
 
+import scala.reflect.ClassTag
+
 import org.joda.time.{DateTime, Days}
 import org.joda.time.format.DateTimeFormat
 
@@ -76,6 +78,41 @@ import com.typesafe.config.{Config, ConfigFactory}
   * @since 2017-02
   */
 object HdfsHelper extends Serializable {
+
+  implicit class SeqExtensions[T <: Seq[String]: ClassTag](val seq: T) {
+
+    /** Saves list elements in a file on hdfs.
+      *
+      * Please only consider this way of storing data when the data set is small
+      * enough.
+      *
+      * Overwrites the file if it already exists.
+      *
+      * {{{
+      * Array("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+      * List("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+      * }}}
+      *
+      * @param filePath the path of the file in which to write the content of
+      * the List.
+      */
+    def writeToHdfs(filePath: String): Unit =
+      HdfsHelper.writeToHdfsFile(seq, filePath)
+  }
+
+  implicit class StringExtensions(val string: String) {
+
+    /** Saves the String in a file on hdfs.
+      *
+      * Overwrites the file if it already exists.
+      *
+      * {{{ "some\nrelatively small\ntext".writeToHdfsFile("/some/hdfs/file/path.txt") }}}
+      *
+      * @param filePath the path of the file in which to write the String
+      */
+    def writeToHdfs(filePath: String): Unit =
+      HdfsHelper.writeToHdfsFile(string, filePath)
+  }
 
   /** Deletes a file on HDFS.
     *
@@ -311,7 +348,7 @@ object HdfsHelper extends Serializable {
     *   List("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
     * }}}
     *
-    * @param content the array of strings to write in the file as one line per
+    * @param content the seq of strings to write in the file as one line per
     * string (this takes care of joining strings with "\n"s).
     * @param filePath the path of the file in which to write the content
     */

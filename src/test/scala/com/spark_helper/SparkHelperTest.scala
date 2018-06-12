@@ -1,8 +1,6 @@
 package com.spark_helper
 
-import com.spark_helper.SparkHelper.{RDDExtensions, StringRDDExtensions}
-import com.spark_helper.SparkHelper.{SeqRDDExtensions, OptionRDDExtensions}
-import com.spark_helper.SparkHelper.{SparkContextExtensions, PairRDDExtensions}
+import com.spark_helper.SparkHelper._
 
 import org.apache.hadoop.io.compress.GzipCodec
 

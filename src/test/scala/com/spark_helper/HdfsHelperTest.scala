@@ -1,5 +1,7 @@
 package com.spark_helper
 
+import com.spark_helper.HdfsHelper._
+
 import org.apache.hadoop.io.compress.GzipCodec
 
 import com.holdenkarau.spark.testing.SharedSparkContext
@@ -127,9 +129,9 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     val filePath = s"$testFolder/small_file.txt"
 
-    // 1: Stores using a "\n"-joined string:
+    HdfsHelper.deleteFolder(testFolder)
 
-    HdfsHelper.deleteFile(filePath)
+    // 1: Stores using a "\n"-joined string:
 
     val contentToStore = "Hello World\nWhatever"
 
@@ -144,8 +146,6 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     // 2: Stores using a list of strings to be "\n"-joined:
 
-    HdfsHelper.deleteFile(filePath)
-
     val listToStore = List("Hello World", "Whatever")
     HdfsHelper.writeToHdfsFile(listToStore, filePath)
 
@@ -154,6 +154,26 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
     assert(storedContent === listToStore.mkString("\n"))
 
+    HdfsHelper.deleteFolder(testFolder)
+
+    // 3: Using the pimped Seq/String:
+
+    listToStore.toSeq.writeToHdfs(filePath)
+    assert(HdfsHelper.fileExists(filePath))
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
+    assert(storedContent === contentToStore)
+    HdfsHelper.deleteFolder(testFolder)
+
+    listToStore.writeToHdfs(filePath)
+    assert(HdfsHelper.fileExists(filePath))
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
+    assert(storedContent === contentToStore)
+    HdfsHelper.deleteFolder(testFolder)
+
+    contentToStore.writeToHdfs(filePath)
+    assert(HdfsHelper.fileExists(filePath))
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
+    assert(storedContent === contentToStore)
     HdfsHelper.deleteFolder(testFolder)
   }
 

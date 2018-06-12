@@ -18,14 +18,14 @@ names are self-explanatory and readable.
 
 This also provides a monitoring/logger tool.
 
-This is a bunch of 4 modules:
+This is a set of 4 modules:
 
-* [HdfsHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.HdfsHelper$): Wrapper around [apache Hadoop FileSystem API](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html) for file manipulations on hdfs.
-* [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$): Hdfs file manipulations through the Spark API.
+* [HdfsHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.HdfsHelper$): Wrapper around the [apache Hadoop FileSystem API](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html) for file manipulations on hdfs.
+* [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$): Hdfs file manipulations through the Spark API (pimped RDDs and SparkContext).
 * [DateHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.DateHelper$): Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for usual data mining dates manipulations.
 * [Monitor](http://xavierguihot.com/spark_helper/#com.spark_helper.Monitor$): Spark custom monitoring/logger and kpi validator.
 
-Compatible with Spark 2.
+Compatible with Spark 2.x
 
 
 ### HdfsHelper:
