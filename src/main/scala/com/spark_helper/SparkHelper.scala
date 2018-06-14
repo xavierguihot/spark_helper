@@ -512,17 +512,16 @@ object SparkHelper extends Serializable {
             iterator.map(tpl => (file.getPath.toString, tpl._2.toString))
         }
 
-      /* An other way of doing would be:
-     *
-     * import org.apache.spark.sql.functions.input_file_name
-     * import spark.implicits._
-     *
-     * spark.read
-     *   .text(testFolder)
-     *   .select(input_file_name, $"value")
-     *   .as[(String, String)]
-     *   .rdd
-     */
+      // An other way of doing would be:
+      //
+      // import org.apache.spark.sql.functions.input_file_name
+      // import spark.implicits._
+      //
+      // spark.read
+      //   .text(testFolder)
+      //   .select(input_file_name, $"value")
+      //   .as[(String, String)]
+      //   .rdd
     }
 
     /** A replacement for <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sc.textFile()</code>

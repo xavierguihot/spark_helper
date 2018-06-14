@@ -36,21 +36,21 @@ The full list of methods is available at
 Contains basic file-related methods mostly based on hdfs apache Hadoop
 FileSystem API [org.apache.hadoop.fs.FileSystem](https://hadoop.apache.org/docs/r2.6.1/api/org/apache/hadoop/fs/FileSystem.html).
 
-For instance, one don't want to remove a file from hdfs using 3 lines of code
-and thus could instead just use `HdfsHelper.deleteFile("my/hdfs/file/path.csv")`.
-
 A non-exhaustive list of exemples:
 
 ```scala
 import com.spark_helper.HdfsHelper
 
 // A bunch of methods wrapping the FileSystem API, such as:
-HdfsHelper.fileExists("my/hdfs/file/path.txt")
+HdfsHelper.fileExists("my/hdfs/file/path.txt") // HdfsHelper.folderExists("my/hdfs/folder")
 assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
 assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
 assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
-HdfsHelper.deleteFile("my/hdfs/file/path.csv")
-HdfsHelper.moveFolder("my/hdfs/folder")
+HdfsHelper.deleteFile("my/hdfs/file/path.csv") // HdfsHelper.deleteFolder("my/hdfs/folder")
+HdfsHelper.moveFolder("my/hdfs/folder") // HdfsHelper.moveFile("my/hdfs/file.txt")
+HdfsHelper.createEmptyHdfsFile("/some/hdfs/file/path.token") // HdfsHelper.createFolder("my/hdfs/folder")
+
+// File content helpers:
 HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
 HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
 
@@ -63,9 +63,23 @@ HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
 
 // In order to write small amount of data in a file on hdfs without the whole spark stack:
 HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+// or:
+import com.spark_helper.HdfsHelper._
+Array("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+"hello world".writeToHdfs("/some/hdfs/file/path.txt")
 
 // Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:
 HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
+```
+
+In case a specific configuration is needed to access the file system, these
+setters are available:
+
+```scala
+// To use a specific conf FileSystem.get(whateverConf) instead of FileSystem.get(new Configuration()):
+HdfsHelper.setConf(whateverConf)
+// Or directly the FileSystem:
+HdfsHelper.setFileSystem(whateverFileSystem)
 ```
 
 ### SparkHelper:
@@ -73,31 +87,43 @@ HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
 The full list of methods is available at
 [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$).
 
-Contains basic file/RRD-related methods based on the Spark APIs.
+Contains basic RRD-related methods.
 
 A non-exhaustive list of exemples:
 
 ```scala
-import com.spark_helper.SparkHelper
+import com.spark_helper.SparkHelper._
 
-// Same as SparkContext.saveAsTextFile, but the result is a single file:
-SparkHelper.saveAsSingleTextFile(myOutputRDD, "/my/output/file/path.txt")
+// Same as rdd.saveAsTextFile("path"), but the result is a single file (while
+// keeping the processing parallelized):
+rdd.saveAsSingleTextFile("/my/output/file/path.txt")
+rdd.saveAsSingleTextFile("/my/output/file/path.txt", classOf[BZip2Codec])
 
-// Same as SparkContext.textFile, but instead of reading one record per line,
-// it reads records spread over several lines. This way, xml, json, yml or
-// any multi-line record file format can be used with Spark:
-SparkHelper.textFileWithDelimiter("/my/input/folder/path", sparkContext, "---\n")
+// Same as sc.textFile("path"), but instead of reading one record per line (by
+// splitting the input with \n), it splits the file in records based on a custom
+// delimiter. This way, xml, json, yml or any multi-line record file format can
+// be used with Spark:
+sc.textFile("/my/input/folder/path", "---\n")
+
+// Equivalent to rdd.flatMap(identity) for RDDs of Seqs or Options:
+rdd.flatten
 
 // Equivalent to sparkContext.textFile(), but for each line is tupled with its
 // file path:
 SparkHelper.textFileWithFileName("folder", sparkContext)
 // which produces:
-RDD(
-    ("file:/path/on/machine/folder/file_1.txt", "record1fromfile1"),
-    ("file:/path/on/machine/folder/file_1.txt", "record2fromfile1"),
-    ("file:/path/on/machine/folder/file_2.txt", "record1fromfile2"),
-    ...
-)
+// RDD(("folder/file_1.txt", "record1fromfile1"), ("folder/file_1.txt", "record2fromfile1"),
+//    ("folder/file_2.txt", "record1fromfile2"), ...)
+
+// In the given folder, this generates one file per key in the given key/value
+// RDD. Within each file (named from the key) are all values for this key:
+rdd.saveAsTextFileByKey("/my/output/folder/path")
+
+// Concept mapper (the following exemple transforms RDD(1, 3, 2, 7, 8) into RDD(1, 3, 4, 7, 16)):
+rdd.partialMap { case a if a % 2 == 0 => 2 * a }
+
+// For when input files contain commas and textFile can't handle it:
+sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
 ```
 
 ### DateHelper:

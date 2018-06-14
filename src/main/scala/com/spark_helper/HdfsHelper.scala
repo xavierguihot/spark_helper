@@ -74,6 +74,7 @@ import com.typesafe.config.{Config, ConfigFactory}
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
   *
+  * @todo Create a touch method
   * @author Xavier Guihot
   * @since 2017-02
   */
