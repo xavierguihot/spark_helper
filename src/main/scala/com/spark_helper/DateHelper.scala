@@ -28,7 +28,6 @@ import scala.util.Try
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/DateHelper.scala">DateHelper</a>
   *
-  * @todo Is it possible to ddo something like ("20170325" to "20170327")?
   * @author Xavier Guihot
   * @since 2017-02
   */
@@ -146,6 +145,19 @@ object DateHelper extends Serializable {
       * @return the date of the day before the given date
       */
     def previousDay(): String = DateHelper.previousDay(string)
+
+    /** Creates the list of dates between the two given dates.
+      *
+      * {{{
+      * assert(("20161230" to "20170101") == List("20161230", "20161231", "20170101"))
+      * }}}
+      *
+      * @param lastDate the last date
+      * @return the list of dates between this string and the lastDate in the
+      * default format.
+      */
+    def to(lastDate: String): List[String] =
+      DateHelper.daysBetween(string, lastDate)
   }
 
   /** Finds the list of dates between the two given dates.
@@ -156,15 +168,15 @@ object DateHelper extends Serializable {
     *
     * @param firstDate the first date (in the given format)
     * @param lastDate the last date (in the given format)
-    * @param format (default = "yyyyMMdd") the format to use for firstDate and
-    * lastDate and for the returned list of dates.
+    * @param format the format to use for firstDate and lastDate and for the
+    * returned list of dates.
     * @return the list of dates between firstDate and lastDate in the given
     * format.
     */
   def daysBetween(
       firstDate: String,
       lastDate: String,
-      format: String = "yyyyMMdd"
+      format: String = defaultFormat
   ): List[String] = {
 
     val formatter = DateTimeFormat.forPattern(format).withZone(DateTimeZone.UTC)

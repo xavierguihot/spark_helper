@@ -155,6 +155,7 @@ DateHelper.dayOfWeek("20160614") // 2
 import com.spark_helper.DateHelper._
 
 2.daysAgo // "20170308"
+"20161230" to "20170101" // List("20161230", "20161231", "20170101")
 3.daysBefore("20170310") // "20170307"
 5.daysAfter // "20170315"
 4.daysAfter("20170310") // "20170314"

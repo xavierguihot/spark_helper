@@ -27,7 +27,11 @@ class DateHelperTest extends FunSuite {
     )
     assert(dates === expectedDates)
 
-    // 2: With a custom formatter:
+    // 2: Same as 1, but using the pimped String:
+    dates = "20161229" to "20170103"
+    assert(dates === expectedDates)
+
+    // 3: With a custom formatter:
     dates = DateHelper.daysBetween("29Dec16", "03Jan17", "ddMMMyy")
     expectedDates = List(
       "29Dec16",
