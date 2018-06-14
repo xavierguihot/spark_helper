@@ -132,21 +132,42 @@ The full list of methods is available at
 [DateHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.DateHelper$).
 
 Wrapper around [joda-time](http://www.joda.org/joda-time/apidocs/) for
-data-mining classic dates manipulations.
+data-mining classic dates manipulations and job scheduling.
 
 A non-exhaustive list of exemples:
 
 ```scala
 import com.spark_helper.DateHelper
 
-assert(DateHelper.daysBetween("20161230", "20170101") == List("20161230", "20161231", "20170101"))
-assert(DateHelper.today() == "20170310") // If today's "20170310"
-assert(DateHelper.yesterday() == "20170309") // If today's "20170310"
-assert(DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") == "170327")
-assert(DateHelper.now("HH:mm") == "10:24")
-assert(DateHelper.currentTimestamp() == "1493105229736")
-assert(DateHelper.nDaysBefore(3) == "20170307") // If today's "20170310"
-assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
+DateHelper.daysBetween("20161230", "20170101") // List("20161230", "20161231", "20170101")
+DateHelper.today // "20170310"
+DateHelper.yesterday // "20170309"
+DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") // "170327"
+DateHelper.now("HH:mm") // "10:24"
+DateHelper.currentTimestamp // "1493105229736"
+DateHelper.nDaysBefore(3) // "20170307"
+DateHelper.nDaysAfterDate(3, "20170307") // "20170310"
+DateHelper.nextDay("20170310") // "20170311"
+DateHelper.nbrOfDaysSince("20170302") // 8
+DateHelper.nbrOfDaysBetween("20170327", "20170401") // 5
+DateHelper.dayOfWeek("20160614") // 2
+
+import com.spark_helper.DateHelper._
+
+2.daysAgo // "20170308"
+3.daysBefore("20170310") // "20170307"
+5.daysAfter // "20170315"
+4.daysAfter("20170310") // "20170314"
+"20170302".isCompliantWith("yyyyMMdd")
+"20170310".nextDay // "20170311"
+"20170310".previousDay // "20170309"
+```
+
+The default format (when no format is specified) is "yyyyMMdd" (20170327). It
+can be modified globally with:
+
+```scala
+DateHelper.setFormat("ddMMMyy")
 ```
 
 ### Monitor:

@@ -1,5 +1,7 @@
 package com.spark_helper
 
+import com.spark_helper.DateHelper._
+
 import org.scalatest.FunSuite
 
 import com.spark_helper.{DateHelper => DH}
@@ -85,6 +87,7 @@ class DateHelperTest extends FunSuite {
   }
 
   test("Date versus provided format") {
+
     assert(DateHelper.isDateCompliantWithFormat("20170302", "yyyyMMdd"))
     assert(!DateHelper.isDateCompliantWithFormat("20170333", "yyyyMMdd"))
     assert(DateHelper.isDateCompliantWithFormat("20170228", "yyyyMMdd"))
@@ -93,5 +96,14 @@ class DateHelperTest extends FunSuite {
     assert(!DateHelper.isDateCompliantWithFormat("", "yyyyMMdd"))
     assert(!DateHelper.isDateCompliantWithFormat("a", "yyyyMMdd"))
     assert(!DateHelper.isDateCompliantWithFormat("24JAN17", "yyyyMMdd"))
+
+    assert("20170302".isCompliantWith("yyyyMMdd"))
+    assert(!"20170333".isCompliantWith("yyyyMMdd"))
+    assert("20170228".isCompliantWith("yyyyMMdd"))
+    assert(!"20170229".isCompliantWith("yyyyMMdd"))
+    assert(!"170228".isCompliantWith("yyyyMMdd"))
+    assert(!"".isCompliantWith("yyyyMMdd"))
+    assert(!"a".isCompliantWith("yyyyMMdd"))
+    assert(!"24JAN17".isCompliantWith("yyyyMMdd"))
   }
 }
