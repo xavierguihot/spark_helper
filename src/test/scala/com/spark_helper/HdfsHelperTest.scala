@@ -158,7 +158,8 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
     // 3: Using the pimped Seq/String:
 
-    listToStore.toSeq.writeToHdfs(filePath)
+    val seqToStore = Seq("Hello World", "Whatever")
+    seqToStore.writeToHdfs(filePath)
     assert(HdfsHelper.fileExists(filePath))
     storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
     assert(storedContent === contentToStore)
@@ -281,7 +282,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(HdfsHelper.fileExists(filePath))
     assert(!HdfsHelper.fileExists(renamedPath))
 
-    // 3: Let's successfuly move the file with the moveFile() method:
+    // 3: Let's successfully move the file with the moveFile() method:
 
     // Let's rename the file:
     HdfsHelper.moveFile(filePath, renamedPath)
@@ -326,7 +327,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(HdfsHelper.fileExists(s"$folderToMove/file_2.txt"))
     assert(!HdfsHelper.folderExists(renamedFolder))
 
-    // 2: Let's successfuly move the folder with the moveFolder() method:
+    // 2: Let's successfully move the folder with the moveFolder() method:
 
     // Let's rename the folder:
     HdfsHelper.moveFolder(folderToMove, renamedFolder)
@@ -411,7 +412,7 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFolder(testFolder)
     HdfsHelper.writeToHdfsFile(
       "<Customer>\n" +
-        "	<Age>trente</Age>\n" +
+        "	<Age>thirty</Age>\n" +
         "	<Address>34 thingy street, someplace, sometown</Address>\n" +
         "</Customer>",
       xmlPath
@@ -500,11 +501,11 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     HdfsHelper.deleteFile(filePath)
 
     HdfsHelper.writeToHdfsFile("hello\nworld", filePath)
-    HdfsHelper.compressFile(filePath, classOf[GzipCodec], true)
+    HdfsHelper.compressFile(filePath, classOf[GzipCodec])
 
     assert(HdfsHelper.fileExists(s"$filePath.gz"))
 
-    // Easy to test with spark, as reading a file with the ".gz" extention
+    // Easy to test with spark, as reading a file with the ".gz" extension
     // forces the read with the compression codec:
     val content = sc.textFile(s"$filePath.gz").collect.sorted
     assert(content === Array("hello", "world"))

@@ -29,9 +29,9 @@ object TextFileOverwrite {
      * version of hadoop-common used by Spark (it will become Serializable
      * starting version 3 of hadoop-common).
      *
-     * * I don't String* (instead of Seq[String]) as for 1 String only it would
-     * confuse the compiler as to which sc.textFile to use (the default one or
-     * this one).
+     * * I don't use String* (instead of Seq[String]) as for 1 String only it
+     * would confuse the compiler as to which sc.textFile to use (the default
+     * one or this one).
      */
 
     val confBroadcast =

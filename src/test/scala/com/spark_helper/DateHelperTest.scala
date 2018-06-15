@@ -81,7 +81,7 @@ class DateHelperTest extends FunSuite {
     assert(DateHelper.nDaysBeforeDate(5, "170310", "yyMMdd") === "170305")
   }
 
-  test("Date it will be N days affter date") {
+  test("Date it will be N days after date") {
     assert(DateHelper.nDaysAfterDate(3, "20170307") === "20170310")
     assert(DateHelper.nDaysAfterDate(5, "170305", "yyMMdd") === "170310")
   }

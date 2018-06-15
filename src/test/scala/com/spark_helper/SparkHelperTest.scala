@@ -75,35 +75,30 @@ class SparkHelperTest
 
     val weirdFormatFilePath = s"$resourceFolder/some_weird_format.txt"
 
-    // 1: Let's read a file where a record begins with a line begining with
-    // 3 and other lines begining by 4:
+    // 1: Let's read a file where a record begins with a line beginning with
+    // 3 and other lines beginning by 4:
 
     HdfsHelper.deleteFile(weirdFormatFilePath)
 
-    val textContent = (
+    val textContent =
       "3 first line of the first record\n" +
         "4 another line of the first record\n" +
         "4 and another one for the first record\n" +
         "3 first line of the second record\n" +
         "3 first line of the third record\n" +
         "4 another line for the third record"
-    )
 
     HdfsHelper.writeToHdfsFile(textContent, weirdFormatFilePath)
 
     var computedRecords = sc.textFile(weirdFormatFilePath, "\n3").collect()
 
     var expectedRecords = Array(
-      (
-        "3 first line of the first record\n" +
-          "4 another line of the first record\n" +
-          "4 and another one for the first record"
-      ),
+      "3 first line of the first record\n" +
+        "4 another line of the first record\n" +
+        "4 and another one for the first record",
       " first line of the second record",
-      (
-        " first line of the third record\n" +
-          "4 another line for the third record"
-      )
+      " first line of the third record\n" +
+        "4 another line for the third record"
     )
 
     assert(computedRecords === expectedRecords)
@@ -132,15 +127,11 @@ class SparkHelperTest
 
     expectedRecords = Array(
       "<Customers>\n",
-      (
-        "<Address>34 thingy street, someplace, sometown</Address>\n" +
-          "</Customer>\n"
-      ),
-      (
-        "<Address>12 thingy street, someplace, sometown</Address>\n" +
-          "</Customer>\n" +
-          "</Customers>"
-      )
+      "<Address>34 thingy street, someplace, sometown</Address>\n" +
+        "</Customer>\n",
+      "<Address>12 thingy street, someplace, sometown</Address>\n" +
+        "</Customer>\n" +
+        "</Customers>"
     )
 
     assert(computedRecords === expectedRecords)
@@ -167,7 +158,7 @@ class SparkHelperTest
 
     val keyValueFolder = s"$resourceFolder/key_value_storage"
 
-    // 1: Let's strore key values per file:
+    // 1: Let's store key values per file:
 
     HdfsHelper.deleteFolder(keyValueFolder)
 
@@ -189,9 +180,9 @@ class SparkHelperTest
     assert(HdfsHelper.folderExists(keyValueFolder))
 
     // And it contains one file per key:
-    var genratedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
+    var generatedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
     var expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
-    assert(genratedKeyFiles === expectedKeyFiles)
+    assert(generatedKeyFiles === expectedKeyFiles)
 
     var valuesForKey1 = sc.textFile(s"$keyValueFolder/key_1").collect().sorted
     assert(valuesForKey1 === Array("value_a", "value_b"))
@@ -202,7 +193,7 @@ class SparkHelperTest
     val valuesForKey3 = sc.textFile(s"$keyValueFolder/key_3").collect().sorted
     assert(valuesForKey3 === Array("value_a", "value_b"))
 
-    // 2: Let's strore key values per file; but without providing the nbr of
+    // 2: Let's store key values per file; but without providing the nbr of
     // keys:
 
     HdfsHelper.deleteFolder(keyValueFolder)
@@ -213,14 +204,14 @@ class SparkHelperTest
     assert(HdfsHelper.folderExists(keyValueFolder))
 
     // And it contains one file per key:
-    genratedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
+    generatedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
     expectedKeyFiles = List("_SUCCESS", "key_1", "key_2", "key_3")
-    assert(genratedKeyFiles === expectedKeyFiles)
+    assert(generatedKeyFiles === expectedKeyFiles)
 
     valuesForKey1 = sc.textFile(s"$keyValueFolder/key_1").collect().sorted
     assert(valuesForKey1 === Array("value_a", "value_b"))
 
-    // 3: Let's strore key values per file and compress these files:
+    // 3: Let's store key values per file and compress these files:
 
     HdfsHelper.deleteFolder(keyValueFolder)
 
@@ -230,9 +221,9 @@ class SparkHelperTest
     assert(HdfsHelper.folderExists(keyValueFolder))
 
     // And it contains one file per key:
-    genratedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
+    generatedKeyFiles = HdfsHelper.listFileNamesInFolder(keyValueFolder)
     expectedKeyFiles = List("_SUCCESS", "key_1.gz", "key_2.gz", "key_3.gz")
-    assert(genratedKeyFiles === expectedKeyFiles)
+    assert(generatedKeyFiles === expectedKeyFiles)
 
     valuesForKey1 = sc.textFile(s"$keyValueFolder/key_1.gz").collect().sorted
     assert(valuesForKey1 === Array("value_a", "value_b"))
@@ -254,9 +245,9 @@ class SparkHelperTest
     rddToStore.saveAsTextFileAndCoalesce(testFolder, 2)
 
     // Let's check the nbr of partitions:
-    var genratedKeyFiles = HdfsHelper.listFileNamesInFolder(testFolder)
+    var generatedKeyFiles = HdfsHelper.listFileNamesInFolder(testFolder)
     var expectedKeyFiles = List("_SUCCESS", "part-00000", "part-00001")
-    assert(genratedKeyFiles === expectedKeyFiles)
+    assert(generatedKeyFiles === expectedKeyFiles)
 
     // And let's check the content:
     var singleFileStoredData = sc.textFile(testFolder).collect().sorted
@@ -269,9 +260,9 @@ class SparkHelperTest
     rddToStore.saveAsTextFileAndCoalesce(testFolder, 2, classOf[GzipCodec])
 
     // Let's check the nbr of partitions:
-    genratedKeyFiles = HdfsHelper.listFileNamesInFolder(testFolder)
+    generatedKeyFiles = HdfsHelper.listFileNamesInFolder(testFolder)
     expectedKeyFiles = List("_SUCCESS", "part-00000.gz", "part-00001.gz")
-    assert(genratedKeyFiles === expectedKeyFiles)
+    assert(generatedKeyFiles === expectedKeyFiles)
 
     // And let's check the content:
     singleFileStoredData = sc.textFile(testFolder).collect().sorted
@@ -350,7 +341,7 @@ class SparkHelperTest
       .map {
         case (filePath, line) =>
           val nonLocalPath = filePath.split("src/test/") match {
-            case Array(localPartOfPath, projectRelativePath) =>
+            case Array(_, projectRelativePath) =>
               "file:/.../src/test/" + projectRelativePath
           }
           (nonLocalPath, line)
@@ -411,7 +402,7 @@ class SparkHelperTest
 
     val in = sc.parallelize(Array(1, 3, 2, 7, 8))
     val computedOut = in.partialMap { case a if a % 2 == 0 => 2 * a }
-    val expetcedOut = sc.parallelize(Array(1, 3, 4, 7, 16))
-    assertRDDEquals(computedOut, expetcedOut)
+    val expectedOut = sc.parallelize(Array(1, 3, 4, 7, 16))
+    assertRDDEquals(computedOut, expectedOut)
   }
 }

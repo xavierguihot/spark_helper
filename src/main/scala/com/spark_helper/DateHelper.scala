@@ -12,7 +12,7 @@ import scala.util.Try
   * spark job and replace it with methods fully tested whose name is
   * self-explanatory/readable.
   *
-  * A few exemples:
+  * A few examples:
   *
   * {{{
   * assert(DateHelper.daysBetween("20161230", "20170101") == List("20161230", "20161231", "20170101"))
@@ -64,7 +64,7 @@ object DateHelper extends Serializable {
       *
       * @return today's date minus the given nbr of days
       */
-    def daysAgo(): String = DateHelper.nDaysBefore(int)
+    def daysAgo: String = DateHelper.nDaysBefore(int)
 
     /** Returns which date it was x days before the given date.
       *
@@ -92,7 +92,7 @@ object DateHelper extends Serializable {
       *
       * @return today's date plus the given nbr of days
       */
-    def daysAfter(): String = DateHelper.nDaysAfter(int)
+    def daysAfter: String = DateHelper.nDaysAfter(int)
 
     /** Returns which date it will be x days after the given date under the
       * default format.
@@ -112,7 +112,7 @@ object DateHelper extends Serializable {
 
   implicit class StringExtensions(val string: String) {
 
-    /** Validates the stringified date is compliant with the provided format.
+    /** Validates the formatted date is compliant with the provided format.
       *
       * {{{
       * assert("20170302".isCompliantWith("yyyyMMdd"))
@@ -136,7 +136,7 @@ object DateHelper extends Serializable {
       *
       * @return the date of the day after the given date
       */
-    def nextDay(): String = DateHelper.nextDay(string)
+    def nextDay: String = DateHelper.nextDay(string)
 
     /** Returns the date one day before the given date.
       *
@@ -144,7 +144,7 @@ object DateHelper extends Serializable {
       *
       * @return the date of the day before the given date
       */
-    def previousDay(): String = DateHelper.previousDay(string)
+    def previousDay: String = DateHelper.previousDay(string)
 
     /** Creates the list of dates between the two given dates.
       *
@@ -205,7 +205,7 @@ object DateHelper extends Serializable {
   ): List[DateTime] = {
 
     val nbrOfDaysWithinRange =
-      Days.daysBetween(jodaFirstDate, jodaLastDate).getDays()
+      Days.daysBetween(jodaFirstDate, jodaLastDate).getDays
 
     (0 to nbrOfDaysWithinRange).toList.map(jodaFirstDate.plusDays)
   }
@@ -385,7 +385,7 @@ object DateHelper extends Serializable {
     *
     * @return today's date under the default format
     */
-  def today(): String = nDaysBefore(0, defaultFormat)
+  def today: String = nDaysBefore(0, defaultFormat)
 
   /** Returns yesterday's date/time under the requested format.
     *
@@ -408,7 +408,7 @@ object DateHelper extends Serializable {
     *
     * @return yesterday's date under the default format
     */
-  def yesterday(): String = nDaysBefore(1, defaultFormat)
+  def yesterday: String = nDaysBefore(1, defaultFormat)
 
   /** Returns which date it was 2 days before today under the requested format.
     *
@@ -460,7 +460,7 @@ object DateHelper extends Serializable {
     * @return the current timestamps (nbr of millis since 1970-01-01) in the
     * local computer's zone.
     */
-  def currentTimestamp(): String = new DateTime().getMillis().toString
+  def currentTimestamp: String = new DateTime().getMillis.toString
 
   /** Returns the current UTC timestamp.
     *
@@ -469,7 +469,7 @@ object DateHelper extends Serializable {
     * @return the current UTC timestamps (nbr of millis since 1970-01-01).
     */
   def currentUtcTimestamp(): String =
-    new DateTime().withZone(DateTimeZone.UTC).getMillis().toString
+    new DateTime().withZone(DateTimeZone.UTC).getMillis.toString
 
   /** Returns for a date the date one day latter.
     *
@@ -521,7 +521,7 @@ object DateHelper extends Serializable {
         DateTimeFormat.forPattern(format).parseDateTime(date),
         new DateTime()
       )
-      .getDays()
+      .getDays
 
   /** Returns the nbr of days between the two given dates.
     *
@@ -552,7 +552,7 @@ object DateHelper extends Serializable {
         formatter.parseDateTime(firstDate),
         formatter.parseDateTime(lastDate)
       )
-      .getDays()
+      .getDays
   }
 
   /** Returns the date associated to the given UTC timestamp.
@@ -586,7 +586,7 @@ object DateHelper extends Serializable {
     * @return the associated day of week, such as 2 for Tuesday
     */
   def dayOfWeek(date: String, format: String = defaultFormat): Int =
-    DateTimeFormat.forPattern(format).parseDateTime(date).getDayOfWeek()
+    DateTimeFormat.forPattern(format).parseDateTime(date).getDayOfWeek
 
   /** Validates a string date is under the provided format.
     *
@@ -601,7 +601,7 @@ object DateHelper extends Serializable {
     * assert(!DateHelper.isDateCompliantWithFormat("24JAN17", "yyyyMMdd"))
     * }}}
     *
-    * @param stringValue the stringified date
+    * @param stringValue the formatted date
     * @return if the provided date is under the provided format
     */
   def isDateCompliantWithFormat(

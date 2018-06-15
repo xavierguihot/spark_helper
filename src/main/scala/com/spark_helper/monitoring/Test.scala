@@ -7,7 +7,7 @@ import java.lang.Math.abs
   * This is intended to be used as parameter of Monitor.updateByKpiValidation
   * and Monitor.updateByKpisValidation methods.
   *
-  * Some exemples of Test objects:
+  * Some examples of Test objects:
   * {{{
   * Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
   * Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
@@ -19,7 +19,7 @@ import java.lang.Math.abs
   *
   * @constructor Creates a Test object.
   *
-  * Some exemples of Test objects:
+  * Some examples of Test objects:
   * {{{
   * Test("pctOfWhatever", 0.06d, INFERIOR_THAN, 0.1d, PCT)
   * Test("pctOfSomethingElse", 0.27d, SUPERIOR_THAN, 0.3d, PCT)
@@ -42,22 +42,22 @@ final case class Test(
     kpiType: KpiType
 ) {
 
-  private[spark_helper] def isSuccess(): Boolean = thresholdType match {
+  private[spark_helper] def isSuccess: Boolean = thresholdType match {
     case EQUAL_TO      => kpiValue == appliedThreshold
     case SUPERIOR_THAN => abs(kpiValue) >= appliedThreshold
     case INFERIOR_THAN => abs(kpiValue) <= appliedThreshold
   }
 
-  override def toString(): String =
+  override def toString: String =
     List(
       "\tKPI: " + description,
       "\t\tValue: " + kpiValue.toString + kpiType.name,
       "\t\tMust be " + thresholdType.name + " " + appliedThreshold.toString + kpiType.name,
-      "\t\tValidated: " + isSuccess().toString
+      "\t\tValidated: " + isSuccess.toString
     ).mkString("\n")
 }
 
-/** An enumeration which represents the type of threshol to use (EQUAL_TO,
+/** An enumeration which represents the type of threshold to use (EQUAL_TO,
   * SUPERIOR_THAN or INFERIOR_THAN) */
 sealed trait ThresholdType { def name: String }
 

@@ -43,11 +43,11 @@ import com.spark_helper.HdfsHelper
 
 // A bunch of methods wrapping the FileSystem API, such as:
 HdfsHelper.fileExists("my/hdfs/file/path.txt") // HdfsHelper.folderExists("my/hdfs/folder")
-assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
-assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
-assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
+HdfsHelper.listFileNamesInFolder("my/folder/path") // List("file_name_1.txt", "file_name_2.csv")
+HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") // "20170306"
+HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") // 3
 HdfsHelper.deleteFile("my/hdfs/file/path.csv") // HdfsHelper.deleteFolder("my/hdfs/folder")
-HdfsHelper.moveFolder("my/hdfs/folder") // HdfsHelper.moveFile("my/hdfs/file.txt")
+HdfsHelper.moveFolder("old/path", "new/path") // HdfsHelper.moveFile("old/path.txt", "new/path.txt")
 HdfsHelper.createEmptyHdfsFile("/some/hdfs/file/path.token") // HdfsHelper.createFolder("my/hdfs/folder")
 
 // File content helpers:
@@ -103,14 +103,13 @@ rdd.saveAsSingleTextFile("/my/output/file/path.txt", classOf[BZip2Codec])
 // splitting the input with \n), it splits the file in records based on a custom
 // delimiter. This way, xml, json, yml or any multi-line record file format can
 // be used with Spark:
-sc.textFile("/my/input/folder/path", "---\n")
+sc.textFile("/my/input/folder/path", "---\n") // for a yml file for instance
 
 // Equivalent to rdd.flatMap(identity) for RDDs of Seqs or Options:
 rdd.flatten
 
-// Equivalent to sparkContext.textFile(), but for each line is tupled with its
-// file path:
-SparkHelper.textFileWithFileName("folder", sparkContext)
+// Equivalent to sc.textFile(), but for each line is tupled with its file path:
+sc.textFileWithFileName("/my/input/folder/path")
 // which produces:
 // RDD(("folder/file_1.txt", "record1fromfile1"), ("folder/file_1.txt", "record2fromfile1"),
 //    ("folder/file_2.txt", "record1fromfile2"), ...)
@@ -176,15 +175,15 @@ DateHelper.setFormat("ddMMMyy")
 The full list of methods is available at
 [Monitor](http://xavierguihot.com/spark_helper/#com.spark_helper.Monitor$)
 
-It's a simple logger/report which contains a report that one can update from
-the driver and a success state. The idea is to persist job executions logs and
-errors (and forget about grepping unreadable yarn logs).
+It's a simple logger/report which contains a report and a state that one can
+update from the driver. The idea is to persist job executions logs and errors
+(and forget about grepping unreadable yarn logs).
 
-It's designed for perdiodic spark jobs (handles storage and purge of logs) and
+It's designed for periodic spark jobs (handles storage and purge of logs) and
 provides a way to handle kpis validation.
 
 Logs are stored on the go which means one can have a direct real time access of
-the job logs/status and it's current state (which can overwise be a pain if it
+the job logs/status and it's current state (which can otherwise be a pain if it
 means going through yarn logs, or even for certain production environments going
 through additional layers of software logs to get to yarn logs).
 
@@ -198,9 +197,9 @@ the logger for a clean logging.
 This is a "driver-only" logger and is not intended at logging concurrent actions
 from executors.
 
-Produced reports can easily be inserted in a notification email whenerver the
+Produced reports can easily be inserted in a notification email whenever the
 job fails, which saves a lot of time to maintainers operating on heavy
-production environements.
+production environments.
 
 The produced persisted report is also a way for downstream jobs to know the
 status of their input data.
@@ -238,7 +237,7 @@ try {
     Monitor.error(e, "My pipeline descirption") // whatever unexpected error
 }
 
-if (Monitor.isSuccess()) {
+if (Monitor.isSuccess) {
   val doMore = "Let's do some more stuff!"
   Monitor.log("My second pipeline description: success")
 }
@@ -249,7 +248,7 @@ Monitor.store()
 
 // At the end of the job, if the job isn't successfull, you might want to
 // crash it (for instance to get a notification from your scheduler):
-if (!Monitor.isSuccess()) throw new Exception() // or send an email, or ...
+if (!Monitor.isSuccess) throw new Exception() // or send an email, or ...
 ```
 
 At any time during the job, logs can be accessed from file

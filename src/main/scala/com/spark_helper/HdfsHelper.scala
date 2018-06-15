@@ -36,7 +36,7 @@ import com.typesafe.config.{Config, ConfigFactory}
   * code and thus could instead just use
   * HdfsHelper.deleteFile("my/hdfs/file/path.csv").
   *
-  * A few exemples:
+  * A few examples:
   *
   * {{{
   * import com.spark_helper.HdfsHelper
@@ -49,7 +49,7 @@ import com.typesafe.config.{Config, ConfigFactory}
   * HdfsHelper.deleteFile("my/hdfs/file/path.csv")
   * HdfsHelper.moveFolder("my/hdfs/folder")
   * HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
-  * HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
+  * HdfsHelper.appendHeader("my/hdfs/file/path.csv", "column0,column1")
   *
   * // Some Xml/Typesafe helpers for hadoop as well:
   * HdfsHelper.isHdfsXmlCompliantWithXsd(
@@ -57,7 +57,7 @@ import com.typesafe.config.{Config, ConfigFactory}
   * HdfsHelper.loadXmlFileFromHdfs("my/hdfs/file/path.xml")
   *
   * // Very handy to load a config (typesafe format) stored on hdfs at the
-  * // begining of a spark job:
+  * // beginning of a spark job:
   * HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
   *
   * // In order to write small amount of data in a file on hdfs without the
@@ -90,7 +90,7 @@ object HdfsHelper extends Serializable {
     * If this setter is not used, the default Configuration is set with
     * <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">new Configuration()</code>.
     *
-    * @param conf the specific Configuration to use
+    * @param configuration the specific Configuration to use
     */
   def setConf(configuration: Configuration): Unit = {
     conf = configuration
@@ -306,8 +306,8 @@ object HdfsHelper extends Serializable {
 
   /** Creates an empty file on hdfs.
     *
-    * Might be usefull for token files. For instance a file which is only used
-    * as a timestamp token of the last update of a processus, or a file which
+    * Might be useful for token files. For instance a file which is only used
+    * as a timestamp token of the last update of a process, or a file which
     * blocks the execution of an other instance of the same job, ...
     *
     * Overwrites the file if it already exists.
@@ -398,7 +398,7 @@ object HdfsHelper extends Serializable {
         else if (recursive)
           listFileNamesInFolder(
             hdfsPath + "/" + status.getPath.getName,
-            true,
+            recursive = true,
             onlyName
           )
         // If it's a dir and we're not in a recursive option:
@@ -433,9 +433,9 @@ object HdfsHelper extends Serializable {
     * @return the joda DateTime of the last modification of the given file
     */
   def fileModificationDateTime(hdfsPath: String): DateTime =
-    new DateTime(hdfs.getFileStatus(new Path(hdfsPath)).getModificationTime())
+    new DateTime(hdfs.getFileStatus(new Path(hdfsPath)).getModificationTime)
 
-  /** Returns the stringified date of the last modification of the given file.
+  /** Returns the formatted date of the last modification of the given file.
     *
     * {{{
     * assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
@@ -445,7 +445,7 @@ object HdfsHelper extends Serializable {
     * modification date.
     * @param format (default = "yyyyMMdd") the format under which to get the
     * modification date.
-    * @return the stringified date of the last modification of the given file,
+    * @return the formatted date of the last modification of the given file,
     * under the provided format.
     */
   def fileModificationDate(
@@ -463,7 +463,7 @@ object HdfsHelper extends Serializable {
   def folderModificationDateTime(hdfsPath: String): DateTime =
     fileModificationDateTime(hdfsPath)
 
-  /** Returns the stringified date of the last modification of the given folder.
+  /** Returns the formatted date of the last modification of the given folder.
     *
     * {{{
     * assert(HdfsHelper.folderModificationDate("my/hdfs/folder") == "20170306")
@@ -473,7 +473,7 @@ object HdfsHelper extends Serializable {
     * modification date.
     * @param format (default = "yyyyMMdd") the format under which to get the
     * modification date.
-    * @return the stringified date of the last modification of the given folder,
+    * @return the formatted date of the last modification of the given folder,
     * under the provided format.
     */
   def folderModificationDate(
@@ -495,17 +495,17 @@ object HdfsHelper extends Serializable {
   def nbrOfDaysSinceFileWasLastModified(hdfsPath: String): Int =
     Days
       .daysBetween(fileModificationDateTime(hdfsPath), new DateTime())
-      .getDays()
+      .getDays
 
   /** Appends a header and a footer to a file.
     *
-    * Usefull when creating an xml file with spark and you need to add top level
+    * Useful when creating an xml file with spark and you need to add top level
     * tags.
     *
     * If the workingFolderPath parameter is provided, then the processing is
     * done in a working/tmp folder and then only, the final file is moved to its
     * final real location. This way, in case of cluster instability, i.e. in
-    * case the Spark job is interupted, this avoids having a temporary or
+    * case the Spark job is interrupted, this avoids having a temporary or
     * corrupted file in output.
     *
     * @param filePath the path of the file for which to add the header and the
@@ -528,13 +528,13 @@ object HdfsHelper extends Serializable {
 
   /** Appends a header to a file.
     *
-    * Usefull when creating a csv file with spark and you need to add a header
+    * Useful when creating a csv file with spark and you need to add a header
     * describing the different fields.
     *
     * If the workingFolderPath parameter is provided, then the processing is
     * done in a working/tmp folder and then only, the final file is moved to its
     * final real location. This way, in case of cluster instability, i.e. in
-    * case the Spark job is interupted, this avoids having a temporary or
+    * case the Spark job is interrupted, this avoids having a temporary or
     * corrupted file in output.
     *
     * @param filePath the path of the file for which to add the header
@@ -557,7 +557,7 @@ object HdfsHelper extends Serializable {
     * If the workingFolderPath parameter is provided, then the processing is
     * done in a working/tmp folder and then only, the final file is moved to its
     * final real location. This way, in case of cluster instability, i.e. in
-    * case the Spark job is interupted, this avoids having a temporary or
+    * case the Spark job is interrupted, this avoids having a temporary or
     * corrupted file in output.
     *
     * @param filePath the path of the file for which to add the footer
@@ -589,7 +589,7 @@ object HdfsHelper extends Serializable {
       validateHdfsXmlWithXsd(hdfsXmlPath, xsdFile)
       true
     } catch {
-      case saxe: SAXException => false
+      case _: SAXException => false
     }
 
   /** Validates an XML file on hdfs in regard to the given XSD.
@@ -615,7 +615,7 @@ object HdfsHelper extends Serializable {
     validator.validate(xmlFile)
   }
 
-  /** Loads a typesafe config from Hdfs.
+  /** Loads a Typesafe config from Hdfs.
     *
     * The best way to load the configuration of your job from hdfs.
     *
@@ -643,8 +643,8 @@ object HdfsHelper extends Serializable {
     * }
     * }}}
     *
-    * @param hdfsConfigPath the absolute path of the typesafe config file on
-    * hdfs we want to load as a typesafe Config object.
+    * @param hdfsConfigPath the absolute path of the Typesafe config file on
+    * hdfs we want to load as a Typesafe Config object.
     * @return the com.typesafe.config.Config object which contains usable data
     */
   def loadTypesafeConfigFromHdfs(hdfsConfigPath: String): Config = {
@@ -746,8 +746,8 @@ object HdfsHelper extends Serializable {
       .filter(path => {
 
         val fileAgeInDays = Days
-          .daysBetween(new DateTime(path.getModificationTime()), new DateTime())
-          .getDays()
+          .daysBetween(new DateTime(path.getModificationTime), new DateTime())
+          .getDays
 
         fileAgeInDays >= purgeAge
 

@@ -21,7 +21,7 @@ import scala.util.Random
   * spark job and replace it with methods fully tested whose name is
   * self-explanatory/readable.
   *
-  * A few exemples:
+  * A few examples:
   *
   * {{{
   * // Same as sc.saveAsTextFile(path), but the result is a single file:
@@ -83,7 +83,7 @@ object SparkHelper extends Serializable {
     /** Saves an RDD in exactly one file.
       *
       * Allows one to save an RDD in one file, while keeping the processing
-      * parallelized.
+      * distributed.
       *
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt") }}}
       *
@@ -95,7 +95,7 @@ object SparkHelper extends Serializable {
     /** Saves an RDD in exactly one file.
       *
       * Allows one to save an RDD in one file, while keeping the processing
-      * parallelized.
+      * distributed.
       *
       * {{{ rdd.saveAsSingleTextFile("/my/file/path.txt", classOf[BZip2Codec]) }}}
       *
@@ -112,7 +112,7 @@ object SparkHelper extends Serializable {
     /** Saves an RDD in exactly one file.
       *
       * Allows one to save an RDD in one file, while keeping the processing
-      * parallelized.
+      * distributed.
       *
       * This variant of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsSingleTextFile</code>
       * performs the storage in a temporary folder instead of directly in the
@@ -136,7 +136,7 @@ object SparkHelper extends Serializable {
     /** Saves an RDD in exactly one file.
       *
       * Allows one to save an RDD in one file, while keeping the processing
-      * parallelized.
+      * distributed.
       *
       * This variant of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsSingleTextFile</code>
       * performs the storage in a temporary folder instead of directly in the
@@ -174,8 +174,8 @@ object SparkHelper extends Serializable {
       * The result is equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.coalesce(x).saveAsTextFile()</code>
       * , but if <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">x</code>
       * is very low, <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">coalesce</code>
-      * would make the processing time explode, wherease this methods keeps the
-      * processing parallelized, save as text file and then only merges the
+      * would make the processing time explode, whereas this methods keeps the
+      * processing distributed, save as text file and then only merges the
       * result in a lower nbr of partitions.
       *
       * {{{ rdd.saveAsTextFileAndCoalesce("/produced/folder/path/with/only/30/files", 30) }}}
@@ -219,8 +219,8 @@ object SparkHelper extends Serializable {
       * The result is equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.coalesce(x).saveAsTextFile()</code>
       * , but if <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">x</code>
       * is very low, <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">coalesce</code>
-      * would make the processing time explode, wherease this methods keeps the
-      * processing parallelized, save as text file and then only merges the
+      * would make the processing time explode, whereas this methods keeps the
+      * processing distributed, save as text file and then only merges the
       * result in a lower nbr of partitions.
       *
       * {{{ rdd.saveAsTextFileAndCoalesce("/produced/folder/path/with/only/30/files", 30, classOf[BZip2Codec]) }}}
@@ -261,7 +261,7 @@ object SparkHelper extends Serializable {
 
   implicit class SeqRDDExtensions[T: ClassTag](val rdd: RDD[Seq[T]]) {
 
-    /** Flattens an <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[Seq[T]]</code>
+    /** Flattens an RDD of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Seq[T]</code>
       * to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.
       *
       * {{{ sc.parallelize(Array(Seq(1, 2, 3), Nil, Seq(4))).flatten == sc.parallelize(Array(Seq(1, 2, 3, 4))) }}}
@@ -270,12 +270,12 @@ object SparkHelper extends Serializable {
       * or <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">List.flatten</code>
       * would have.
       */
-    def flatten(): RDD[T] = rdd.flatMap(identity)
+    def flatten: RDD[T] = rdd.flatMap(identity)
   }
 
   implicit class OptionRDDExtensions[T: ClassTag](val rdd: RDD[Option[T]]) {
 
-    /** Flattens an <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[Option[T]]</code>
+    /** Flattens an RDD of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Option[T]</code>
       * to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.
       *
       * {{{ sc.parallelize(Array(Some(1), None, Some(2))).flatten == sc.parallelize(Array(Seq(1, 2))) }}}
@@ -284,7 +284,7 @@ object SparkHelper extends Serializable {
       * or <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">List.flatten</code>
       * would have.
       */
-    def flatten(): RDD[T] = rdd.flatMap(o => o)
+    def flatten: RDD[T] = rdd.flatMap(o => o)
   }
 
   implicit class PairRDDExtensions(val rdd: RDD[(String, String)])
@@ -306,7 +306,7 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path") }}}
       *
-      * @param path the folder where will be storrred key files
+      * @param path the folder where will be stored key files
       */
     def saveAsTextFileByKey(path: String): Unit =
       SparkHelper.saveAsTextFileByKeyInternal(rdd, path, None, None)
@@ -322,8 +322,8 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path", 12) }}}
       *
-      * @param path the folder where will be storrred key files
-      * @param keyNbr the nbr of expected keys (which is the nbr of outputed
+      * @param path the folder where will be stored key files
+      * @param keyNbr the nbr of expected keys (which is the nbr of output
       * files)
       */
     def saveAsTextFileByKey(path: String, keyNbr: Int): Unit =
@@ -346,7 +346,7 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path", classOf[BZip2Codec]) }}}
       *
-      * @param path the folder where will be storrred key files
+      * @param path the folder where will be stored key files
       * @param codec the type of compression to use (for instance
       * classOf[BZip2Codec] or classOf[GzipCodec]))
       */
@@ -367,8 +367,8 @@ object SparkHelper extends Serializable {
       *
       * {{{ rdd.saveAsTextFileByKey("/my/output/folder/path", 12, classOf[BZip2Codec]) }}}
       *
-      * @param path the folder where will be storrred key files
-      * @param keyNbr the nbr of expected keys (which is the nbr of outputed
+      * @param path the folder where will be stored key files
+      * @param keyNbr the nbr of expected keys (which is the nbr of output
       * files)
       * @param codec the type of compression to use (for instance
       * classOf[BZip2Codec] or classOf[GzipCodec]))
@@ -667,11 +667,11 @@ object SparkHelper extends Serializable {
   /** Saves RDD in exactly one file.
     *
     * Allows one to save an RDD as one text file, but at the same time to keep
-    * the processing parallelized.
+    * the processing distributed.
     *
     * @param outputRDD the RDD of strings to save as text file
     * @param path the path where to save the file
-    * @param compression the compression codec to use (can be left to None)
+    * @param codec the compression codec to use (can be left to None)
     */
   private def saveAsSingleTextFileInternal(
       outputRDD: RDD[String],
@@ -685,8 +685,8 @@ object SparkHelper extends Serializable {
     // Classic saveAsTextFile in a temporary folder:
     HdfsHelper.deleteFolder(s"$path.tmp")
     codec match {
-      case Some(codec) =>
-        outputRDD.saveAsTextFile(s"$path.tmp", codec)
+      case Some(compression) =>
+        outputRDD.saveAsTextFile(s"$path.tmp", compression)
       case None =>
         outputRDD.saveAsTextFile(s"$path.tmp")
     }
@@ -718,25 +718,22 @@ object SparkHelper extends Serializable {
     val isCached = rdd.getStorageLevel.useMemory
 
     // If the nbr of keys isn't provided, we have to get it ourselves:
-    val keyNbr = optKeyNbr match {
-      case Some(keyNbr) =>
-        keyNbr
-      case None =>
-        if (!isCached)
-          rdd.cache()
-        rdd.keys.distinct.count.toInt
+    val keyNbr = optKeyNbr.getOrElse {
+      if (!isCached)
+        rdd.cache()
+      rdd.keys.distinct.count.toInt
     }
 
     val prdd = rdd.partitionBy(new HashPartitioner(keyNbr))
 
     codec match {
-      case Some(codec) =>
+      case Some(compression) =>
         prdd.saveAsHadoopFile(
           path,
           classOf[String],
           classOf[String],
           classOf[KeyBasedOutput],
-          codec
+          compression
         )
       case None =>
         prdd.saveAsHadoopFile(
@@ -764,8 +761,8 @@ object SparkHelper extends Serializable {
       .coalesce(finalCoalesceLevel)
 
     codec match {
-      case Some(codec) =>
-        intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder, codec)
+      case Some(compression) =>
+        intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder, compression)
       case None =>
         intermediateRDD.saveAsTextFile(lowerCoalescenceLevelFolder)
     }
