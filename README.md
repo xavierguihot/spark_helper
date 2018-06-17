@@ -5,8 +5,6 @@
 ## Overview
 
 
-Version: 1.1.1
-
 API Scaladoc: [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$)
 
 This library contains a bunch of low-level basic methods for data processing
@@ -300,7 +298,7 @@ With sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "v1.1.1"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.0"
 ```
 
 With maven:
@@ -316,7 +314,7 @@ With maven:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>v1.1.1</version>
+	<version>2.0.0</version>
 </dependency>
 ```
 
@@ -330,7 +328,7 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:v1.1.1'
+	compile 'com.github.xavierguihot:spark_helper:2.0.0'
 }
 ```
 
