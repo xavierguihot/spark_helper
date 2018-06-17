@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>SparkHelper - com.spark_helper.SparkHelper</title>
-          <meta name="description" content="SparkHelper - com.spark helper.SparkHelper" />
-          <meta name="keywords" content="SparkHelper com.spark helper.SparkHelper" />
+          <title>OptionRDDExtensions - com.spark_helper.SparkHelper.OptionRDDExtensions</title>
+          <meta name="description" content="OptionRDDExtensions - com.spark helper.SparkHelper.OptionRDDExtensions" />
+          <meta name="keywords" content="OptionRDDExtensions com.spark helper.SparkHelper.OptionRDDExtensions" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../index.html';
-            var hash = 'com.spark_helper.SparkHelper$';
+            var hash = 'com.spark_helper.SparkHelper$$OptionRDDExtensions';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,14 +26,14 @@
    	  </script>
     
         </head>
-        <body class="value">
+        <body class="type">
       <div id="definition">
-        <img alt="Object" src="../../lib/object_big.png" />
-        <p id="owner"><a href="../package.html" class="extype" name="com">com</a>.<a href="package.html" class="extype" name="com.spark_helper">spark_helper</a></p>
-        <h1>SparkHelper</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="com.spark_helper">package spark_helper</a>
+        <img alt="Class" src="../../lib/class_big.png" />
+        <p id="owner"><a href="../package.html" class="extype" name="com">com</a>.<a href="package.html" class="extype" name="com.spark_helper">spark_helper</a>.<a href="SparkHelper$.html" class="extype" name="com.spark_helper.SparkHelper">SparkHelper</a></p>
+        <h1>OptionRDDExtensions</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="SparkHelper$.html" class="extype" name="com.spark_helper.SparkHelper">package SparkHelper</a>
           </div></span></h3><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -41,51 +41,17 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">SparkHelper</span><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">OptionRDDExtensions</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A facility to deal with RDD/file manipulations based on the Spark API.</p><p>The goal is to remove the maximum of highly used low-level code from your
-spark job and replace it with methods fully tested whose name is
-self-explanatory/readable.</p><p>A few examples:</p><pre><span class="kw">import</span> com.spark_helper.SparkHelper._
-
-<span class="cmt">// Same as rdd.saveAsTextFile("path"), but the result is a single file (while</span>
-<span class="cmt">// keeping the processing distributed):</span>
-rdd.saveAsSingleTextFile(<span class="lit">"/my/output/file/path.txt"</span>)
-rdd.saveAsSingleTextFile(<span class="lit">"/my/output/file/path.txt"</span>, classOf[BZip2Codec])
-
-<span class="cmt">// Same as sc.textFile("path"), but instead of reading one record per line (by</span>
-<span class="cmt">// splitting the input with \n), it splits the file in records based on a custom</span>
-<span class="cmt">// delimiter. This way, xml, json, yml or any multi-line record file format can</span>
-<span class="cmt">// be used with Spark:</span>
-sc.textFile(<span class="lit">"/my/input/folder/path"</span>, <span class="lit">"---\n"</span>) <span class="cmt">// for a yml file for instance</span>
-
-<span class="cmt">// Equivalent to rdd.flatMap(identity) for RDDs of Seqs or Options:</span>
-rdd.flatten
-
-<span class="cmt">// Equivalent to sc.textFile(), but for each line is tupled with its file path:</span>
-sc.textFileWithFileName(<span class="lit">"/my/input/folder/path"</span>)
-<span class="cmt">// which produces:</span>
-<span class="cmt">// RDD(("folder/file_1.txt", "record1fromfile1"), ("folder/file_1.txt", "record2fromfile1"),</span>
-<span class="cmt">//    ("folder/file_2.txt", "record1fromfile2"), ...)</span>
-
-<span class="cmt">// In the given folder, this generates one file per key in the given key/value</span>
-<span class="cmt">// RDD. Within each file (named from the key) are all values for this key:</span>
-rdd.saveAsTextFileByKey(<span class="lit">"/my/output/folder/path"</span>)
-
-<span class="cmt">// Concept mapper (the following example transforms RDD(1, 3, 2, 7, 8) into RDD(1, 3, 4, 7, 16)):</span>
-rdd.partialMap { <span class="kw">case</span> a <span class="kw">if</span> a % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> <span class="num">2</span> * a }
-
-<span class="cmt">// For when input files contain commas and textFile can't handle it:</span>
-sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt"</span>, <span class="lit">"path/hello_world.txt"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
-/main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>sc.parallelize[T](elmts: T*) instead of sc.parallelize[T](elmts: Array[T])</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -103,7 +69,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.spark_helper.SparkHelper"><span>SparkHelper</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.spark_helper.SparkHelper.OptionRDDExtensions"><span>OptionRDDExtensions</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -120,114 +86,29 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
 
       <div id="template">
         <div id="allMembers">
-        
-
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="com.spark_helper.SparkHelper.OptionRDDExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="OptionRDDExtensions[T]extendsAnyRef"></a>
-      <a id="OptionRDDExtensions[T]:OptionRDDExtensions[T]"></a>
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="com.spark_helper.SparkHelper.OptionRDDExtensions#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[Option[T]])(implicitevidence$3:scala.reflect.ClassTag[T]):com.spark_helper.SparkHelper.OptionRDDExtensions[T]"></a>
+      <a id="&lt;init&gt;:OptionRDDExtensions[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
+        <span class="modifier"></span>
+        <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <a href="SparkHelper$$OptionRDDExtensions.html"><span class="name">OptionRDDExtensions</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">OptionRDDExtensions</span><span class="params">(<span name="rdd">rdd: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.spark_helper.SparkHelper.OptionRDDExtensions.T">T</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="com.spark_helper.SparkHelper.OptionRDDExtensions.T">T</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@OptionRDDExtensions[T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="PairRDDExtensionsextendsAnyVal"></a>
-      <a id="PairRDDExtensions:PairRDDExtensions"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit final </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SparkHelper$$PairRDDExtensions.html"><span class="name">PairRDDExtensions</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@PairRDDExtensionsextendsAnyVal" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="com.spark_helper.SparkHelper.RDDExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RDDExtensions[T]extendsAnyRef"></a>
-      <a id="RDDExtensions[T]:RDDExtensions[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SparkHelper$$RDDExtensions.html"><span class="name">RDDExtensions</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@RDDExtensions[T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="com.spark_helper.SparkHelper.SeqRDDExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SeqRDDExtensions[T]extendsAnyRef"></a>
-      <a id="SeqRDDExtensions[T]:SeqRDDExtensions[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SparkHelper$$SeqRDDExtensions.html"><span class="name">SeqRDDExtensions</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@SeqRDDExtensions[T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="com.spark_helper.SparkHelper.SparkContextExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="SparkContextExtensionsextendsAnyVal"></a>
-      <a id="SparkContextExtensions:SparkContextExtensions"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit final </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SparkHelper$$SparkContextExtensions.html"><span class="name">SparkContextExtensions</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@SparkContextExtensionsextendsAnyVal" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="com.spark_helper.SparkHelper.StringRDDExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="StringRDDExtensionsextendsAnyVal"></a>
-      <a id="StringRDDExtensions:StringRDDExtensions"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit final </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="SparkHelper$$StringRDDExtensions.html"><span class="name">StringRDDExtensions</span></a><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@StringRDDExtensionsextendsAnyVal" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[Option[T]])(implicitevidence$3:scala.reflect.ClassTag[T]):com.spark_helper.SparkHelper.OptionRDDExtensions[T]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li></ol>
             </div>
+
+        
 
         
 
@@ -245,7 +126,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -262,7 +143,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@##():Int" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@##():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -279,7 +160,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -296,7 +177,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -313,7 +194,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@clone():Object" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@clone():Object" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -336,7 +217,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -353,7 +234,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -370,7 +251,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@finalize():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -381,6 +262,27 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.OptionRDDExtensions#flatten" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flatten:org.apache.spark.rdd.RDD[T]"></a>
+      <a id="flatten:RDD[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flatten</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="com.spark_helper.SparkHelper.OptionRDDExtensions.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@flatten:org.apache.spark.rdd.RDD[T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Flattens an RDD of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Option[T]</code>
+to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.</code></code></p><div class="fullcomment"><div class="comment cmt"><p>Flattens an RDD of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Option[T]</code>
+to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.</p><pre>sc.parallelize(<span class="std">Array</span>(<span class="std">Some</span>(<span class="num">1</span>), <span class="std">None</span>, <span class="std">Some</span>(<span class="num">2</span>))).flatten == sc.parallelize(<span class="std">Array</span>(<span class="std">Seq</span>(<span class="num">1</span>, <span class="num">2</span>)))</pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the flat RDD as <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD.flatMap(x => x)</code>
+or <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">List.flatten</code>
+would have.</p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -393,7 +295,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -410,7 +312,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@hashCode():Int" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -427,7 +329,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -444,7 +346,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -461,7 +363,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@notify():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@notify():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -478,11 +380,28 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.OptionRDDExtensions#rdd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="rdd:org.apache.spark.rdd.RDD[Option[T]]"></a>
+      <a id="rdd:RDD[Option[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rdd</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="scala.Option">Option</span>[<span class="extype" name="com.spark_helper.SparkHelper.OptionRDDExtensions.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@rdd:org.apache.spark.rdd.RDD[Option[T]]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -495,7 +414,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -512,7 +431,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@toString():String" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@toString():String" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -529,7 +448,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@wait():Unit" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@wait():Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -552,7 +471,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -575,7 +494,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$OptionRDDExtensions@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -595,11 +514,7 @@ sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.Serializable">
-              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="java.io.Serializable">
-              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

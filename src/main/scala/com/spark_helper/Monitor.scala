@@ -534,7 +534,8 @@ object Monitor {
         require(
           logDirectory.nonEmpty,
           "to save the report, please specify the log folder using " +
-            "Monitor.setLogFolder(\"hdfs/path/to/log/folder\")")
+            "Monitor.setLogFolder(\"hdfs/path/to/log/folder\")"
+        )
     }
   }
 

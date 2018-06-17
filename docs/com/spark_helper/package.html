@@ -90,14 +90,31 @@
 <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</a></p><div class="fullcomment"><div class="comment cmt"><p>A facility which deals with usual date needs (wrapper around
 <a href="http://www.joda.org/joda-time/apidocs/">joda-time</a>).</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
-self-explanatory/readable.</p><p>A few exemples:</p><pre>assert(DateHelper.daysBetween(<span class="lit">"20161230"</span>, <span class="lit">"20170101"</span>) == <span class="std">List</span>(<span class="lit">"20161230"</span>, <span class="lit">"20161231"</span>, <span class="lit">"20170101"</span>))
-assert(DateHelper.today() == <span class="lit">"20170310"</span>) <span class="cmt">// If today's "20170310"</span>
-assert(DateHelper.yesterday() == <span class="lit">"20170309"</span>) <span class="cmt">// If today's "20170310"</span>
-assert(DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) == <span class="lit">"170327"</span>)
-assert(DateHelper.now(<span class="lit">"HH:mm"</span>) == <span class="lit">"10:24"</span>)
-assert(DateHelper.currentTimestamp() == <span class="lit">"1493105229736"</span>)
-assert(DateHelper.nDaysBefore(<span class="num">3</span>) == <span class="lit">"20170307"</span>) <span class="cmt">// If today's "20170310"</span>
-assert(DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) == <span class="lit">"20170310"</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+self-explanatory/readable.</p><p>A few examples:</p><pre><span class="kw">import</span> com.spark_helper.DateHelper
+
+DateHelper.daysBetween(<span class="lit">"20161230"</span>, <span class="lit">"20170101"</span>) <span class="cmt">// List("20161230", "20161231", "20170101")</span>
+DateHelper.today <span class="cmt">// "20170310"</span>
+DateHelper.yesterday <span class="cmt">// "20170309"</span>
+DateHelper.reformatDate(<span class="lit">"20170327"</span>, <span class="lit">"yyyyMMdd"</span>, <span class="lit">"yyMMdd"</span>) <span class="cmt">// "170327"</span>
+DateHelper.now(<span class="lit">"HH:mm"</span>) <span class="cmt">// "10:24"</span>
+DateHelper.currentTimestamp <span class="cmt">// "1493105229736"</span>
+DateHelper.nDaysBefore(<span class="num">3</span>) <span class="cmt">// "20170307"</span>
+DateHelper.nDaysAfterDate(<span class="num">3</span>, <span class="lit">"20170307"</span>) <span class="cmt">// "20170310"</span>
+DateHelper.nextDay(<span class="lit">"20170310"</span>) <span class="cmt">// "20170311"</span>
+DateHelper.nbrOfDaysSince(<span class="lit">"20170302"</span>) <span class="cmt">// 8</span>
+DateHelper.nbrOfDaysBetween(<span class="lit">"20170327"</span>, <span class="lit">"20170401"</span>) <span class="cmt">// 5</span>
+DateHelper.dayOfWeek(<span class="lit">"20160614"</span>) <span class="cmt">// 2</span>
+
+<span class="kw">import</span> com.spark_helper.DateHelper._
+
+<span class="num">2.</span>daysAgo <span class="cmt">// "20170308"</span>
+<span class="lit">"20161230"</span> to <span class="lit">"20170101"</span> <span class="cmt">// List("20161230", "20161231", "20170101")</span>
+<span class="num">3.</span>daysBefore(<span class="lit">"20170310"</span>) <span class="cmt">// "20170307"</span>
+<span class="num">5.</span>daysAfter <span class="cmt">// "20170315"</span>
+<span class="num">4.</span>daysAfter(<span class="lit">"20170310"</span>) <span class="cmt">// "20170314"</span>
+<span class="lit">"20170302"</span>.isCompliantWith(<span class="lit">"yyyyMMdd"</span>)
+<span class="lit">"20170310"</span>.nextDay <span class="cmt">// "20170311"</span>
+<span class="lit">"20170310"</span>.previousDay <span class="cmt">// "20170309"</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/DateHelper.scala">DateHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -122,38 +139,39 @@ Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apa
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>For instance, one don't want to remove a file from hdfs using 3 lines of
 code and thus could instead just use
-HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
+HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few examples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
 
 <span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
-HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
-assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))
-assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
-assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
-HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>)
-HdfsHelper.moveFolder(<span class="lit">"my/hdfs/folder"</span>)
+HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>) <span class="cmt">// HdfsHelper.folderExists("my/hdfs/folder")</span>
+HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) <span class="cmt">// List("file_name_1.txt", "file_name_2.csv")</span>
+HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) <span class="cmt">// "20170306"</span>
+HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) <span class="cmt">// 3</span>
+HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>) <span class="cmt">// HdfsHelper.deleteFolder("my/hdfs/folder")</span>
+HdfsHelper.moveFolder(<span class="lit">"old/path"</span>, <span class="lit">"new/path"</span>) <span class="cmt">// HdfsHelper.moveFile("old/path.txt", "new/path.txt")</span>
+HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>) <span class="cmt">// HdfsHelper.createFolder("my/hdfs/folder")</span>
+
+<span class="cmt">// File content helpers:</span>
 HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])
 HdfsHelper.appendHeader(<span class="lit">"my/hdfs/file/path.csv"</span>, <span class="lit">"colum0,column1"</span>)
 
 <span class="cmt">// Some Xml/Typesafe helpers for hadoop as well:</span>
-HdfsHelper.isHdfsXmlCompliantWithXsd(
-  <span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
+HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
 HdfsHelper.loadXmlFileFromHdfs(<span class="lit">"my/hdfs/file/path.xml"</span>)
 
-<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the</span>
-<span class="cmt">// begining of a spark job:</span>
+<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the beginning of a spark job:</span>
 HdfsHelper.loadTypesafeConfigFromHdfs(<span class="lit">"my/hdfs/file/path.conf"</span>): Config
 
-<span class="cmt">// In order to write small amount of data in a file on hdfs without the</span>
-<span class="cmt">// whole spark stack:</span>
-HdfsHelper.writeToHdfsFile(
-  <span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>),
-  <span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="cmt">// In order to write small amount of data in a file on hdfs without the whole spark stack:</span>
+HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="cmt">// or:</span>
+<span class="kw">import</span> com.spark_helper.HdfsHelper._
+<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>).writeToHdfs(<span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="lit">"hello world"</span>.writeToHdfs(<span class="lit">"/some/hdfs/file/path.txt"</span>)
 
-<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the</span>
-<span class="cmt">// timestamp is older than 10 days:</span>
+<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:</span>
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>Create a touch method</p></span></dd></dl></div>
     </li><li name="com.spark_helper.Monitor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Monitor"></a>
       <a id="Monitor:Monitor"></a>
@@ -170,11 +188,11 @@ HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span cla
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A logger dedicated to Spak jobs.</p><div class="fullcomment"><div class="comment cmt"><p>A logger dedicated to Spak jobs.</p><p>It's a simple logger/report which contains a report that one can update from
+      <p class="shortcomment cmt">A logger dedicated to Spark jobs.</p><div class="fullcomment"><div class="comment cmt"><p>A logger dedicated to Spark jobs.</p><p>It's a simple logger/report which contains a report that one can update from
 the driver and a success state. The idea is to persist job executions logs
-and errors (and forget about grepping unreadable yarn logs).</p><p>It's designed for perdiodic spark jobs (handles storage and purge of logs)
+and errors (and forget about grepping unreadable yarn logs).</p><p>It's designed for periodic spark jobs (handles storage and purge of logs)
 and provides a way to handle kpis validation.</p><p>Logs are stored on the go which means one can have a direct real time access
-of the job logs/status and it's current state (which can overwise be a pain
+of the job logs/status and it's current state (which can otherwise be a pain
 if it means going through yarn logs, or even for certain production
 environments going through additional layers of software logs to get to yarn
 logs).</p><p>One of the issues this logger aims at tackling is the handling of exceptions
@@ -183,9 +201,9 @@ mean one want to make the job fail. Or if it's the case, one might still
 want to perform a few actions before letting the job crash. The idea is thus
 to surround (driver side) a Spark pipeline within a try catch and redirect
 the exception to the logger for a clean logging.</p><p>This is a &quot;driver-only&quot; logger and is not intended at logging concurrent
-actions from executors.</p><p>Produced reports can easily be inserted in a notification email whenerver
+actions from executors.</p><p>Produced reports can easily be inserted in a notification email whenever
 the job fails, which saves a lot of time to maintainers operating on heavy
-production environements.</p><p>The produced persisted report is also a way for downstream jobs to know the
+production environments.</p><p>The produced persisted report is also a way for downstream jobs to know the
 status of their input data.</p><p>Let's go through a simple Spark job example monitored with this Monitor
 facility:</p><pre>Monitor.setTitle(<span class="lit">"My job title"</span>)
 Monitor.addDescription(
@@ -204,7 +222,7 @@ Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
       Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), SUPERIOR_THAN, <span class="num">10</span>e6d, NBR),
       Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, INFERIOR_THAN, <span class="num">3</span>, PCT)
     ),
-    <span class="lit">"My pipeline descirption"</span>
+    <span class="lit">"My pipeline description"</span>
   )
 
   <span class="kw">if</span> (outputIsValid)
@@ -212,9 +230,9 @@ Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
 
 } <span class="kw">catch</span> {
   <span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span>
-    Monitor.error(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+    Monitor.error(iie, <span class="lit">"My pipeline description"</span>, diagnostic = <span class="lit">"No input data!"</span>)
   <span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span>
-    Monitor.error(e, <span class="lit">"My pipeline descirption"</span>) <span class="cmt">// whatever unexpected error</span>
+    Monitor.error(e, <span class="lit">"My pipeline description"</span>) <span class="cmt">// whatever unexpected error</span>
 }
 
 <span class="kw">if</span> (Monitor.isSuccess()) {
@@ -226,7 +244,7 @@ Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
 <span class="cmt">// HDFS (this saves the logs in the folder set with Monitor.setLogFolder):</span>
 Monitor.store()
 
-<span class="cmt">// At the end of the job, if the job isn't successfull, you might want to</span>
+<span class="cmt">// At the end of the job, if the job isn't successful, you might want to</span>
 <span class="cmt">// crash it (for instance to get a notification from your scheduler):</span>
 <span class="kw">if</span> (!Monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception() <span class="cmt">// or send an email, or ...</span></pre><p>At any time during the job, logs can be accessed from file
 path/to/log/folder/current.ongoing</p><p>If we were to read the stored report after this simple pipeline, here are
@@ -234,8 +252,8 @@ some possible reports:</p><p>First scenario, problem with the input of the job:<
 
 My job description (whatever you want); <span class="kw">for</span> instance:
 Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
-[<span class="num">10</span>:<span class="num">23</span>] Begining
-[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
+[<span class="num">10</span>:<span class="num">23</span>] Beginning
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline description: failed
   Diagnostic: No input data!
     org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
     at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
@@ -245,18 +263,18 @@ Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</s
 
 My job description (whatever you want); <span class="kw">for</span> instance:
 Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
-[<span class="num">10</span>:<span class="num">23</span>] Begining
-[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
+[<span class="num">10</span>:<span class="num">23</span>] Beginning
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline description: failed
     java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
     java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
     java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
     ...
-[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>          My job title
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successful spark pipeline and KPIs are valid; all good!:</p><pre>          My job title
 
 My job description (whatever you want); <span class="kw">for</span> instance:
 Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
-[<span class="num">10</span>:<span class="num">23</span>] Begining
-[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
+[<span class="num">10</span>:<span class="num">23</span>] Beginning
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline description: success
   KPI: Nbr of output records
     Value: <span class="num">14669071.0</span>
     Must be superior than <span class="num">10000000.0</span>
@@ -268,7 +286,7 @@ Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</s
 [<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
 [<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>would a State monad be appropriate?</p></span></dd></dl></div>
     </li><li name="com.spark_helper.SparkHelper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SparkHelper"></a>
       <a id="SparkHelper:SparkHelper"></a>
@@ -287,19 +305,39 @@ Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</s
     </span>
       <p class="shortcomment cmt">A facility to deal with RDD/file manipulations based on the Spark API.</p><div class="fullcomment"><div class="comment cmt"><p>A facility to deal with RDD/file manipulations based on the Spark API.</p><p>The goal is to remove the maximum of highly used low-level code from your
 spark job and replace it with methods fully tested whose name is
-self-explanatory/readable.</p><p>A few exemples:</p><pre><span class="cmt">// Same as SparkContext.saveAsTextFile, but the result is a single file:</span>
-SparkHelper.saveAsSingleTextFile(myOutputRDD, <span class="lit">"/my/output/file/path.txt"</span>)
-<span class="cmt">// Same as SparkContext.textFile, but instead of reading one record per</span>
-<span class="cmt">// line, it reads records spread over several lines.</span>
-<span class="cmt">// This way, xml, json, yml or any multi-line record file format can be used</span>
-<span class="cmt">// with Spark:</span>
-SparkHelper.textFileWithDelimiter(<span class="lit">"/my/input/folder/path"</span>, sparkContext, <span class="lit">"---\n"</span>)
-<span class="cmt">// Same as SparkContext.textFile, but instead of returning an RDD of</span>
-<span class="cmt">// records, it returns an RDD of tuples containing both the record and the</span>
-<span class="cmt">// path of the file it comes from:</span>
-SparkHelper.textFileWithFileName(<span class="lit">"folder"</span>, sparkContext)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+self-explanatory/readable.</p><p>A few examples:</p><pre><span class="kw">import</span> com.spark_helper.SparkHelper._
+
+<span class="cmt">// Same as rdd.saveAsTextFile("path"), but the result is a single file (while</span>
+<span class="cmt">// keeping the processing distributed):</span>
+rdd.saveAsSingleTextFile(<span class="lit">"/my/output/file/path.txt"</span>)
+rdd.saveAsSingleTextFile(<span class="lit">"/my/output/file/path.txt"</span>, classOf[BZip2Codec])
+
+<span class="cmt">// Same as sc.textFile("path"), but instead of reading one record per line (by</span>
+<span class="cmt">// splitting the input with \n), it splits the file in records based on a custom</span>
+<span class="cmt">// delimiter. This way, xml, json, yml or any multi-line record file format can</span>
+<span class="cmt">// be used with Spark:</span>
+sc.textFile(<span class="lit">"/my/input/folder/path"</span>, <span class="lit">"---\n"</span>) <span class="cmt">// for a yml file for instance</span>
+
+<span class="cmt">// Equivalent to rdd.flatMap(identity) for RDDs of Seqs or Options:</span>
+rdd.flatten
+
+<span class="cmt">// Equivalent to sc.textFile(), but for each line is tupled with its file path:</span>
+sc.textFileWithFileName(<span class="lit">"/my/input/folder/path"</span>)
+<span class="cmt">// which produces:</span>
+<span class="cmt">// RDD(("folder/file_1.txt", "record1fromfile1"), ("folder/file_1.txt", "record2fromfile1"),</span>
+<span class="cmt">//    ("folder/file_2.txt", "record1fromfile2"), ...)</span>
+
+<span class="cmt">// In the given folder, this generates one file per key in the given key/value</span>
+<span class="cmt">// RDD. Within each file (named from the key) are all values for this key:</span>
+rdd.saveAsTextFileByKey(<span class="lit">"/my/output/folder/path"</span>)
+
+<span class="cmt">// Concept mapper (the following example transforms RDD(1, 3, 2, 7, 8) into RDD(1, 3, 4, 7, 16)):</span>
+rdd.partialMap { <span class="kw">case</span> a <span class="kw">if</span> a % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> <span class="num">2</span> * a }
+
+<span class="cmt">// For when input files contain commas and textFile can't handle it:</span>
+sc.textFile(<span class="std">Seq</span>(<span class="lit">"path/hello,world.txt"</span>, <span class="lit">"path/hello_world.txt"</span>))</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>sc.parallelize[T](elmts: T*) instead of sc.parallelize[T](elmts: Array[T])</p></span></dd></dl></div>
     </li><li name="com.spark_helper.monitoring" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="monitoring"></a>
       <a id="monitoring:monitoring"></a>

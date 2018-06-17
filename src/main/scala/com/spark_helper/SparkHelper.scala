@@ -24,17 +24,37 @@ import scala.util.Random
   * A few examples:
   *
   * {{{
-  * // Same as sc.saveAsTextFile(path), but the result is a single file:
+  * import com.spark_helper.SparkHelper._
+  *
+  * // Same as rdd.saveAsTextFile("path"), but the result is a single file (while
+  * // keeping the processing distributed):
   * rdd.saveAsSingleTextFile("/my/output/file/path.txt")
-  * // Same as SparkContext.textFile, but instead of reading one record per
-  * // line, it reads records spread over several lines.
-  * // This way, xml, json, yml or any multi-line record file format can be used
-  * // with Spark:
-  * SparkHelper.textFileWithDelimiter("/my/input/folder/path", sparkContext, "---\n")
-  * // Same as SparkContext.textFile, but instead of returning an RDD of
-  * // records, it returns an RDD of tuples containing both the record and the
-  * // path of the file it comes from:
-  * SparkHelper.textFileWithFileName("folder", sparkContext)
+  * rdd.saveAsSingleTextFile("/my/output/file/path.txt", classOf[BZip2Codec])
+  *
+  * // Same as sc.textFile("path"), but instead of reading one record per line (by
+  * // splitting the input with \n), it splits the file in records based on a custom
+  * // delimiter. This way, xml, json, yml or any multi-line record file format can
+  * // be used with Spark:
+  * sc.textFile("/my/input/folder/path", "---\n") // for a yml file for instance
+  *
+  * // Equivalent to rdd.flatMap(identity) for RDDs of Seqs or Options:
+  * rdd.flatten
+  *
+  * // Equivalent to sc.textFile(), but for each line is tupled with its file path:
+  * sc.textFileWithFileName("/my/input/folder/path")
+  * // which produces:
+  * // RDD(("folder/file_1.txt", "record1fromfile1"), ("folder/file_1.txt", "record2fromfile1"),
+  * //    ("folder/file_2.txt", "record1fromfile2"), ...)
+  *
+  * // In the given folder, this generates one file per key in the given key/value
+  * // RDD. Within each file (named from the key) are all values for this key:
+  * rdd.saveAsTextFileByKey("/my/output/folder/path")
+  *
+  * // Concept mapper (the following example transforms RDD(1, 3, 2, 7, 8) into RDD(1, 3, 4, 7, 16)):
+  * rdd.partialMap { case a if a % 2 == 0 => 2 * a }
+  *
+  * // For when input files contain commas and textFile can't handle it:
+  * sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src

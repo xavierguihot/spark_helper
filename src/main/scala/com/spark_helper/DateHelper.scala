@@ -15,14 +15,31 @@ import scala.util.Try
   * A few examples:
   *
   * {{{
-  * assert(DateHelper.daysBetween("20161230", "20170101") == List("20161230", "20161231", "20170101"))
-  * assert(DateHelper.today() == "20170310") // If today's "20170310"
-  * assert(DateHelper.yesterday() == "20170309") // If today's "20170310"
-  * assert(DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") == "170327")
-  * assert(DateHelper.now("HH:mm") == "10:24")
-  * assert(DateHelper.currentTimestamp() == "1493105229736")
-  * assert(DateHelper.nDaysBefore(3) == "20170307") // If today's "20170310"
-  * assert(DateHelper.nDaysAfterDate(3, "20170307") == "20170310")
+  * import com.spark_helper.DateHelper
+  *
+  * DateHelper.daysBetween("20161230", "20170101") // List("20161230", "20161231", "20170101")
+  * DateHelper.today // "20170310"
+  * DateHelper.yesterday // "20170309"
+  * DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") // "170327"
+  * DateHelper.now("HH:mm") // "10:24"
+  * DateHelper.currentTimestamp // "1493105229736"
+  * DateHelper.nDaysBefore(3) // "20170307"
+  * DateHelper.nDaysAfterDate(3, "20170307") // "20170310"
+  * DateHelper.nextDay("20170310") // "20170311"
+  * DateHelper.nbrOfDaysSince("20170302") // 8
+  * DateHelper.nbrOfDaysBetween("20170327", "20170401") // 5
+  * DateHelper.dayOfWeek("20160614") // 2
+  *
+  * import com.spark_helper.DateHelper._
+  *
+  * 2.daysAgo // "20170308"
+  * "20161230" to "20170101" // List("20161230", "20161231", "20170101")
+  * 3.daysBefore("20170310") // "20170307"
+  * 5.daysAfter // "20170315"
+  * 4.daysAfter("20170310") // "20170314"
+  * "20170302".isCompliantWith("yyyyMMdd")
+  * "20170310".nextDay // "20170311"
+  * "20170310".previousDay // "20170309"
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src

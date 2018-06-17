@@ -42,32 +42,33 @@ import com.typesafe.config.{Config, ConfigFactory}
   * import com.spark_helper.HdfsHelper
   *
   * // A bunch of methods wrapping the FileSystem API, such as:
-  * HdfsHelper.fileExists("my/hdfs/file/path.txt")
-  * assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
-  * assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
-  * assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
-  * HdfsHelper.deleteFile("my/hdfs/file/path.csv")
-  * HdfsHelper.moveFolder("my/hdfs/folder")
+  * HdfsHelper.fileExists("my/hdfs/file/path.txt") // HdfsHelper.folderExists("my/hdfs/folder")
+  * HdfsHelper.listFileNamesInFolder("my/folder/path") // List("file_name_1.txt", "file_name_2.csv")
+  * HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") // "20170306"
+  * HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") // 3
+  * HdfsHelper.deleteFile("my/hdfs/file/path.csv") // HdfsHelper.deleteFolder("my/hdfs/folder")
+  * HdfsHelper.moveFolder("old/path", "new/path") // HdfsHelper.moveFile("old/path.txt", "new/path.txt")
+  * HdfsHelper.createEmptyHdfsFile("/some/hdfs/file/path.token") // HdfsHelper.createFolder("my/hdfs/folder")
+  *
+  * // File content helpers:
   * HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
-  * HdfsHelper.appendHeader("my/hdfs/file/path.csv", "column0,column1")
+  * HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
   *
   * // Some Xml/Typesafe helpers for hadoop as well:
-  * HdfsHelper.isHdfsXmlCompliantWithXsd(
-  *   "my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
+  * HdfsHelper.isHdfsXmlCompliantWithXsd("my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
   * HdfsHelper.loadXmlFileFromHdfs("my/hdfs/file/path.xml")
   *
-  * // Very handy to load a config (typesafe format) stored on hdfs at the
-  * // beginning of a spark job:
+  * // Very handy to load a config (typesafe format) stored on hdfs at the beginning of a spark job:
   * HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
   *
-  * // In order to write small amount of data in a file on hdfs without the
-  * // whole spark stack:
-  * HdfsHelper.writeToHdfsFile(
-  *   Array("some", "relatively small", "text"),
-  *   "/some/hdfs/file/path.txt")
+  * // In order to write small amount of data in a file on hdfs without the whole spark stack:
+  * HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+  * // or:
+  * import com.spark_helper.HdfsHelper._
+  * Array("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+  * "hello world".writeToHdfs("/some/hdfs/file/path.txt")
   *
-  * // Deletes all files/folders in "hdfs/path/to/folder" for which the
-  * // timestamp is older than 10 days:
+  * // Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:
   * HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
   * }}}
   *
@@ -156,7 +157,8 @@ object HdfsHelper extends Serializable {
 
       require(
         hdfs.isFile(fileToDelete),
-        "to delete a folder, prefer using the deleteFolder() method.")
+        "to delete a folder, prefer using the deleteFolder() method."
+      )
 
       hdfs.delete(fileToDelete, true)
     }
@@ -176,7 +178,8 @@ object HdfsHelper extends Serializable {
 
       require(
         !hdfs.isFile(folderToDelete),
-        "to delete a file, prefer using the deleteFile() method.")
+        "to delete a file, prefer using the deleteFile() method."
+      )
 
       hdfs.delete(folderToDelete, true)
     }
@@ -202,7 +205,8 @@ object HdfsHelper extends Serializable {
     if (hdfs.exists(fileToCheck))
       require(
         hdfs.isFile(fileToCheck),
-        "to check if a folder exists, prefer using the folderExists() method.")
+        "to check if a folder exists, prefer using the folderExists() method."
+      )
 
     hdfs.exists(fileToCheck)
   }
@@ -219,7 +223,8 @@ object HdfsHelper extends Serializable {
     if (hdfs.exists(folderToCheck))
       require(
         !hdfs.isFile(folderToCheck),
-        "to check if a file exists, prefer using the fileExists() method.")
+        "to check if a file exists, prefer using the fileExists() method."
+      )
 
     hdfs.exists(folderToCheck)
   }
@@ -246,7 +251,8 @@ object HdfsHelper extends Serializable {
     if (hdfs.exists(fileToRename))
       require(
         hdfs.isFile(fileToRename),
-        "to move a folder, prefer using the moveFolder() method.")
+        "to move a folder, prefer using the moveFolder() method."
+      )
 
     if (overwrite)
       hdfs.delete(renamedFile, true)
@@ -254,7 +260,8 @@ object HdfsHelper extends Serializable {
       require(
         !hdfs.exists(renamedFile),
         "overwrite option set to false, but a file already exists at target " +
-          "location " + newPath)
+          "location " + newPath
+      )
 
     // Before moving the file to its final destination, we check if the folder
     // where to put the file exists, and if not we create it:
@@ -286,7 +293,8 @@ object HdfsHelper extends Serializable {
     if (hdfs.exists(folderToRename))
       require(
         !hdfs.isFile(folderToRename),
-        "to move a file, prefer using the moveFile() method.")
+        "to move a file, prefer using the moveFile() method."
+      )
 
     if (overwrite)
       hdfs.delete(renamedFolder, true)
@@ -294,7 +302,8 @@ object HdfsHelper extends Serializable {
       require(
         !hdfs.exists(renamedFolder),
         "overwrite option set to false, but a folder already exists at target " +
-          "location " + newPath)
+          "location " + newPath
+      )
 
     // Before moving the folder to its final destination, we check if the folder
     // where to put the folder exists, and if not we create it:
@@ -739,7 +748,8 @@ object HdfsHelper extends Serializable {
 
     require(
       purgeAge >= 0,
-      "the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0.")
+      "the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0."
+    )
 
     hdfs
       .listStatus(new Path(folderPath))
