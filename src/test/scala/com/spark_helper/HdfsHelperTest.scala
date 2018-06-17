@@ -1,5 +1,9 @@
 package com.spark_helper
 
+import com.spark_helper.HdfsHelper._
+
+import org.apache.hadoop.io.compress.GzipCodec
+
 import com.holdenkarau.spark.testing.SharedSparkContext
 
 import org.scalatest.FunSuite
@@ -11,60 +15,67 @@ import org.scalatest.FunSuite
   */
 class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
+  val resourceFolder = "src/test/resources"
+  val testFolder = s"$resourceFolder/folder"
+
   test("Delete file/folder") {
+
+    val filePath = s"$testFolder/file.txt"
 
     // Let's try to delete a file:
 
-    HdfsHelper.writeToHdfsFile("", "src/test/resources/file_to_delete.txt")
+    HdfsHelper.createEmptyHdfsFile(filePath)
 
     // 1: Let's try to delete it with the deleteFolder method:
     var messageThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.deleteFolder("src/test/resources/file_to_delete.txt")
+      HdfsHelper.deleteFolder(filePath)
     }
     var expectedMessage =
       "requirement failed: to delete a file, prefer using the " +
         "deleteFile() method."
     assert(messageThrown.getMessage === expectedMessage)
-    assert(HdfsHelper.fileExists("src/test/resources/file_to_delete.txt"))
+    assert(HdfsHelper.fileExists(filePath))
 
     // 2: Let's delete it with the deleteFile method:
-    HdfsHelper.deleteFile("src/test/resources/file_to_delete.txt")
-    assert(!HdfsHelper.fileExists("src/test/resources/file_to_delete.txt"))
+    HdfsHelper.deleteFile(filePath)
+    assert(!HdfsHelper.fileExists(filePath))
 
     // Let's try to delete a folder:
 
-    HdfsHelper
-      .writeToHdfsFile("", "src/test/resources/folder_to_delete/file.txt")
+    HdfsHelper.createEmptyHdfsFile(s"$testFolder/file.txt")
 
     // 3: Let's try to delete it with the deleteFile method:
     messageThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.deleteFile("src/test/resources/folder_to_delete")
+      HdfsHelper.deleteFile(testFolder)
     }
     expectedMessage =
       "requirement failed: to delete a folder, prefer using the " +
         "deleteFolder() method."
     assert(messageThrown.getMessage === expectedMessage)
-    assert(HdfsHelper.folderExists("src/test/resources/folder_to_delete"))
+    assert(HdfsHelper.folderExists(testFolder))
 
     // 4: Let's delete it with the deleteFolder method:
-    HdfsHelper.deleteFolder("src/test/resources/folder_to_delete")
-    assert(!HdfsHelper.folderExists("src/test/resources/folder_to_delete"))
+    HdfsHelper.deleteFolder(testFolder)
+    assert(!HdfsHelper.folderExists(testFolder))
   }
 
   test("File/folder exists") {
 
-    HdfsHelper.deleteFile("src/test/resources/file_to_check.txt")
-    HdfsHelper.deleteFolder("src/test/resources/folder_to_check")
+    val folderPath = s"$resourceFolder/folder"
+    val filePath = s"$folderPath/file.txt"
+
+    HdfsHelper.deleteFile(filePath)
+    HdfsHelper.deleteFolder(folderPath)
 
     // Let's try to check if a file exists:
 
-    assert(!HdfsHelper.fileExists("src/test/resources/file_to_check.txt"))
+    assert(!HdfsHelper.fileExists(filePath))
 
-    HdfsHelper.writeToHdfsFile("", "src/test/resources/file_to_check.txt")
+    HdfsHelper.createEmptyHdfsFile(filePath)
 
     // 1: Let's try to check it exists with the folderExists method:
     var messageThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.folderExists("src/test/resources/file_to_check.txt")
+      HdfsHelper.folderExists(filePath)
     }
     var expectedMessage =
       "requirement failed: to check if a file exists, prefer using the " +
@@ -72,18 +83,18 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(messageThrown.getMessage === expectedMessage)
 
     // 2: Let's try to check it exists with the fileExists method:
-    assert(HdfsHelper.fileExists("src/test/resources/file_to_check.txt"))
+    assert(HdfsHelper.fileExists(filePath))
 
     // Let's try to check if a folder exists:
 
-    assert(!HdfsHelper.folderExists("src/test/resources/folder_to_check"))
+    HdfsHelper.deleteFolder(folderPath)
+    assert(!HdfsHelper.folderExists(folderPath))
 
-    HdfsHelper
-      .writeToHdfsFile("", "src/test/resources/folder_to_check/file.txt")
+    HdfsHelper.createEmptyHdfsFile(filePath)
 
     // 3: Let's try to check it exists with the fileExists method:
     messageThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.fileExists("src/test/resources/folder_to_check")
+      HdfsHelper.fileExists(folderPath)
     }
     expectedMessage =
       "requirement failed: to check if a folder exists, prefer using " +
@@ -91,377 +102,325 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
     assert(messageThrown.getMessage === expectedMessage)
 
     // 2: Let's try to check it exists with the folderExists method:
-    assert(HdfsHelper.folderExists("src/test/resources/folder_to_check"))
+    assert(HdfsHelper.folderExists(folderPath))
 
-    HdfsHelper.deleteFile("src/test/resources/file_to_check.txt")
-    HdfsHelper.deleteFolder("src/test/resources/folder_to_check")
+    HdfsHelper.deleteFile(filePath)
+    HdfsHelper.deleteFolder(folderPath)
   }
 
   test("Create an empty file on hdfs") {
 
-    HdfsHelper.deleteFile("src/test/resources/empty_file.token")
+    val filePath = s"$testFolder/empty_file.token"
 
-    HdfsHelper.createEmptyHdfsFile("src/test/resources/empty_file.token")
+    HdfsHelper.deleteFile(filePath)
 
-    assert(HdfsHelper.fileExists("src/test/resources/empty_file.token"))
+    HdfsHelper.createEmptyHdfsFile(filePath)
 
-    val tokenContent = sc
-      .textFile("src/test/resources/empty_file.token")
-      .collect()
-      .sorted
-      .mkString("\n")
+    assert(HdfsHelper.fileExists(filePath))
 
+    val tokenContent = sc.textFile(filePath).collect().sorted.mkString("\n")
     assert(tokenContent === "")
 
-    HdfsHelper.deleteFile("src/test/resources/empty_file.token")
+    HdfsHelper.deleteFile(filePath)
   }
 
   test(
     "Save text in HDFS file with the fileSystem API instead of the Spark API") {
 
-    // 1: Stores using a "\n"-joined string:
+    val filePath = s"$testFolder/small_file.txt"
 
-    HdfsHelper.deleteFile("src/test/resources/folder/small_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
+
+    // 1: Stores using a "\n"-joined string:
 
     val contentToStore = "Hello World\nWhatever"
 
-    HdfsHelper.writeToHdfsFile(
-      contentToStore,
-      "src/test/resources/folder/small_file.txt")
+    HdfsHelper.writeToHdfsFile(contentToStore, filePath)
 
-    assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
+    assert(HdfsHelper.fileExists(filePath))
 
-    var storedContent = sc
-      .textFile("src/test/resources/folder/small_file.txt")
-      .collect()
-      .sorted
-      .mkString("\n")
-
+    var storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
     assert(storedContent === contentToStore)
 
-    HdfsHelper.deleteFolder("src/test/resources/folder")
+    HdfsHelper.deleteFolder(testFolder)
 
     // 2: Stores using a list of strings to be "\n"-joined:
 
-    HdfsHelper.deleteFile("src/test/resources/folder/small_file.txt")
-
     val listToStore = List("Hello World", "Whatever")
+    HdfsHelper.writeToHdfsFile(listToStore, filePath)
 
-    HdfsHelper
-      .writeToHdfsFile(listToStore, "src/test/resources/folder/small_file.txt")
+    assert(HdfsHelper.fileExists(filePath))
 
-    assert(HdfsHelper.fileExists("src/test/resources/folder/small_file.txt"))
-
-    storedContent = sc
-      .textFile("src/test/resources/folder/small_file.txt")
-      .collect()
-      .sorted
-      .mkString("\n")
-
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
     assert(storedContent === listToStore.mkString("\n"))
 
-    HdfsHelper.deleteFolder("src/test/resources/folder")
+    HdfsHelper.deleteFolder(testFolder)
+
+    // 3: Using the pimped Seq/String:
+
+    val seqToStore = Seq("Hello World", "Whatever")
+    seqToStore.writeToHdfs(filePath)
+    assert(HdfsHelper.fileExists(filePath))
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
+    assert(storedContent === contentToStore)
+    HdfsHelper.deleteFolder(testFolder)
+
+    listToStore.writeToHdfs(filePath)
+    assert(HdfsHelper.fileExists(filePath))
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
+    assert(storedContent === contentToStore)
+    HdfsHelper.deleteFolder(testFolder)
+
+    contentToStore.writeToHdfs(filePath)
+    assert(HdfsHelper.fileExists(filePath))
+    storedContent = sc.textFile(filePath).collect().sorted.mkString("\n")
+    assert(storedContent === contentToStore)
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("List file names in Hdfs folder") {
 
-    HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_1.txt")
-    HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_2.csv")
-    HdfsHelper
-      .writeToHdfsFile("", "src/test/resources/folder_1/folder_2/file_3.txt")
+    val folder1 = s"$resourceFolder/folder_1"
+
+    HdfsHelper.createEmptyHdfsFile(s"$folder1/file_1.txt")
+    HdfsHelper.createEmptyHdfsFile(s"$folder1/file_2.csv")
+    HdfsHelper.createEmptyHdfsFile(s"$folder1/folder_2/file_3.txt")
 
     // 1: Not recursive, names only:
-    var fileNames =
-      HdfsHelper.listFileNamesInFolder("src/test/resources/folder_1")
+    var fileNames = HdfsHelper.listFileNamesInFolder(folder1)
     var expectedFileNames = List("file_1.txt", "file_2.csv")
     assert(fileNames === expectedFileNames)
 
     // 2: Not recursive, full paths:
-    fileNames = HdfsHelper
-      .listFileNamesInFolder("src/test/resources/folder_1", onlyName = false)
-    expectedFileNames = List(
-      "src/test/resources/folder_1/file_1.txt",
-      "src/test/resources/folder_1/file_2.csv"
-    )
+    fileNames = HdfsHelper.listFileNamesInFolder(folder1, onlyName = false)
+    expectedFileNames = List(s"$folder1/file_1.txt", s"$folder1/file_2.csv")
     assert(fileNames === expectedFileNames)
 
     // 3: Recursive, names only:
-    fileNames = HdfsHelper
-      .listFileNamesInFolder("src/test/resources/folder_1", recursive = true)
+    fileNames = HdfsHelper.listFileNamesInFolder(folder1, recursive = true)
     expectedFileNames = List("file_1.txt", "file_2.csv", "file_3.txt")
     assert(fileNames === expectedFileNames)
 
     // 4: Recursive, full paths:
-    fileNames = HdfsHelper.listFileNamesInFolder(
-      "src/test/resources/folder_1",
-      recursive = true,
-      onlyName = false)
+    fileNames = HdfsHelper
+      .listFileNamesInFolder(folder1, recursive = true, onlyName = false)
     expectedFileNames = List(
-      "src/test/resources/folder_1/file_1.txt",
-      "src/test/resources/folder_1/file_2.csv",
-      "src/test/resources/folder_1/folder_2/file_3.txt"
+      s"$folder1/file_1.txt",
+      s"$folder1/file_2.csv",
+      s"$folder1/folder_2/file_3.txt"
     )
     assert(fileNames === expectedFileNames)
 
-    HdfsHelper.deleteFolder("src/test/resources/folder_1")
+    HdfsHelper.deleteFolder(folder1)
   }
 
   test("List folder names in Hdfs folder") {
 
-    HdfsHelper.writeToHdfsFile("", "src/test/resources/folder_1/file_1.txt")
-    HdfsHelper
-      .writeToHdfsFile("", "src/test/resources/folder_1/folder_2/file_2.txt")
-    HdfsHelper
-      .writeToHdfsFile("", "src/test/resources/folder_1/folder_3/file_3.txt")
+    val folder1 = s"$resourceFolder/folder_1"
 
-    val folderNames = HdfsHelper.listFolderNamesInFolder(
-      "src/test/resources/folder_1"
-    )
+    HdfsHelper.createEmptyHdfsFile(s"$folder1/file_1.txt")
+    HdfsHelper.createEmptyHdfsFile(s"$folder1/folder_2/file_2.txt")
+    HdfsHelper.createEmptyHdfsFile(s"$folder1/folder_3/file_3.txt")
+
+    val folderNames = HdfsHelper.listFolderNamesInFolder(folder1)
     val expectedFolderNames = List("folder_2", "folder_3")
 
     assert(folderNames === expectedFolderNames)
 
-    HdfsHelper.deleteFolder("src/test/resources/folder_1")
+    HdfsHelper.deleteFolder(folder1)
   }
 
   test("Move file") {
 
+    val filePath = s"$testFolder/some_file.txt"
+    val renamedPath = s"$testFolder/renamed_file.txt"
+
     // Let's remove possible previous stuff:
-    HdfsHelper.deleteFile("src/test/resources/some_file.txt")
-    HdfsHelper.deleteFile("src/test/resources/renamed_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
 
     // Let's create the file to rename:
-    HdfsHelper.writeToHdfsFile("whatever", "src/test/resources/some_file.txt")
+    HdfsHelper.writeToHdfsFile("whatever", filePath)
 
     // 1: Let's try to move the file on a file which already exists without
     // the overwrite option:
 
-    assert(HdfsHelper.fileExists("src/test/resources/some_file.txt"))
-    assert(!HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
+    assert(HdfsHelper.fileExists(filePath))
+    assert(!HdfsHelper.fileExists(renamedPath))
 
     // Let's create the existing file where we want to move our file:
-    HdfsHelper.writeToHdfsFile("", "src/test/resources/renamed_file.txt")
+    HdfsHelper.createEmptyHdfsFile(renamedPath)
 
     // Let's rename the file to the path where a file already exists:
     val ioExceptionThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.moveFile(
-        "src/test/resources/some_file.txt",
-        "src/test/resources/renamed_file.txt")
+      HdfsHelper.moveFile(filePath, renamedPath)
     }
     var expectedMessage =
       "requirement failed: overwrite option set to false, but a file " +
-        "already exists at target location src/test/resources/renamed_file.txt"
+        "already exists at target location " +
+        "src/test/resources/folder/renamed_file.txt"
     assert(ioExceptionThrown.getMessage === expectedMessage)
 
-    assert(HdfsHelper.fileExists("src/test/resources/some_file.txt"))
-    assert(HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
+    assert(HdfsHelper.fileExists(filePath))
+    assert(HdfsHelper.fileExists(renamedPath))
 
-    HdfsHelper.deleteFile("src/test/resources/renamed_file.txt")
+    HdfsHelper.deleteFile(renamedPath)
 
     // 2: Let's fail to move the file with the moveFolder() method:
 
-    assert(HdfsHelper.fileExists("src/test/resources/some_file.txt"))
-    assert(!HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
+    assert(HdfsHelper.fileExists(filePath))
+    assert(!HdfsHelper.fileExists(renamedPath))
 
     // Let's rename the file:
     val illegalArgExceptionThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.moveFolder(
-        "src/test/resources/some_file.txt",
-        "src/test/resources/renamed_file.txt")
+      HdfsHelper.moveFolder(filePath, renamedPath)
     }
     expectedMessage =
       "requirement failed: to move a file, prefer using the " +
         "moveFile() method."
     assert(illegalArgExceptionThrown.getMessage === expectedMessage)
 
-    assert(HdfsHelper.fileExists("src/test/resources/some_file.txt"))
-    assert(!HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
+    assert(HdfsHelper.fileExists(filePath))
+    assert(!HdfsHelper.fileExists(renamedPath))
 
-    // 3: Let's successfuly move the file with the moveFile() method:
+    // 3: Let's successfully move the file with the moveFile() method:
 
     // Let's rename the file:
-    HdfsHelper.moveFile(
-      "src/test/resources/some_file.txt",
-      "src/test/resources/renamed_file.txt")
+    HdfsHelper.moveFile(filePath, renamedPath)
 
-    assert(!HdfsHelper.fileExists("src/test/resources/some_file.txt"))
-    assert(HdfsHelper.fileExists("src/test/resources/renamed_file.txt"))
+    assert(!HdfsHelper.fileExists(filePath))
+    assert(HdfsHelper.fileExists(renamedPath))
 
-    val newContent = sc.textFile("src/test/resources/renamed_file.txt").collect
-
+    val newContent = sc.textFile(renamedPath).collect
     assert(Array("whatever") === newContent)
 
-    HdfsHelper.deleteFile("src/test/resources/renamed_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("Move folder") {
 
+    val folderToMove = s"$testFolder/folder_to_move"
+    val renamedFolder = s"$testFolder/renamed_folder"
+
     // Let's remove possible previous stuff:
-    HdfsHelper.deleteFolder("src/test/resources/some_folder_to_move")
-    HdfsHelper.deleteFolder("src/test/resources/renamed_folder")
+    HdfsHelper.deleteFolder(testFolder)
 
     // Let's create the folder to rename:
-    HdfsHelper.writeToHdfsFile(
-      "whatever",
-      "src/test/resources/some_folder_to_move/file_1.txt")
-    HdfsHelper.writeToHdfsFile(
-      "something",
-      "src/test/resources/some_folder_to_move/file_2.txt")
+    HdfsHelper.writeToHdfsFile("whatever", s"$folderToMove/file_1.txt")
+    HdfsHelper.writeToHdfsFile("something", s"$folderToMove/file_2.txt")
 
     // 1: Let's fail to move the folder with the moveFile() method:
 
-    assert(
-      HdfsHelper.fileExists(
-        "src/test/resources/some_folder_to_move/file_1.txt"))
-    assert(
-      HdfsHelper.fileExists(
-        "src/test/resources/some_folder_to_move/file_2.txt"))
-    assert(!HdfsHelper.folderExists("src/test/resources/renamed_folder"))
+    assert(HdfsHelper.fileExists(s"$folderToMove/file_1.txt"))
+    assert(HdfsHelper.fileExists(s"$folderToMove/file_2.txt"))
+    assert(!HdfsHelper.folderExists(renamedFolder))
 
     // Let's rename the folder:
     val messageThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.moveFile(
-        "src/test/resources/some_folder_to_move",
-        "src/test/resources/renamed_folder")
+      HdfsHelper.moveFile(folderToMove, renamedFolder)
     }
     val expectedMessage =
       "requirement failed: to move a folder, prefer using the " +
         "moveFolder() method."
     assert(messageThrown.getMessage === expectedMessage)
 
-    assert(
-      HdfsHelper.fileExists(
-        "src/test/resources/some_folder_to_move/file_1.txt"))
-    assert(
-      HdfsHelper.fileExists(
-        "src/test/resources/some_folder_to_move/file_2.txt"))
-    assert(!HdfsHelper.folderExists("src/test/resources/renamed_folder"))
+    assert(HdfsHelper.fileExists(s"$folderToMove/file_1.txt"))
+    assert(HdfsHelper.fileExists(s"$folderToMove/file_2.txt"))
+    assert(!HdfsHelper.folderExists(renamedFolder))
 
-    // 2: Let's successfuly move the folder with the moveFolder() method:
+    // 2: Let's successfully move the folder with the moveFolder() method:
 
     // Let's rename the folder:
-    HdfsHelper.moveFolder(
-      "src/test/resources/some_folder_to_move",
-      "src/test/resources/renamed_folder")
+    HdfsHelper.moveFolder(folderToMove, renamedFolder)
 
-    assert(!HdfsHelper.folderExists("src/test/resources/some_folder_to_move"))
-    assert(
-      HdfsHelper.fileExists("src/test/resources/renamed_folder/file_1.txt"))
-    assert(
-      HdfsHelper.fileExists("src/test/resources/renamed_folder/file_2.txt"))
+    assert(!HdfsHelper.folderExists(folderToMove))
+    assert(HdfsHelper.fileExists(s"$renamedFolder/file_1.txt"))
+    assert(HdfsHelper.fileExists(s"$renamedFolder/file_2.txt"))
 
-    val newContent =
-      sc.textFile("src/test/resources/renamed_folder").collect().sorted
-
+    val newContent = sc.textFile(renamedFolder).collect().sorted
     assert(newContent === Array("something", "whatever"))
 
-    HdfsHelper.deleteFolder("src/test/resources/renamed_folder")
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("Append header and footer to file") {
 
+    val filePath = s"$testFolder/header_footer_file.txt"
+    val tmpFolder = s"$testFolder/header_footer_tmp"
+
     // 1: Without the tmp/working folder:
 
-    HdfsHelper.deleteFile("src/test/resources/header_footer_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
 
     // Let's create the file for which to add header and footer:
-    HdfsHelper.writeToHdfsFile(
-      "whatever\nsomething else\n",
-      "src/test/resources/header_footer_file.txt")
+    HdfsHelper.writeToHdfsFile("whatever\nsomething else\n", filePath)
 
-    HdfsHelper.appendHeaderAndFooter(
-      "src/test/resources/header_footer_file.txt",
-      "my_header",
-      "my_footer")
+    HdfsHelper.appendHeaderAndFooter(filePath, "my_header", "my_footer")
 
-    var newContent = sc
-      .textFile("src/test/resources/header_footer_file.txt")
-      .collect
-      .mkString("\n")
+    var newContent = sc.textFile(filePath).collect.mkString("\n")
 
-    var expectedNewContent = (
+    var expectedNewContent =
       "my_header\n" +
         "whatever\n" +
         "something else\n" +
         "my_footer"
-    )
 
     assert(newContent === expectedNewContent)
 
-    HdfsHelper.deleteFile("src/test/resources/header_footer_file.txt")
+    HdfsHelper.deleteFile(filePath)
 
     // 2: With the tmp/working folder:
 
     // Let's create the file for which to add header and footer:
-    HdfsHelper.writeToHdfsFile(
-      "whatever\nsomething else\n",
-      "src/test/resources/header_footer_file.txt")
+    HdfsHelper.writeToHdfsFile("whatever\nsomething else\n", filePath)
 
-    HdfsHelper.appendHeaderAndFooter(
-      "src/test/resources/header_footer_file.txt",
-      "my_header",
-      "my_footer",
-      workingFolderPath = "src/test/resources/header_footer_tmp")
+    HdfsHelper
+      .appendHeaderAndFooter(filePath, "my_header", "my_footer", tmpFolder)
 
-    assert(HdfsHelper.folderExists("src/test/resources/header_footer_tmp"))
-    assert(
-      !HdfsHelper.fileExists("src/test/resources/header_footer_tmp/xml.tmp"))
+    assert(HdfsHelper.folderExists(tmpFolder))
+    assert(!HdfsHelper.fileExists(s"$tmpFolder/xml.tmp"))
 
-    newContent = sc
-      .textFile("src/test/resources/header_footer_file.txt")
-      .collect
-      .mkString("\n")
+    newContent = sc.textFile(filePath).collect.mkString("\n")
 
-    expectedNewContent = (
+    expectedNewContent =
       "my_header\n" +
         "whatever\n" +
         "something else\n" +
         "my_footer"
-    )
 
     assert(newContent === expectedNewContent)
 
-    HdfsHelper.deleteFile("src/test/resources/header_footer_file.txt")
-    HdfsHelper.deleteFolder("src/test/resources/header_footer_tmp")
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("Validate Xml Hdfs file with Xsd") {
 
+    val xmlPath = s"$testFolder/file.xml"
+
     // 1: Valid xml:
-    HdfsHelper.deleteFile("src/test/resources/xml_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
     HdfsHelper.writeToHdfsFile(
       "<Customer>\n" +
         "	<Age>24</Age>\n" +
         "	<Address>34 thingy street, someplace, sometown</Address>\n" +
         "</Customer>",
-      "src/test/resources/xml_file.txt"
+      xmlPath
     )
-
     var xsdFile = getClass.getResource("/some_xml.xsd")
-
-    var isValid = HdfsHelper
-      .isHdfsXmlCompliantWithXsd("src/test/resources/xml_file.txt", xsdFile)
-
-    assert(isValid)
+    assert(HdfsHelper.isHdfsXmlCompliantWithXsd(xmlPath, xsdFile))
 
     // 2: Invalid xml:
-    HdfsHelper.deleteFile("src/test/resources/xml_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
     HdfsHelper.writeToHdfsFile(
       "<Customer>\n" +
-        "	<Age>trente</Age>\n" +
+        "	<Age>thirty</Age>\n" +
         "	<Address>34 thingy street, someplace, sometown</Address>\n" +
         "</Customer>",
-      "src/test/resources/xml_file.txt"
+      xmlPath
     )
-
     xsdFile = getClass.getResource("/some_xml.xsd")
+    assert(!HdfsHelper.isHdfsXmlCompliantWithXsd(xmlPath, xsdFile))
 
-    isValid = HdfsHelper
-      .isHdfsXmlCompliantWithXsd("src/test/resources/xml_file.txt", xsdFile)
-
-    assert(!isValid)
-
-    HdfsHelper.deleteFile("src/test/resources/xml_file.txt")
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("Load Typesafe Config from Hdfs") {
@@ -484,58 +443,73 @@ class HdfsHelperTest extends FunSuite with SharedSparkContext {
 
   test("Load Xml file from Hdfs") {
 
-    HdfsHelper.deleteFile("src/test/resources/folder/xml_to_load.xml")
+    val xmlPath = s"$testFolder/file.xml"
+
+    HdfsHelper.deleteFolder(testFolder)
 
     HdfsHelper.writeToHdfsFile(
       "<toptag>\n" +
         "	<sometag value=\"something\">whatever</sometag>\n" +
         "</toptag>",
-      "src/test/resources/folder/xml_to_load.xml"
+      xmlPath
     )
 
-    val xmlContent = HdfsHelper
-      .loadXmlFileFromHdfs("src/test/resources/folder/xml_to_load.xml")
+    val xmlContent = HdfsHelper.loadXmlFileFromHdfs(xmlPath)
 
     assert((xmlContent \ "sometag" \ "@value").text === "something")
     assert((xmlContent \ "sometag").text === "whatever")
 
-    HdfsHelper.deleteFolder("src/test/resources/folder/")
+    HdfsHelper.deleteFolder(testFolder)
   }
 
   test("Purge folder from too old files/folders") {
 
-    HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
-    HdfsHelper
-      .createEmptyHdfsFile("src/test/resources/folder_to_purge/file.txt")
-    HdfsHelper
-      .createEmptyHdfsFile("src/test/resources/folder_to_purge/folder/file.txt")
-    assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
-    assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+    val folderToPurge = s"$testFolder/folder_to_purge"
 
-    HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 63)
+    HdfsHelper.deleteFolder(testFolder)
+    HdfsHelper.createEmptyHdfsFile(s"$folderToPurge/file.txt")
+    HdfsHelper.createEmptyHdfsFile(s"$folderToPurge/folder/file.txt")
+    assert(HdfsHelper.fileExists(s"$folderToPurge/file.txt"))
+    assert(HdfsHelper.folderExists(s"$folderToPurge/folder"))
 
-    assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
-    assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+    HdfsHelper.purgeFolder(folderToPurge, 63)
+    assert(HdfsHelper.fileExists(s"$folderToPurge/file.txt"))
+    assert(HdfsHelper.folderExists(s"$folderToPurge/folder"))
 
-    HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 1)
-
-    assert(HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
-    assert(HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+    HdfsHelper.purgeFolder(folderToPurge, 1)
+    assert(HdfsHelper.fileExists(s"$folderToPurge/file.txt"))
+    assert(HdfsHelper.folderExists(s"$folderToPurge/folder"))
 
     val messageThrown = intercept[IllegalArgumentException] {
-      HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", -3)
+      HdfsHelper.purgeFolder(folderToPurge, -3)
     }
     val expectedMessage =
       "requirement failed: the purgeAge provided \"-3\" must be superior to 0."
     assert(messageThrown.getMessage === expectedMessage)
 
-    HdfsHelper.purgeFolder("src/test/resources/folder_to_purge", 0)
+    HdfsHelper.purgeFolder(folderToPurge, 0)
+    assert(!HdfsHelper.fileExists(s"$folderToPurge/file.txt"))
+    assert(!HdfsHelper.folderExists(s"$folderToPurge/folder"))
 
-    assert(
-      !HdfsHelper.fileExists("src/test/resources/folder_to_purge/file.txt"))
-    assert(
-      !HdfsHelper.folderExists("src/test/resources/folder_to_purge/folder"))
+    HdfsHelper.deleteFolder(testFolder)
+  }
 
-    HdfsHelper.deleteFolder("src/test/resources/folder_to_purge")
+  test("Compress hdfs file") {
+
+    val filePath = s"$testFolder/file.txt"
+
+    HdfsHelper.deleteFile(filePath)
+
+    HdfsHelper.writeToHdfsFile("hello\nworld", filePath)
+    HdfsHelper.compressFile(filePath, classOf[GzipCodec])
+
+    assert(HdfsHelper.fileExists(s"$filePath.gz"))
+
+    // Easy to test with spark, as reading a file with the ".gz" extension
+    // forces the read with the compression codec:
+    val content = sc.textFile(s"$filePath.gz").collect.sorted
+    assert(content === Array("hello", "world"))
+
+    HdfsHelper.deleteFolder(testFolder)
   }
 }

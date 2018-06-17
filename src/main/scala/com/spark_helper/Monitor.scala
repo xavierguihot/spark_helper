@@ -6,19 +6,17 @@ import java.util.Calendar
 
 import org.apache.commons.lang3.time.DurationFormatUtils
 
-import java.lang.Throwable
-
-/** A logger dedicated to Spak jobs.
+/** A logger dedicated to Spark jobs.
   *
   * It's a simple logger/report which contains a report that one can update from
   * the driver and a success state. The idea is to persist job executions logs
   * and errors (and forget about grepping unreadable yarn logs).
   *
-  * It's designed for perdiodic spark jobs (handles storage and purge of logs)
+  * It's designed for periodic spark jobs (handles storage and purge of logs)
   * and provides a way to handle kpis validation.
   *
   * Logs are stored on the go which means one can have a direct real time access
-  * of the job logs/status and it's current state (which can overwise be a pain
+  * of the job logs/status and it's current state (which can otherwise be a pain
   * if it means going through yarn logs, or even for certain production
   * environments going through additional layers of software logs to get to yarn
   * logs).
@@ -33,9 +31,9 @@ import java.lang.Throwable
   * This is a "driver-only" logger and is not intended at logging concurrent
   * actions from executors.
   *
-  * Produced reports can easily be inserted in a notification email whenerver
+  * Produced reports can easily be inserted in a notification email whenever
   * the job fails, which saves a lot of time to maintainers operating on heavy
-  * production environements.
+  * production environments.
   *
   * The produced persisted report is also a way for downstream jobs to know the
   * status of their input data.
@@ -61,7 +59,7 @@ import java.lang.Throwable
   *       Test("Nbr of output records", processedData.count(), SUPERIOR_THAN, 10e6d, NBR),
   *       Test("Some pct of invalid output", your_complex_kpi, INFERIOR_THAN, 3, PCT)
   *     ),
-  *     "My pipeline descirption"
+  *     "My pipeline description"
   *   )
   *
   *   if (outputIsValid)
@@ -69,9 +67,9 @@ import java.lang.Throwable
   *
   * } catch {
   *   case iie: InvalidInputException =>
-  *     Monitor.error(iie, "My pipeline descirption", diagnostic = "No input data!")
+  *     Monitor.error(iie, "My pipeline description", diagnostic = "No input data!")
   *   case e: Throwable =>
-  *     Monitor.error(e, "My pipeline descirption") // whatever unexpected error
+  *     Monitor.error(e, "My pipeline description") // whatever unexpected error
   * }
   *
   * if (Monitor.isSuccess()) {
@@ -83,7 +81,7 @@ import java.lang.Throwable
   * // HDFS (this saves the logs in the folder set with Monitor.setLogFolder):
   * Monitor.store()
   *
-  * // At the end of the job, if the job isn't successfull, you might want to
+  * // At the end of the job, if the job isn't successful, you might want to
   * // crash it (for instance to get a notification from your scheduler):
   * if (!Monitor.isSuccess()) throw new Exception() // or send an email, or ...
   * }}}
@@ -100,8 +98,8 @@ import java.lang.Throwable
   *
   * My job description (whatever you want); for instance:
   * Documentation: https://github.com/xavierguihot/spark_helper
-  * [10:23] Begining
-  * [10:23-10:23] My pipeline descirption: failed
+  * [10:23] Beginning
+  * [10:23-10:23] My pipeline description: failed
   *   Diagnostic: No input data!
   *     org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs://my/hdfs/input/path
   *     at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:285)
@@ -116,8 +114,8 @@ import java.lang.Throwable
   *
   * My job description (whatever you want); for instance:
   * Documentation: https://github.com/xavierguihot/spark_helper
-  * [10:23] Begining
-  * [10:23-10:36] My pipeline descirption: failed
+  * [10:23] Beginning
+  * [10:23-10:36] My pipeline description: failed
   *     java.lang.NumberFormatException: For input string: "a"
   *     java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
   *     java.lang.Integer.parseInt(Integer.java:492)
@@ -125,14 +123,14 @@ import java.lang.Throwable
   * [10:36] Duration: 00:13:47
   * }}}
   *
-  * Another scenario, successfull spark pipeline and KPIs are valid; all good!:
+  * Another scenario, successful spark pipeline and KPIs are valid; all good!:
   * {{{
   *           My job title
   *
   * My job description (whatever you want); for instance:
   * Documentation: https://github.com/xavierguihot/spark_helper
-  * [10:23] Begining
-  * [10:23-10:41] My pipeline descirption: success
+  * [10:23] Beginning
+  * [10:23-10:41] My pipeline description: success
   *   KPI: Nbr of output records
   *     Value: 14669071.0
   *     Must be superior than 10000000.0
@@ -148,6 +146,7 @@ import java.lang.Throwable
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
   *
+  * @todo would a State monad be appropriate?
   * @author Xavier Guihot
   * @since 2017-02
   */
@@ -159,13 +158,13 @@ object Monitor {
   private var logDirectory: Option[String] = None
   private var purgeWindow: Option[Int] = None
 
-  private val jobStart = DateHelper.now("[HH:mm]") + " Begining"
+  private val jobStart = DateHelper.now("[HH:mm]") + " Beginning"
 
   // Join of reportTitle, pointsOfContact, reportDescription, logDirectory and
   // jobStart:
   private var reportHeader = buildReportHeader()
 
-  private val begining = Calendar.getInstance().getTimeInMillis()
+  private val beginning = Calendar.getInstance().getTimeInMillis
   private var lastReportUpdate = DateHelper.now("HH:mm")
 
   /** Sets the report's title.
@@ -175,7 +174,7 @@ object Monitor {
     * {{{
     * // Using:
     * Monitor.setReportTitle("My Simple Job")
-    * // Produces this at the begining of the report:
+    * // Produces this at the beginning of the report:
     * "          My Simple Job"
     * ""
     * }}}
@@ -196,7 +195,7 @@ object Monitor {
     * // Using:
     * Monitor.setReportTitle("My Simple Job")
     * Monitor.addContacts(List("x.guihot@gmail.com", "smbdy@gmail.com"))
-    * // Produces this at the begining of the report:
+    * // Produces this at the beginning of the report:
     * "          My Simple Job"
     * ""
     * "Point of contact: x.guihot@gmail.com, smbdy@gmail.com"
@@ -218,7 +217,7 @@ object Monitor {
     * // Using:
     * Monitor.setReportTitle("My Simple Job")
     * Monitor.addDescription("Documentation: https://github.com/xavierguihot/spark_helper")
-    * // Produces this at the begining of the report:
+    * // Produces this at the beginning of the report:
     * "          My Simple Job"
     * ""
     * "Documentation: https://github.com/xavierguihot/spark_helper"
@@ -269,7 +268,7 @@ object Monitor {
     *
     * @return if your spark job is successful.
     */
-  def isSuccess(): Boolean = successful
+  def isSuccess: Boolean = successful
 
   /** Returns the current state of the monitoring report.
     *
@@ -286,7 +285,7 @@ object Monitor {
     *
     * @param text the text to append to the report
     */
-  def log(text: String): Unit = log(text, true)
+  def log(text: String): Unit = log(text, withTimestamp = true)
 
   /** Updates the report with some text and a success.
     *
@@ -316,7 +315,7 @@ object Monitor {
     * will result in this to be appended to the report:
     * {{{ "[10:35-10:37] Some text: failure\n" }}}
     *
-    * Once the monitoring is a failure, then whatever following successfull
+    * Once the monitoring is a failure, then whatever following successful
     * action won't change the failed status of the monitoring.
     *
     * @param taskDescription the text to append to the report
@@ -342,12 +341,12 @@ object Monitor {
     * {{{
     * monitor.error(
     *   invalidInputException,
-    *   "My pipeline descirption",
+    *   "My pipeline description",
     *   diagnostic = "No input data!")
     * }}}
     * will result in this to be appended to the report:
     * {{{
-    * [10:23-10:24] My pipeline descirption: failed
+    * [10:23-10:24] My pipeline description: failed
     *   Diagnostic: No input data!
     *     org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs://my/hdfs/input/path
     *     at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:285)
@@ -370,7 +369,7 @@ object Monitor {
     successful = false
 
     val serializedException =
-      "\t\t" + exception.toString() + "\n" +
+      "\t\t" + exception.toString + "\n" +
         exception.getStackTrace.map(line => s"\t\t$line").mkString("\n")
 
     val update = List(
@@ -433,14 +432,13 @@ object Monitor {
     if (!testsAreValid)
       successful = false
 
-    val seriralizedTests = tests.mkString("\n")
+    val serializedTests = tests.mkString("\n")
 
     val update = testSuitName match {
-      case "" => seriralizedTests
-      case _ => {
+      case "" => serializedTests
+      case _ =>
         val status = if (testsAreValid) "success" else "failed"
-        s"$testSuitName: $status\n$seriralizedTests"
-      }
+        s"$testSuitName: $status\n$serializedTests"
     }
 
     log(update)
@@ -506,11 +504,10 @@ object Monitor {
 
     logDirectory match {
 
-      case Some(logFolder) => {
-
+      case Some(logFolder) =>
         // We add the job duration to the report:
         val jobDuration = DurationFormatUtils.formatDuration(
-          Calendar.getInstance().getTimeInMillis() - begining,
+          Calendar.getInstance().getTimeInMillis - beginning,
           "HH:mm:ss")
 
         var now = DateHelper.now("[HH:mm]")
@@ -532,13 +529,13 @@ object Monitor {
           .writeToHdfsFile(finalReport, s"$logFolder/current.$reportExtension")
 
         purgeWindow.foreach(window => purgeOutdatedLogs(logFolder, window))
-      }
 
       case None =>
         require(
           logDirectory.nonEmpty,
           "to save the report, please specify the log folder using " +
-            "Monitor.setLogFolder(\"hdfs/path/to/log/folder\")")
+            "Monitor.setLogFolder(\"hdfs/path/to/log/folder\")"
+        )
     }
   }
 
@@ -583,20 +580,17 @@ object Monitor {
   /** Updates the current stored version of logs in file
     * logFolder/current.ongoing */
   private def storeCurrent(): Unit =
-    logDirectory.foreach {
-      case logFolder => {
+    logDirectory.foreach { logFolder =>
+      val warning =
+        "WARNING: If this file exists it does not necessarily mean that " +
+          "your job is still running. This file might persist if your job " +
+          "has been killed and thus couldn't reach your call to the " +
+          "Monitor.store()."
 
-        val warning =
-          "WARNING: If this file exists it does not necessarily mean that " +
-            "your job is still running. This file might persist if your job " +
-            "has been killed and thus couldn't reach your call to the " +
-            "Monitor.store()."
+      val ongoingReport =
+        s"$reportHeader\n$report\n$warning"
 
-        val ongoingReport =
-          s"$reportHeader\n$report\n$warning"
-
-        HdfsHelper.writeToHdfsFile(ongoingReport, s"$logFolder/current.ongoing")
-      }
+      HdfsHelper.writeToHdfsFile(ongoingReport, s"$logFolder/current.ongoing")
     }
 
   private def purgeOutdatedLogs(logFolder: String, window: Int): Unit = {

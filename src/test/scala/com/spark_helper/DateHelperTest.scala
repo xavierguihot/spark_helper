@@ -1,6 +1,10 @@
 package com.spark_helper
 
+import com.spark_helper.DateHelper._
+
 import org.scalatest.FunSuite
+
+import com.spark_helper.{DateHelper => DH}
 
 /** Testing facility for date helpers.
   *
@@ -23,7 +27,11 @@ class DateHelperTest extends FunSuite {
     )
     assert(dates === expectedDates)
 
-    // 2: With a custom formatter:
+    // 2: Same as 1, but using the pimped String:
+    dates = "20161229" to "20170103"
+    assert(dates === expectedDates)
+
+    // 3: With a custom formatter:
     dates = DateHelper.daysBetween("29Dec16", "03Jan17", "ddMMMyy")
     expectedDates = List(
       "29Dec16",
@@ -37,25 +45,20 @@ class DateHelperTest extends FunSuite {
   }
 
   test("Reformat date") {
-    assert(
-      DateHelper.reformatDate("20170327", "yyyyMMdd", "yyMMdd") === "170327")
-    assert(
-      DateHelper.reformatDate("20170327", "yyyyMMdd", "MMddyy") === "032717")
+    assert(DH.reformatDate("20170327", "yyyyMMdd", "yyMMdd") === "170327")
+    assert(DH.reformatDate("20170327", "yyyyMMdd", "MMddyy") === "032717")
   }
 
   test("Next day") {
-    assert(DateHelper.nextDay("20170310") === "20170311")
-    assert(DateHelper.nextDay("170310", "yyMMdd") === "170311")
-    assert(
-      DateHelper.nextDay("20170310_0000", "yyyyMMdd_HHmm") === "20170311_0000")
+    assert(DH.nextDay("20170310") === "20170311")
+    assert(DH.nextDay("170310", "yyMMdd") === "170311")
+    assert(DH.nextDay("20170310_0000", "yyyyMMdd_HHmm") === "20170311_0000")
   }
 
   test("Previous day") {
-    assert(DateHelper.previousDay("20170310") === "20170309")
-    assert(DateHelper.previousDay("170310", "yyMMdd") === "170309")
-    assert(
-      DateHelper
-        .previousDay("20170310_0000", "yyyyMMdd_HHmm") === "20170309_0000")
+    assert(DH.previousDay("20170310") === "20170309")
+    assert(DH.previousDay("170310", "yyMMdd") === "170309")
+    assert(DH.previousDay("20170310_0000", "yyyyMMdd_HHmm") === "20170309_0000")
   }
 
   test("Nbr of days between two dates") {
@@ -78,7 +81,7 @@ class DateHelperTest extends FunSuite {
     assert(DateHelper.nDaysBeforeDate(5, "170310", "yyMMdd") === "170305")
   }
 
-  test("Date it will be N days affter date") {
+  test("Date it will be N days after date") {
     assert(DateHelper.nDaysAfterDate(3, "20170307") === "20170310")
     assert(DateHelper.nDaysAfterDate(5, "170305", "yyMMdd") === "170310")
   }
@@ -88,6 +91,7 @@ class DateHelperTest extends FunSuite {
   }
 
   test("Date versus provided format") {
+
     assert(DateHelper.isDateCompliantWithFormat("20170302", "yyyyMMdd"))
     assert(!DateHelper.isDateCompliantWithFormat("20170333", "yyyyMMdd"))
     assert(DateHelper.isDateCompliantWithFormat("20170228", "yyyyMMdd"))
@@ -96,5 +100,14 @@ class DateHelperTest extends FunSuite {
     assert(!DateHelper.isDateCompliantWithFormat("", "yyyyMMdd"))
     assert(!DateHelper.isDateCompliantWithFormat("a", "yyyyMMdd"))
     assert(!DateHelper.isDateCompliantWithFormat("24JAN17", "yyyyMMdd"))
+
+    assert("20170302".isCompliantWith("yyyyMMdd"))
+    assert(!"20170333".isCompliantWith("yyyyMMdd"))
+    assert("20170228".isCompliantWith("yyyyMMdd"))
+    assert(!"20170229".isCompliantWith("yyyyMMdd"))
+    assert(!"170228".isCompliantWith("yyyyMMdd"))
+    assert(!"".isCompliantWith("yyyyMMdd"))
+    assert(!"a".isCompliantWith("yyyyMMdd"))
+    assert(!"24JAN17".isCompliantWith("yyyyMMdd"))
   }
 }

@@ -49,11 +49,11 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A logger dedicated to Spak jobs.</p><p>It's a simple logger/report which contains a report that one can update from
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A logger dedicated to Spark jobs.</p><p>It's a simple logger/report which contains a report that one can update from
 the driver and a success state. The idea is to persist job executions logs
-and errors (and forget about grepping unreadable yarn logs).</p><p>It's designed for perdiodic spark jobs (handles storage and purge of logs)
+and errors (and forget about grepping unreadable yarn logs).</p><p>It's designed for periodic spark jobs (handles storage and purge of logs)
 and provides a way to handle kpis validation.</p><p>Logs are stored on the go which means one can have a direct real time access
-of the job logs/status and it's current state (which can overwise be a pain
+of the job logs/status and it's current state (which can otherwise be a pain
 if it means going through yarn logs, or even for certain production
 environments going through additional layers of software logs to get to yarn
 logs).</p><p>One of the issues this logger aims at tackling is the handling of exceptions
@@ -62,9 +62,9 @@ mean one want to make the job fail. Or if it's the case, one might still
 want to perform a few actions before letting the job crash. The idea is thus
 to surround (driver side) a Spark pipeline within a try catch and redirect
 the exception to the logger for a clean logging.</p><p>This is a &quot;driver-only&quot; logger and is not intended at logging concurrent
-actions from executors.</p><p>Produced reports can easily be inserted in a notification email whenerver
+actions from executors.</p><p>Produced reports can easily be inserted in a notification email whenever
 the job fails, which saves a lot of time to maintainers operating on heavy
-production environements.</p><p>The produced persisted report is also a way for downstream jobs to know the
+production environments.</p><p>The produced persisted report is also a way for downstream jobs to know the
 status of their input data.</p><p>Let's go through a simple Spark job example monitored with this Monitor
 facility:</p><pre>Monitor.setTitle(<span class="lit">"My job title"</span>)
 Monitor.addDescription(
@@ -83,7 +83,7 @@ Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
       Test(<span class="lit">"Nbr of output records"</span>, processedData.count(), SUPERIOR_THAN, <span class="num">10</span>e6d, NBR),
       Test(<span class="lit">"Some pct of invalid output"</span>, your_complex_kpi, INFERIOR_THAN, <span class="num">3</span>, PCT)
     ),
-    <span class="lit">"My pipeline descirption"</span>
+    <span class="lit">"My pipeline description"</span>
   )
 
   <span class="kw">if</span> (outputIsValid)
@@ -91,9 +91,9 @@ Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
 
 } <span class="kw">catch</span> {
   <span class="kw">case</span> iie: InvalidInputException <span class="kw">=&gt;</span>
-    Monitor.error(iie, <span class="lit">"My pipeline descirption"</span>, diagnostic = <span class="lit">"No input data!"</span>)
+    Monitor.error(iie, <span class="lit">"My pipeline description"</span>, diagnostic = <span class="lit">"No input data!"</span>)
   <span class="kw">case</span> e: Throwable <span class="kw">=&gt;</span>
-    Monitor.error(e, <span class="lit">"My pipeline descirption"</span>) <span class="cmt">// whatever unexpected error</span>
+    Monitor.error(e, <span class="lit">"My pipeline description"</span>) <span class="cmt">// whatever unexpected error</span>
 }
 
 <span class="kw">if</span> (Monitor.isSuccess()) {
@@ -105,7 +105,7 @@ Monitor.setLogFolder(<span class="lit">"path/to/log/folder"</span>)
 <span class="cmt">// HDFS (this saves the logs in the folder set with Monitor.setLogFolder):</span>
 Monitor.store()
 
-<span class="cmt">// At the end of the job, if the job isn't successfull, you might want to</span>
+<span class="cmt">// At the end of the job, if the job isn't successful, you might want to</span>
 <span class="cmt">// crash it (for instance to get a notification from your scheduler):</span>
 <span class="kw">if</span> (!Monitor.isSuccess()) <span class="kw">throw</span> <span class="kw">new</span> Exception() <span class="cmt">// or send an email, or ...</span></pre><p>At any time during the job, logs can be accessed from file
 path/to/log/folder/current.ongoing</p><p>If we were to read the stored report after this simple pipeline, here are
@@ -113,8 +113,8 @@ some possible reports:</p><p>First scenario, problem with the input of the job:<
 
 My job description (whatever you want); <span class="kw">for</span> instance:
 Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
-[<span class="num">10</span>:<span class="num">23</span>] Begining
-[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline descirption: failed
+[<span class="num">10</span>:<span class="num">23</span>] Beginning
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">23</span>] My pipeline description: failed
   Diagnostic: No input data!
     org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
     at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
@@ -124,18 +124,18 @@ Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</s
 
 My job description (whatever you want); <span class="kw">for</span> instance:
 Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
-[<span class="num">10</span>:<span class="num">23</span>] Begining
-[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline descirption: failed
+[<span class="num">10</span>:<span class="num">23</span>] Beginning
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">36</span>] My pipeline description: failed
     java.lang.NumberFormatException: For input string: <span class="lit">"a"</span>
     java.lang.NumberFormatException.forInputString(NumberFormatException.java:<span class="num">65</span>)
     java.lang.Integer.parseInt(Integer.java:<span class="num">492</span>)
     ...
-[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successfull spark pipeline and KPIs are valid; all good!:</p><pre>          My job title
+[<span class="num">10</span>:<span class="num">36</span>] Duration: <span class="num">00</span>:<span class="num">13</span>:<span class="num">47</span></pre><p>Another scenario, successful spark pipeline and KPIs are valid; all good!:</p><pre>          My job title
 
 My job description (whatever you want); <span class="kw">for</span> instance:
 Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</span>
-[<span class="num">10</span>:<span class="num">23</span>] Begining
-[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline descirption: success
+[<span class="num">10</span>:<span class="num">23</span>] Beginning
+[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">41</span>] My pipeline description: success
   KPI: Nbr of output records
     Value: <span class="num">14669071.0</span>
     Must be superior than <span class="num">10000000.0</span>
@@ -147,7 +147,7 @@ Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</s
 [<span class="num">10</span>:<span class="num">41</span>-<span class="num">10</span>:<span class="num">42</span>] My second pipeline description: success
 [<span class="num">10</span>:<span class="num">42</span>] Duration: <span class="num">00</span>:<span class="num">19</span>:<span class="num">23</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/monitoring/Monitor.scala">Monitor</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>would a State monad be appropriate?</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -262,7 +262,7 @@ Documentation: https:<span class="cmt">//github.com/xavierguihot/spark_helper</s
       <p class="shortcomment cmt">Sets the report's contact list.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the report's contact list.</p><p>This will appear within the first lines of the report:</p><pre><span class="cmt">// Using:</span>
 Monitor.setReportTitle(<span class="lit">"My Simple Job"</span>)
 Monitor.addContacts(<span class="std">List</span>(<span class="lit">"x.guihot@gmail.com"</span>, <span class="lit">"smbdy@gmail.com"</span>))
-<span class="cmt">// Produces this at the begining of the report:</span>
+<span class="cmt">// Produces this at the beginning of the report:</span>
 <span class="lit">"          My Simple Job"</span>
 <span class="lit">""</span>
 <span class="lit">"Point of contact: x.guihot@gmail.com, smbdy@gmail.com"</span></pre></div><dl class="paramcmts block"><dt class="param">contacts</dt><dd class="cmt"><p>the list of points of contact</p></dd></dl></div>
@@ -285,7 +285,7 @@ Monitor.addContacts(<span class="std">List</span>(<span class="lit">"x.guihot@gm
       <p class="shortcomment cmt">Sets the report's description.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the report's description.</p><p>This will appear within the first lines of the report:</p><pre><span class="cmt">// Using:</span>
 Monitor.setReportTitle(<span class="lit">"My Simple Job"</span>)
 Monitor.addDescription(<span class="lit">"Documentation: https://github.com/xavierguihot/spark_helper"</span>)
-<span class="cmt">// Produces this at the begining of the report:</span>
+<span class="cmt">// Produces this at the beginning of the report:</span>
 <span class="lit">"          My Simple Job"</span>
 <span class="lit">""</span>
 <span class="lit">"Documentation: https://github.com/xavierguihot/spark_helper"</span></pre></div><dl class="paramcmts block"><dt class="param">description</dt><dd class="cmt"><p>the description of the Spark job (or whatever)</p></dd></dl></div>
@@ -372,7 +372,7 @@ Monitor.addDescription(<span class="lit">"Documentation: https://github.com/xavi
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="exception">exception: <span class="extype" name="java.lang.Throwable">Throwable</span></span>, <span name="taskDescription">taskDescription: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="diagnostic">diagnostic: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">error</span><span class="params">(<span name="exception">exception: <span class="extype" name="scala.Throwable">Throwable</span></span>, <span name="taskDescription">taskDescription: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="diagnostic">diagnostic: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../index.html#com.spark_helper.Monitor$@error(exception:Throwable,taskDescription:String,diagnostic:String):Boolean" title="Permalink" target="_top">
@@ -385,8 +385,8 @@ tasks.</p><p>The main idea is to surround a Spark pipeline on the driver in orde
 catch whatever exception from executors and thus log the exact error while
 still being able to keep on with the job or end it properly.</p><p>Catching an error like this:</p><pre>monitor.error(
   invalidInputException,
-  <span class="lit">"My pipeline descirption"</span>,
-  diagnostic = <span class="lit">"No input data!"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">24</span>] My pipeline descirption: failed
+  <span class="lit">"My pipeline description"</span>,
+  diagnostic = <span class="lit">"No input data!"</span>)</pre><p>will result in this to be appended to the report:</p><pre>[<span class="num">10</span>:<span class="num">23</span>-<span class="num">10</span>:<span class="num">24</span>] My pipeline description: failed
   Diagnostic: No input data!
     org.apache.hadoop.mapred.InvalidInputException: Input path does not exist: hdfs:<span class="cmt">//my/hdfs/input/path</span>
     at org.apache.hadoop.mapred.FileInputFormat.singleThreadedListStatus(FileInputFormat.java:<span class="num">285</span>)
@@ -410,7 +410,7 @@ source of the problem.</p></dd><dt>returns</dt><dd class="cmt"><p>false since it
       </a>
     </span>
       <p class="shortcomment cmt">Updates the report with some text and a failure.</p><div class="fullcomment"><div class="comment cmt"><p>Updates the report with some text and a failure.</p><p>This sets the status of the monitoring to false. After that the status
-will never be success again, even if you update the report with success().</p><p>Using this method like this:</p><pre>monitor.error(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text: failure\n"</span></pre><p>Once the monitoring is a failure, then whatever following successfull
+will never be success again, even if you update the report with success().</p><p>Using this method like this:</p><pre>monitor.error(<span class="lit">"Some text"</span>)</pre><p>will result in this to be appended to the report:</p><pre><span class="lit">"[10:35-10:37] Some text: failure\n"</span></pre><p>Once the monitoring is a failure, then whatever following successful
 action won't change the failed status of the monitoring.
 </p></div><dl class="paramcmts block"><dt class="param">taskDescription</dt><dd class="cmt"><p>the text to append to the report</p></dd><dt>returns</dt><dd class="cmt"><p>false since it's a failure</p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -488,18 +488,18 @@ action won't change the failed status of the monitoring.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.spark_helper.Monitor#isSuccess" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="isSuccess():Boolean"></a>
-      <a id="isSuccess():Boolean"></a>
+      <a id="isSuccess:Boolean"></a>
+      <a id="isSuccess:Boolean"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isSuccess</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+        <span class="name">isSuccess</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.Monitor$@isSuccess():Boolean" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.Monitor$@isSuccess:Boolean" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -696,7 +696,7 @@ from:</p><pre>src/test/resources/logs/current.ongoing</pre></div><dl class="para
     </span>
       <p class="shortcomment cmt">Sets the report's title.</p><div class="fullcomment"><div class="comment cmt"><p>Sets the report's title.</p><p>This will be the first line of the report:</p><pre><span class="cmt">// Using:</span>
 Monitor.setReportTitle(<span class="lit">"My Simple Job"</span>)
-<span class="cmt">// Produces this at the begining of the report:</span>
+<span class="cmt">// Produces this at the beginning of the report:</span>
 <span class="lit">"          My Simple Job"</span>
 <span class="lit">""</span></pre></div><dl class="paramcmts block"><dt class="param">title</dt><dd class="cmt"><p>the title of the report</p></dd></dl></div>
     </li><li name="com.spark_helper.Monitor#store" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

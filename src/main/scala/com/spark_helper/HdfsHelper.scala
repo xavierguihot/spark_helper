@@ -6,6 +6,8 @@ import org.apache.hadoop.io.compress.{CompressionCodec, CompressionCodecFactory}
 import org.apache.hadoop.io.compress.{GzipCodec, BZip2Codec}
 import org.apache.hadoop.io.IOUtils
 
+import scala.reflect.ClassTag
+
 import org.joda.time.{DateTime, Days}
 import org.joda.time.format.DateTimeFormat
 
@@ -34,48 +36,112 @@ import com.typesafe.config.{Config, ConfigFactory}
   * code and thus could instead just use
   * HdfsHelper.deleteFile("my/hdfs/file/path.csv").
   *
-  * A few exemples:
+  * A few examples:
   *
   * {{{
   * import com.spark_helper.HdfsHelper
   *
   * // A bunch of methods wrapping the FileSystem API, such as:
-  * HdfsHelper.fileExists("my/hdfs/file/path.txt")
-  * assert(HdfsHelper.listFileNamesInFolder("my/folder/path") == List("file_name_1.txt", "file_name_2.csv"))
-  * assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
-  * assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") == 3)
-  * HdfsHelper.deleteFile("my/hdfs/file/path.csv")
-  * HdfsHelper.moveFolder("my/hdfs/folder")
+  * HdfsHelper.fileExists("my/hdfs/file/path.txt") // HdfsHelper.folderExists("my/hdfs/folder")
+  * HdfsHelper.listFileNamesInFolder("my/folder/path") // List("file_name_1.txt", "file_name_2.csv")
+  * HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") // "20170306"
+  * HdfsHelper.nbrOfDaysSinceFileWasLastModified("my/hdfs/file/path.txt") // 3
+  * HdfsHelper.deleteFile("my/hdfs/file/path.csv") // HdfsHelper.deleteFolder("my/hdfs/folder")
+  * HdfsHelper.moveFolder("old/path", "new/path") // HdfsHelper.moveFile("old/path.txt", "new/path.txt")
+  * HdfsHelper.createEmptyHdfsFile("/some/hdfs/file/path.token") // HdfsHelper.createFolder("my/hdfs/folder")
+  *
+  * // File content helpers:
   * HdfsHelper.compressFile("hdfs/path/to/uncompressed_file.txt", classOf[GzipCodec])
   * HdfsHelper.appendHeader("my/hdfs/file/path.csv", "colum0,column1")
   *
   * // Some Xml/Typesafe helpers for hadoop as well:
-  * HdfsHelper.isHdfsXmlCompliantWithXsd(
-  *   "my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
+  * HdfsHelper.isHdfsXmlCompliantWithXsd("my/hdfs/file/path.xml", getClass.getResource("/some_xml.xsd"))
   * HdfsHelper.loadXmlFileFromHdfs("my/hdfs/file/path.xml")
   *
-  * // Very handy to load a config (typesafe format) stored on hdfs at the
-  * // begining of a spark job:
+  * // Very handy to load a config (typesafe format) stored on hdfs at the beginning of a spark job:
   * HdfsHelper.loadTypesafeConfigFromHdfs("my/hdfs/file/path.conf"): Config
   *
-  * // In order to write small amount of data in a file on hdfs without the
-  * // whole spark stack:
-  * HdfsHelper.writeToHdfsFile(
-  *   Array("some", "relatively small", "text"),
-  *   "/some/hdfs/file/path.txt")
+  * // In order to write small amount of data in a file on hdfs without the whole spark stack:
+  * HdfsHelper.writeToHdfsFile(Array("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
+  * // or:
+  * import com.spark_helper.HdfsHelper._
+  * Array("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+  * "hello world".writeToHdfs("/some/hdfs/file/path.txt")
   *
-  * // Deletes all files/folders in "hdfs/path/to/folder" for which the
-  * // timestamp is older than 10 days:
+  * // Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:
   * HdfsHelper.purgeFolder("hdfs/path/to/folder", 10)
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
   * /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
   *
+  * @todo Create a touch method
   * @author Xavier Guihot
   * @since 2017-02
   */
 object HdfsHelper extends Serializable {
+
+  private var conf = new Configuration()
+  private var hdfs = FileSystem.get(conf)
+
+  /** Sets a specific <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Configuration</code>
+    * used by the underlying <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem</code>
+    * in case it requires some specificities.
+    *
+    * If this setter is not used, the default Configuration is set with
+    * <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">new Configuration()</code>.
+    *
+    * @param configuration the specific Configuration to use
+    */
+  def setConf(configuration: Configuration): Unit = {
+    conf = configuration
+    hdfs = FileSystem.get(configuration)
+  }
+
+  /** Sets a specific <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem</code>
+    * in case it requires some specificities.
+    *
+    * If this setter is not used, the default FileSystem is set with
+    * <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem.get(new Configuration())</code>.
+    *
+    * @param fileSystem the specific FileSystem to use
+    */
+  def setFileSystem(fileSystem: FileSystem): Unit = hdfs = fileSystem
+
+  implicit class SeqExtensions[T <: Seq[String]: ClassTag](val seq: T) {
+
+    /** Saves list elements in a file on hdfs.
+      *
+      * Please only consider this way of storing data when the data set is small
+      * enough.
+      *
+      * Overwrites the file if it already exists.
+      *
+      * {{{
+      * Array("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+      * List("some", "relatively small", "text").writeToHdfs("/some/hdfs/file/path.txt")
+      * }}}
+      *
+      * @param filePath the path of the file in which to write the content of
+      * the List.
+      */
+    def writeToHdfs(filePath: String): Unit =
+      HdfsHelper.writeToHdfsFile(seq, filePath)
+  }
+
+  implicit class StringExtensions(val string: String) {
+
+    /** Saves the String in a file on hdfs.
+      *
+      * Overwrites the file if it already exists.
+      *
+      * {{{ "some\nrelatively small\ntext".writeToHdfsFile("/some/hdfs/file/path.txt") }}}
+      *
+      * @param filePath the path of the file in which to write the String
+      */
+    def writeToHdfs(filePath: String): Unit =
+      HdfsHelper.writeToHdfsFile(string, filePath)
+  }
 
   /** Deletes a file on HDFS.
     *
@@ -85,17 +151,16 @@ object HdfsHelper extends Serializable {
     */
   def deleteFile(hdfsPath: String): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val fileToDelete = new Path(hdfsPath)
 
-    if (fileSystem.exists(fileToDelete)) {
+    if (hdfs.exists(fileToDelete)) {
 
       require(
-        fileSystem.isFile(fileToDelete),
-        "to delete a folder, prefer using the deleteFolder() method.")
+        hdfs.isFile(fileToDelete),
+        "to delete a folder, prefer using the deleteFolder() method."
+      )
 
-      fileSystem.delete(fileToDelete, true)
+      hdfs.delete(fileToDelete, true)
     }
   }
 
@@ -107,17 +172,16 @@ object HdfsHelper extends Serializable {
     */
   def deleteFolder(hdfsPath: String): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val folderToDelete = new Path(hdfsPath)
 
-    if (fileSystem.exists(folderToDelete)) {
+    if (hdfs.exists(folderToDelete)) {
 
       require(
-        !fileSystem.isFile(folderToDelete),
-        "to delete a file, prefer using the deleteFile() method.")
+        !hdfs.isFile(folderToDelete),
+        "to delete a file, prefer using the deleteFile() method."
+      )
 
-      fileSystem.delete(folderToDelete, true)
+      hdfs.delete(folderToDelete, true)
     }
   }
 
@@ -127,8 +191,7 @@ object HdfsHelper extends Serializable {
     *
     * @param hdfsPath the path of the folder to create
     */
-  def createFolder(hdfsPath: String): Unit =
-    FileSystem.get(new Configuration()).mkdirs(new Path(hdfsPath))
+  def createFolder(hdfsPath: String): Unit = hdfs.mkdirs(new Path(hdfsPath))
 
   /** Checks if the file exists.
     *
@@ -137,16 +200,15 @@ object HdfsHelper extends Serializable {
     */
   def fileExists(hdfsPath: String): Boolean = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val fileToCheck = new Path(hdfsPath)
 
-    if (fileSystem.exists(fileToCheck))
+    if (hdfs.exists(fileToCheck))
       require(
-        fileSystem.isFile(fileToCheck),
-        "to check if a folder exists, prefer using the folderExists() method.")
+        hdfs.isFile(fileToCheck),
+        "to check if a folder exists, prefer using the folderExists() method."
+      )
 
-    fileSystem.exists(fileToCheck)
+    hdfs.exists(fileToCheck)
   }
 
   /** Checks if the folder exists.
@@ -156,16 +218,15 @@ object HdfsHelper extends Serializable {
     */
   def folderExists(hdfsPath: String): Boolean = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val folderToCheck = new Path(hdfsPath)
 
-    if (fileSystem.exists(folderToCheck))
+    if (hdfs.exists(folderToCheck))
       require(
-        !fileSystem.isFile(folderToCheck),
-        "to check if a file exists, prefer using the fileExists() method.")
+        !hdfs.isFile(folderToCheck),
+        "to check if a file exists, prefer using the fileExists() method."
+      )
 
-    fileSystem.exists(folderToCheck)
+    hdfs.exists(folderToCheck)
   }
 
   /** Moves/renames a file.
@@ -184,30 +245,30 @@ object HdfsHelper extends Serializable {
       overwrite: Boolean = false
   ): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val fileToRename = new Path(oldPath)
     val renamedFile = new Path(newPath)
 
-    if (fileSystem.exists(fileToRename))
+    if (hdfs.exists(fileToRename))
       require(
-        fileSystem.isFile(fileToRename),
-        "to move a folder, prefer using the moveFolder() method.")
+        hdfs.isFile(fileToRename),
+        "to move a folder, prefer using the moveFolder() method."
+      )
 
     if (overwrite)
-      fileSystem.delete(renamedFile, true)
+      hdfs.delete(renamedFile, true)
     else
       require(
-        !fileSystem.exists(renamedFile),
+        !hdfs.exists(renamedFile),
         "overwrite option set to false, but a file already exists at target " +
-          "location " + newPath)
+          "location " + newPath
+      )
 
     // Before moving the file to its final destination, we check if the folder
     // where to put the file exists, and if not we create it:
     val targetContainerFolder = newPath.split("/").init.mkString("/")
     createFolder(targetContainerFolder)
 
-    fileSystem.rename(fileToRename, renamedFile)
+    hdfs.rename(fileToRename, renamedFile)
   }
 
   /** Moves/renames a folder.
@@ -226,36 +287,36 @@ object HdfsHelper extends Serializable {
       overwrite: Boolean = false
   ): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val folderToRename = new Path(oldPath)
     val renamedFolder = new Path(newPath)
 
-    if (fileSystem.exists(folderToRename))
+    if (hdfs.exists(folderToRename))
       require(
-        !fileSystem.isFile(folderToRename),
-        "to move a file, prefer using the moveFile() method.")
+        !hdfs.isFile(folderToRename),
+        "to move a file, prefer using the moveFile() method."
+      )
 
     if (overwrite)
-      fileSystem.delete(renamedFolder, true)
+      hdfs.delete(renamedFolder, true)
     else
       require(
-        !fileSystem.exists(renamedFolder),
+        !hdfs.exists(renamedFolder),
         "overwrite option set to false, but a folder already exists at target " +
-          "location " + newPath)
+          "location " + newPath
+      )
 
     // Before moving the folder to its final destination, we check if the folder
     // where to put the folder exists, and if not we create it:
     val targetContainerFolder = newPath.split("/").init.mkString("/")
     createFolder(targetContainerFolder)
 
-    fileSystem.rename(folderToRename, new Path(newPath))
+    hdfs.rename(folderToRename, new Path(newPath))
   }
 
   /** Creates an empty file on hdfs.
     *
-    * Might be usefull for token files. For instance a file which is only used
-    * as a timestamp token of the last update of a processus, or a file which
+    * Might be useful for token files. For instance a file which is only used
+    * as a timestamp token of the last update of a process, or a file which
     * blocks the execution of an other instance of the same job, ...
     *
     * Overwrites the file if it already exists.
@@ -272,7 +333,7 @@ object HdfsHelper extends Serializable {
     * @param filePath the path of the empty file to create
     */
   def createEmptyHdfsFile(filePath: String): Unit =
-    FileSystem.get(new Configuration()).create(new Path(filePath)).close()
+    hdfs.create(new Path(filePath)).close()
 
   /** Saves text in a file when content is too small to really require an RDD.
     *
@@ -289,10 +350,7 @@ object HdfsHelper extends Serializable {
     * @param filePath the path of the file in which to write the content
     */
   def writeToHdfsFile(content: String, filePath: String): Unit = {
-
-    val outputFile =
-      FileSystem.get(new Configuration()).create(new Path(filePath))
-
+    val outputFile = hdfs.create(new Path(filePath))
     outputFile.write(content.getBytes("UTF-8"))
     outputFile.close()
   }
@@ -311,7 +369,7 @@ object HdfsHelper extends Serializable {
     *   List("some", "relatively small", "text"), "/some/hdfs/file/path.txt")
     * }}}
     *
-    * @param content the array of strings to write in the file as one line per
+    * @param content the seq of strings to write in the file as one line per
     * string (this takes care of joining strings with "\n"s).
     * @param filePath the path of the file in which to write the content
     */
@@ -337,11 +395,9 @@ object HdfsHelper extends Serializable {
       onlyName: Boolean = true
   ): List[String] = {
 
-    FileSystem
-      .get(new Configuration())
+    hdfs
       .listStatus(new Path(hdfsPath))
-      .flatMap(status => {
-
+      .flatMap { status =>
         // If it's a file:
         if (status.isFile) {
           if (onlyName) List(status.getPath.getName)
@@ -351,12 +407,13 @@ object HdfsHelper extends Serializable {
         else if (recursive)
           listFileNamesInFolder(
             hdfsPath + "/" + status.getPath.getName,
-            true,
-            onlyName)
+            recursive = true,
+            onlyName
+          )
         // If it's a dir and we're not in a recursive option:
         else
           Nil
-      })
+      }
       .toList
       .sorted
   }
@@ -371,8 +428,7 @@ object HdfsHelper extends Serializable {
     * @return the list of folder names in the specified folder
     */
   def listFolderNamesInFolder(hdfsPath: String): List[String] =
-    FileSystem
-      .get(new Configuration())
+    hdfs
       .listStatus(new Path(hdfsPath))
       .filter(!_.isFile)
       .map(_.getPath.getName)
@@ -386,13 +442,9 @@ object HdfsHelper extends Serializable {
     * @return the joda DateTime of the last modification of the given file
     */
   def fileModificationDateTime(hdfsPath: String): DateTime =
-    new DateTime(
-      FileSystem
-        .get(new Configuration())
-        .getFileStatus(new Path(hdfsPath))
-        .getModificationTime())
+    new DateTime(hdfs.getFileStatus(new Path(hdfsPath)).getModificationTime)
 
-  /** Returns the stringified date of the last modification of the given file.
+  /** Returns the formatted date of the last modification of the given file.
     *
     * {{{
     * assert(HdfsHelper.fileModificationDate("my/hdfs/file/path.txt") == "20170306")
@@ -402,7 +454,7 @@ object HdfsHelper extends Serializable {
     * modification date.
     * @param format (default = "yyyyMMdd") the format under which to get the
     * modification date.
-    * @return the stringified date of the last modification of the given file,
+    * @return the formatted date of the last modification of the given file,
     * under the provided format.
     */
   def fileModificationDate(
@@ -420,7 +472,7 @@ object HdfsHelper extends Serializable {
   def folderModificationDateTime(hdfsPath: String): DateTime =
     fileModificationDateTime(hdfsPath)
 
-  /** Returns the stringified date of the last modification of the given folder.
+  /** Returns the formatted date of the last modification of the given folder.
     *
     * {{{
     * assert(HdfsHelper.folderModificationDate("my/hdfs/folder") == "20170306")
@@ -430,7 +482,7 @@ object HdfsHelper extends Serializable {
     * modification date.
     * @param format (default = "yyyyMMdd") the format under which to get the
     * modification date.
-    * @return the stringified date of the last modification of the given folder,
+    * @return the formatted date of the last modification of the given folder,
     * under the provided format.
     */
   def folderModificationDate(
@@ -452,17 +504,17 @@ object HdfsHelper extends Serializable {
   def nbrOfDaysSinceFileWasLastModified(hdfsPath: String): Int =
     Days
       .daysBetween(fileModificationDateTime(hdfsPath), new DateTime())
-      .getDays()
+      .getDays
 
   /** Appends a header and a footer to a file.
     *
-    * Usefull when creating an xml file with spark and you need to add top level
+    * Useful when creating an xml file with spark and you need to add top level
     * tags.
     *
     * If the workingFolderPath parameter is provided, then the processing is
     * done in a working/tmp folder and then only, the final file is moved to its
     * final real location. This way, in case of cluster instability, i.e. in
-    * case the Spark job is interupted, this avoids having a temporary or
+    * case the Spark job is interrupted, this avoids having a temporary or
     * corrupted file in output.
     *
     * @param filePath the path of the file for which to add the header and the
@@ -485,13 +537,13 @@ object HdfsHelper extends Serializable {
 
   /** Appends a header to a file.
     *
-    * Usefull when creating a csv file with spark and you need to add a header
+    * Useful when creating a csv file with spark and you need to add a header
     * describing the different fields.
     *
     * If the workingFolderPath parameter is provided, then the processing is
     * done in a working/tmp folder and then only, the final file is moved to its
     * final real location. This way, in case of cluster instability, i.e. in
-    * case the Spark job is interupted, this avoids having a temporary or
+    * case the Spark job is interrupted, this avoids having a temporary or
     * corrupted file in output.
     *
     * @param filePath the path of the file for which to add the header
@@ -514,7 +566,7 @@ object HdfsHelper extends Serializable {
     * If the workingFolderPath parameter is provided, then the processing is
     * done in a working/tmp folder and then only, the final file is moved to its
     * final real location. This way, in case of cluster instability, i.e. in
-    * case the Spark job is interupted, this avoids having a temporary or
+    * case the Spark job is interrupted, this avoids having a temporary or
     * corrupted file in output.
     *
     * @param filePath the path of the file for which to add the footer
@@ -546,7 +598,7 @@ object HdfsHelper extends Serializable {
       validateHdfsXmlWithXsd(hdfsXmlPath, xsdFile)
       true
     } catch {
-      case saxe: SAXException => false
+      case _: SAXException => false
     }
 
   /** Validates an XML file on hdfs in regard to the given XSD.
@@ -562,9 +614,7 @@ object HdfsHelper extends Serializable {
     */
   def validateHdfsXmlWithXsd(hdfsXmlPath: String, xsdFile: URL): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
-    val xmlFile = new StreamSource(fileSystem.open(new Path(hdfsXmlPath)))
+    val xmlFile = new StreamSource(hdfs.open(new Path(hdfsXmlPath)))
 
     val schemaFactory =
       SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
@@ -574,7 +624,7 @@ object HdfsHelper extends Serializable {
     validator.validate(xmlFile)
   }
 
-  /** Loads a typesafe config from Hdfs.
+  /** Loads a Typesafe config from Hdfs.
     *
     * The best way to load the configuration of your job from hdfs.
     *
@@ -602,15 +652,12 @@ object HdfsHelper extends Serializable {
     * }
     * }}}
     *
-    * @param hdfsConfigPath the absolute path of the typesafe config file on
-    * hdfs we want to load as a typesafe Config object.
+    * @param hdfsConfigPath the absolute path of the Typesafe config file on
+    * hdfs we want to load as a Typesafe Config object.
     * @return the com.typesafe.config.Config object which contains usable data
     */
   def loadTypesafeConfigFromHdfs(hdfsConfigPath: String): Config = {
-
-    val reader = new InputStreamReader(
-      FileSystem.get(new Configuration()).open(new Path(hdfsConfigPath)))
-
+    val reader = new InputStreamReader(hdfs.open(new Path(hdfsConfigPath)))
     try { ConfigFactory.parseReader(reader) } finally { reader.close() }
   }
 
@@ -623,10 +670,7 @@ object HdfsHelper extends Serializable {
     * @return the scala.xml.Elem object
     */
   def loadXmlFileFromHdfs(hdfsXmlPath: String): Elem = {
-
-    val reader = new InputStreamReader(
-      FileSystem.get(new Configuration()).open(new Path(hdfsXmlPath)))
-
+    val reader = new InputStreamReader(hdfs.open(new Path(hdfsXmlPath)))
     try { XML.load(reader) } finally { reader.close() }
   }
 
@@ -655,22 +699,19 @@ object HdfsHelper extends Serializable {
       deleteInputFile: Boolean = true
   ): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val ClassOfGzip = classOf[GzipCodec]
     val ClassOfBZip2 = classOf[BZip2Codec]
 
     val outputPath = compressionCodec match {
-      case ClassOfGzip  => inputPath + ".gz"
-      case ClassOfBZip2 => inputPath + ".bz2"
+      case ClassOfGzip  => s"$inputPath.gz"
+      case ClassOfBZip2 => s"$inputPath.bz2"
     }
 
-    val inputStream = fileSystem.open(new Path(inputPath))
-    val outputStream = fileSystem.create(new Path(outputPath))
+    val inputStream = hdfs.open(new Path(inputPath))
+    val outputStream = hdfs.create(new Path(outputPath))
 
     // The compression code:
-    val codec = new CompressionCodecFactory(new Configuration())
-      .getCodec(new Path(outputPath))
+    val codec = new CompressionCodecFactory(conf).getCodec(new Path(outputPath))
     // We include the compression codec to the output stream:
     val compressedOutputStream = codec.createOutputStream(outputStream)
 
@@ -678,7 +719,7 @@ object HdfsHelper extends Serializable {
       IOUtils.copyBytes(
         inputStream,
         compressedOutputStream,
-        new Configuration(),
+        conf,
         false
       )
     } finally {
@@ -707,16 +748,16 @@ object HdfsHelper extends Serializable {
 
     require(
       purgeAge >= 0,
-      "the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0.")
+      "the purgeAge provided \"" + purgeAge.toString + "\" must be superior to 0."
+    )
 
-    FileSystem
-      .get(new Configuration())
+    hdfs
       .listStatus(new Path(folderPath))
       .filter(path => {
 
         val fileAgeInDays = Days
-          .daysBetween(new DateTime(path.getModificationTime()), new DateTime())
-          .getDays()
+          .daysBetween(new DateTime(path.getModificationTime), new DateTime())
+          .getDays
 
         fileAgeInDays >= purgeAge
 
@@ -744,22 +785,20 @@ object HdfsHelper extends Serializable {
       workingFolderPath: String
   ): Unit = {
 
-    val fileSystem = FileSystem.get(new Configuration())
-
     val tmpOutputPath = workingFolderPath match {
-      case "" => filePath + ".tmp"
-      case _  => workingFolderPath + "/xml.tmp"
+      case "" => s"$filePath.tmp"
+      case _  => s"$workingFolderPath/xml.tmp"
     }
     deleteFile(tmpOutputPath)
 
-    val inputFile = fileSystem.open(new Path(filePath))
-    val tmpOutputFile = fileSystem.create(new Path(tmpOutputPath))
+    val inputFile = hdfs.open(new Path(filePath))
+    val tmpOutputFile = hdfs.create(new Path(tmpOutputPath))
 
     // If there is an header, we add it to the file:
     header.foreach(h => tmpOutputFile.write((h + "\n").getBytes("UTF-8")))
 
     try {
-      IOUtils.copyBytes(inputFile, tmpOutputFile, new Configuration(), false)
+      IOUtils.copyBytes(inputFile, tmpOutputFile, conf, false)
     } finally {
       inputFile.close()
     }

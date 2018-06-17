@@ -54,38 +54,39 @@ Hadoop FileSystem API <a href="https://hadoop.apache.org/docs/r2.6.1/api/org/apa
 spark job and replace it with methods fully tested whose name is
 self-explanatory/readable.</p><p>For instance, one don't want to remove a file from hdfs using 3 lines of
 code and thus could instead just use
-HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few exemples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
+HdfsHelper.deleteFile(&quot;my/hdfs/file/path.csv&quot;).</p><p>A few examples:</p><pre><span class="kw">import</span> com.spark_helper.HdfsHelper
 
 <span class="cmt">// A bunch of methods wrapping the FileSystem API, such as:</span>
-HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>)
-assert(HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) == <span class="std">List</span>(<span class="lit">"file_name_1.txt"</span>, <span class="lit">"file_name_2.csv"</span>))
-assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)
-assert(HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="num">3</span>)
-HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>)
-HdfsHelper.moveFolder(<span class="lit">"my/hdfs/folder"</span>)
+HdfsHelper.fileExists(<span class="lit">"my/hdfs/file/path.txt"</span>) <span class="cmt">// HdfsHelper.folderExists("my/hdfs/folder")</span>
+HdfsHelper.listFileNamesInFolder(<span class="lit">"my/folder/path"</span>) <span class="cmt">// List("file_name_1.txt", "file_name_2.csv")</span>
+HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) <span class="cmt">// "20170306"</span>
+HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"my/hdfs/file/path.txt"</span>) <span class="cmt">// 3</span>
+HdfsHelper.deleteFile(<span class="lit">"my/hdfs/file/path.csv"</span>) <span class="cmt">// HdfsHelper.deleteFolder("my/hdfs/folder")</span>
+HdfsHelper.moveFolder(<span class="lit">"old/path"</span>, <span class="lit">"new/path"</span>) <span class="cmt">// HdfsHelper.moveFile("old/path.txt", "new/path.txt")</span>
+HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>) <span class="cmt">// HdfsHelper.createFolder("my/hdfs/folder")</span>
+
+<span class="cmt">// File content helpers:</span>
 HdfsHelper.compressFile(<span class="lit">"hdfs/path/to/uncompressed_file.txt"</span>, classOf[GzipCodec])
 HdfsHelper.appendHeader(<span class="lit">"my/hdfs/file/path.csv"</span>, <span class="lit">"colum0,column1"</span>)
 
 <span class="cmt">// Some Xml/Typesafe helpers for hadoop as well:</span>
-HdfsHelper.isHdfsXmlCompliantWithXsd(
-  <span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
+HdfsHelper.isHdfsXmlCompliantWithXsd(<span class="lit">"my/hdfs/file/path.xml"</span>, getClass.getResource(<span class="lit">"/some_xml.xsd"</span>))
 HdfsHelper.loadXmlFileFromHdfs(<span class="lit">"my/hdfs/file/path.xml"</span>)
 
-<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the</span>
-<span class="cmt">// begining of a spark job:</span>
+<span class="cmt">// Very handy to load a config (typesafe format) stored on hdfs at the beginning of a spark job:</span>
 HdfsHelper.loadTypesafeConfigFromHdfs(<span class="lit">"my/hdfs/file/path.conf"</span>): Config
 
-<span class="cmt">// In order to write small amount of data in a file on hdfs without the</span>
-<span class="cmt">// whole spark stack:</span>
-HdfsHelper.writeToHdfsFile(
-  <span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>),
-  <span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="cmt">// In order to write small amount of data in a file on hdfs without the whole spark stack:</span>
+HdfsHelper.writeToHdfsFile(<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="cmt">// or:</span>
+<span class="kw">import</span> com.spark_helper.HdfsHelper._
+<span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>).writeToHdfs(<span class="lit">"/some/hdfs/file/path.txt"</span>)
+<span class="lit">"hello world"</span>.writeToHdfs(<span class="lit">"/some/hdfs/file/path.txt"</span>)
 
-<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the</span>
-<span class="cmt">// timestamp is older than 10 days:</span>
+<span class="cmt">// Deletes all files/folders in "hdfs/path/to/folder" for which the timestamp is older than 10 days:</span>
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/HdfsHelper.scala">HdfsHelper</a>
-</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>Create a touch method</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -124,7 +125,44 @@ HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span cla
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.spark_helper.HdfsHelper.SeqExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SeqExtensions[T&lt;:Seq[String]]extendsAnyRef"></a>
+      <a id="SeqExtensions[T&lt;:Seq[String]]:SeqExtensions[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HdfsHelper$$SeqExtensions.html"><span class="name">SeqExtensions</span></a><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@SeqExtensions[T&lt;:Seq[String]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.spark_helper.HdfsHelper.StringExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringExtensionsextendsAnyRef"></a>
+      <a id="StringExtensions:StringExtensions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HdfsHelper$$StringExtensions.html"><span class="name">StringExtensions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@StringExtensionsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
 
         
 
@@ -200,7 +238,7 @@ HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span cla
       <p class="shortcomment cmt">Appends a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a footer to a file.</p><p>If the workingFolderPath parameter is provided, then the processing is
 done in a working/tmp folder and then only, the final file is moved to its
 final real location. This way, in case of cluster instability, i.e. in
-case the Spark job is interupted, this avoids having a temporary or
+case the Spark job is interrupted, this avoids having a temporary or
 corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the footer</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendHeader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -219,11 +257,11 @@ corrupted file in output.
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Appends a header to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header to a file.</p><p>Usefull when creating a csv file with spark and you need to add a header
+      <p class="shortcomment cmt">Appends a header to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header to a file.</p><p>Useful when creating a csv file with spark and you need to add a header
 describing the different fields.</p><p>If the workingFolderPath parameter is provided, then the processing is
 done in a working/tmp folder and then only, the final file is moved to its
 final real location. This way, in case of cluster instability, i.e. in
-case the Spark job is interupted, this avoids having a temporary or
+case the Spark job is interrupted, this avoids having a temporary or
 corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#appendHeaderAndFooter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -242,11 +280,11 @@ corrupted file in output.
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Appends a header and a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header and a footer to a file.</p><p>Usefull when creating an xml file with spark and you need to add top level
+      <p class="shortcomment cmt">Appends a header and a footer to a file.</p><div class="fullcomment"><div class="comment cmt"><p>Appends a header and a footer to a file.</p><p>Useful when creating an xml file with spark and you need to add top level
 tags.</p><p>If the workingFolderPath parameter is provided, then the processing is
 done in a working/tmp folder and then only, the final file is moved to its
 final real location. This way, in case of cluster instability, i.e. in
-case the Spark job is interupted, this avoids having a temporary or
+case the Spark job is interrupted, this avoids having a temporary or
 corrupted file in output.
 </p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file for which to add the header and the
 footer.</p></dd><dt class="param">header</dt><dd class="cmt"><p>the header to add</p></dd><dt class="param">footer</dt><dd class="cmt"><p>the footer to add</p></dd><dt class="param">workingFolderPath</dt><dd class="cmt"><p>the path where file manipulations will happen</p></dd></dl></div>
@@ -329,8 +367,8 @@ classOf[BZip2Codec] or classOf[GzipCodec])).</p></dd><dt class="param">deleteInp
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Creates an empty file on hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an empty file on hdfs.</p><p>Might be usefull for token files. For instance a file which is only used
-as a timestamp token of the last update of a processus, or a file which
+      <p class="shortcomment cmt">Creates an empty file on hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Creates an empty file on hdfs.</p><p>Might be useful for token files. For instance a file which is only used
+as a timestamp token of the last update of a process, or a file which
 blocks the execution of an other instance of the same job, ...</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.createEmptyHdfsFile(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre><p>In case this is used as a timestamp container, you can then use the
 following methods to retrieve its timestamp:</p><pre><span class="kw">val</span> fileAge = HdfsHelper.nbrOfDaysSinceFileWasLastModified(<span class="lit">"/some/hdfs/file/path.token"</span>)
 <span class="kw">val</span> lastModificationDate = HdfsHelper.folderModificationDate(<span class="lit">"/some/hdfs/file/path.token"</span>)</pre></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the path of the empty file to create</p></dd></dl></div>
@@ -456,9 +494,9 @@ following methods to retrieve its timestamp:</p><pre><span class="kw">val</span>
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Returns the stringified date of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given file.</p><pre>assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
+      <p class="shortcomment cmt">Returns the formatted date of the last modification of the given file.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the formatted date of the last modification of the given file.</p><pre>assert(HdfsHelper.fileModificationDate(<span class="lit">"my/hdfs/file/path.txt"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the file for which to get the last
 modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given file,
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the formatted date of the last modification of the given file,
 under the provided format.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#fileModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fileModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
@@ -536,9 +574,9 @@ modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the joda DateTime 
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Returns the stringified date of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the stringified date of the last modification of the given folder.</p><pre>assert(HdfsHelper.folderModificationDate(<span class="lit">"my/hdfs/folder"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
+      <p class="shortcomment cmt">Returns the formatted date of the last modification of the given folder.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the formatted date of the last modification of the given folder.</p><pre>assert(HdfsHelper.folderModificationDate(<span class="lit">"my/hdfs/folder"</span>) == <span class="lit">"20170306"</span>)</pre></div><dl class="paramcmts block"><dt class="param">hdfsPath</dt><dd class="cmt"><p>the path of the folder for which to get the last
 modification date.</p></dd><dt class="param">format</dt><dd class="cmt"><p>(default = &quot;yyyyMMdd&quot;) the format under which to get the
-modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the stringified date of the last modification of the given folder,
+modification date.</p></dd><dt>returns</dt><dd class="cmt"><p>the formatted date of the last modification of the given folder,
 under the provided format.</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#folderModificationDateTime" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="folderModificationDateTime(hdfsPath:String):org.joda.time.DateTime"></a>
@@ -683,7 +721,7 @@ of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names in t
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Loads a typesafe config from Hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a typesafe config from Hdfs.</p><p>The best way to load the configuration of your job from hdfs.</p><p>Typesafe is a config format which looks like this:</p><pre>config {
+      <p class="shortcomment cmt">Loads a Typesafe config from Hdfs.</p><div class="fullcomment"><div class="comment cmt"><p>Loads a Typesafe config from Hdfs.</p><p>The best way to load the configuration of your job from hdfs.</p><p>Typesafe is a config format which looks like this:</p><pre>config {
   airlines = [
     {
       code = QF
@@ -702,8 +740,8 @@ of files.</p></dd><dt>returns</dt><dd class="cmt"><p>the list of file names in t
       }
     }
   ]
-}</pre></div><dl class="paramcmts block"><dt class="param">hdfsConfigPath</dt><dd class="cmt"><p>the absolute path of the typesafe config file on
-hdfs we want to load as a typesafe Config object.</p></dd><dt>returns</dt><dd class="cmt"><p>the com.typesafe.config.Config object which contains usable data</p></dd></dl></div>
+}</pre></div><dl class="paramcmts block"><dt class="param">hdfsConfigPath</dt><dd class="cmt"><p>the absolute path of the Typesafe config file on
+hdfs we want to load as a Typesafe Config object.</p></dd><dt>returns</dt><dd class="cmt"><p>the com.typesafe.config.Config object which contains usable data</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#loadXmlFileFromHdfs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadXmlFileFromHdfs(hdfsXmlPath:String):scala.xml.Elem"></a>
       <a id="loadXmlFileFromHdfs(String):Elem"></a>
@@ -854,6 +892,50 @@ threshold (in days).</p><pre><span class="cmt">// Deletes all files/folders in "
 <span class="cmt">// timestamp is older than 10 days:</span>
 HdfsHelper.purgeFolder(<span class="lit">"hdfs/path/to/folder"</span>, <span class="num">10</span>)</pre></div><dl class="paramcmts block"><dt class="param">folderPath</dt><dd class="cmt"><p>the path of the folder on hdfs to purge</p></dd><dt class="param">purgeAge</dt><dd class="cmt"><p>the threshold (in nbr of days) above which a file is
 considered too old and thus deleted/purged.</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#setConf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setConf(configuration:org.apache.hadoop.conf.Configuration):Unit"></a>
+      <a id="setConf(Configuration):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setConf</span><span class="params">(<span name="configuration">configuration: <span class="extype" name="org.apache.hadoop.conf.Configuration">Configuration</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@setConf(configuration:org.apache.hadoop.conf.Configuration):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets a specific <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Configuration</code>
+used by the underlying <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem</code>
+in case it requires some specificities.</code></code></p><div class="fullcomment"><div class="comment cmt"><p>Sets a specific <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Configuration</code>
+used by the underlying <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem</code>
+in case it requires some specificities.</p><p>If this setter is not used, the default Configuration is set with
+<code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">new Configuration()</code>.
+</p></div><dl class="paramcmts block"><dt class="param">configuration</dt><dd class="cmt"><p>the specific Configuration to use</p></dd></dl></div>
+    </li><li name="com.spark_helper.HdfsHelper#setFileSystem" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setFileSystem(fileSystem:org.apache.hadoop.fs.FileSystem):Unit"></a>
+      <a id="setFileSystem(FileSystem):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setFileSystem</span><span class="params">(<span name="fileSystem">fileSystem: <span class="extype" name="org.apache.hadoop.fs.FileSystem">FileSystem</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.HdfsHelper$@setFileSystem(fileSystem:org.apache.hadoop.fs.FileSystem):Unit" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets a specific <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem</code>
+in case it requires some specificities.</code></p><div class="fullcomment"><div class="comment cmt"><p>Sets a specific <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem</code>
+in case it requires some specificities.</p><p>If this setter is not used, the default FileSystem is set with
+<code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">FileSystem.get(new Configuration())</code>.
+</p></div><dl class="paramcmts block"><dt class="param">fileSystem</dt><dd class="cmt"><p>the specific FileSystem to use</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -999,7 +1081,7 @@ getClass.getResource(&quot;/my_file.xsd&quot;).</p></dd></dl></div>
 enough.</p><p>Overwrites the file if it already exists.</p><pre>HdfsHelper.writeToHdfsFile(
   <span class="std">Array</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)
 HdfsHelper.writeToHdfsFile(
-  <span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the array of strings to write in the file as one line per
+  <span class="std">List</span>(<span class="lit">"some"</span>, <span class="lit">"relatively small"</span>, <span class="lit">"text"</span>), <span class="lit">"/some/hdfs/file/path.txt"</span>)</pre></div><dl class="paramcmts block"><dt class="param">content</dt><dd class="cmt"><p>the seq of strings to write in the file as one line per
 string (this takes care of joining strings with &quot;\n&quot;s).</p></dd><dt class="param">filePath</dt><dd class="cmt"><p>the path of the file in which to write the content</p></dd></dl></div>
     </li><li name="com.spark_helper.HdfsHelper#writeToHdfsFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="writeToHdfsFile(content:String,filePath:String):Unit"></a>

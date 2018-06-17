@@ -17,12 +17,12 @@ class MonitorTest extends FunSuite with SharedSparkContext {
 
   test("Basic monitoring testing") {
 
-    // Monitor is initialy successful:
-    assert(Monitor.isSuccess())
+    // Monitor is initially successful:
+    assert(Monitor.isSuccess)
     // Here is what a report generated without any additional settings should
     // look like:
     var report = removeTimeStamps(Monitor.logs())
-    assert(report === "[..:..] Begining\n")
+    assert(report === "[..:..] Beginning\n")
 
     // Include additional info which are placed in the report's header:
     Monitor.setTitle("Processing of whatever")
@@ -30,33 +30,30 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     Monitor.addDescription(
       "Documentation: https://github.com/xavierguihot/spark_helper")
     report = removeTimeStamps(Monitor.logs())
-    var expectedReport = (
+    var expectedReport =
       "					Processing of whatever\n" +
         "\n" +
         "Point of contact: x.guihot@gmail.com, smbdy@gmail.com\n" +
         "Documentation: https://github.com/xavierguihot/spark_helper\n" +
-        "[..:..] Begining\n"
-    )
+        "[..:..] Beginning\n"
     assert(report === expectedReport)
 
     // Simple text update without success modification:
     Monitor.reset()
     Monitor.log("My First Stage")
     report = removeTimeStamps(Monitor.logs())
-    expectedReport = (
-      "[..:..] Begining\n" +
+    expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] My First Stage\n"
-    )
     assert(report === expectedReport)
 
     // Let's call .log() another time:
     Monitor.log("My Second Stage")
     report = removeTimeStamps(Monitor.logs())
-    expectedReport = (
-      "[..:..] Begining\n" +
+    expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] My First Stage\n" +
         "[..:..-..:..] My Second Stage\n"
-    )
     assert(report === expectedReport)
 
     // Successive updates:
@@ -64,33 +61,30 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     Monitor.reset()
     Monitor.success("My First Stage")
     report = removeTimeStamps(Monitor.logs())
-    expectedReport = (
-      "[..:..] Begining\n" +
+    expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] My First Stage: success\n"
-    )
     assert(report === expectedReport)
-    assert(Monitor.isSuccess())
+    assert(Monitor.isSuccess)
     // Update report with a failure:
     Monitor.error("My Second Stage")
     report = removeTimeStamps(Monitor.logs())
-    expectedReport = (
-      "[..:..] Begining\n" +
+    expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] My First Stage: success\n" +
         "[..:..-..:..] My Second Stage: failed\n"
-    )
     assert(report === expectedReport)
-    assert(!Monitor.isSuccess())
+    assert(!Monitor.isSuccess)
     // A success after a failure, which must not overwrite the failure:
     Monitor.success("My Third Stage")
     report = removeTimeStamps(Monitor.logs())
-    expectedReport = (
-      "[..:..] Begining\n" +
+    expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] My First Stage: success\n" +
         "[..:..-..:..] My Second Stage: failed\n" +
         "[..:..-..:..] My Third Stage: success\n"
-    )
     assert(report === expectedReport)
-    assert(!Monitor.isSuccess())
+    assert(!Monitor.isSuccess)
   }
 
   test("Check current.ongoing live monitoring") {
@@ -112,18 +106,17 @@ class MonitorTest extends FunSuite with SharedSparkContext {
       .toList
       .mkString("\n")
 
-    val expectedReport = (
+    val expectedReport =
       "					My Processing\n" +
         "\n" +
         "Point of contact: x.guihot@gmail.com, smbdy@gmail.com\n" +
         "Documentation: https://github.com/xavierguihot/spark_helper\n" +
-        "[..:..] Begining\n" +
+        "[..:..] Beginning\n" +
         "[..:..-..:..] Doing something\n" +
         "\n" +
         "WARNING: If this file exists it does not necessarily mean that " +
         "your job is still running. This file might persist if your job has " +
         "been killed and thus couldn't reach your call to the Monitor.store()."
-    )
     assert(removeTimeStamps(reportStoredLines) === expectedReport)
   }
 
@@ -132,7 +125,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     Monitor.reset()
 
     // Explanation to someone running tests and seeing an error stack trace
-    // even though tests are actually successfull:
+    // even though tests are actually successful:
     println(
       "README: The following stack trace is NOT a test failure. This " +
         "is the logging/print of the tested stack trace error as it would " +
@@ -146,14 +139,13 @@ class MonitorTest extends FunSuite with SharedSparkContext {
         Monitor.error(nfe, "Parse to integer", "my diagnostic")
     }
     // Warning, here I remove the stack trace because it depends on the
-    // java/scala version! And yes this test is a bit less usefull.
+    // java/scala version! And yes this test is a bit less useful.
     val report =
       removeTimeStamps(Monitor.logs()).split("\n").take(3).mkString("\n")
-    val expectedReport = (
-      "[..:..] Begining\n" +
+    val expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] Parse to integer: failed\n" +
         "	Diagnostic: my diagnostic"
-    )
     assert(report === expectedReport)
   }
 
@@ -171,11 +163,11 @@ class MonitorTest extends FunSuite with SharedSparkContext {
     )
 
     assert(!success)
-    assert(!Monitor.isSuccess())
+    assert(!Monitor.isSuccess)
 
     var report = removeTimeStamps(Monitor.logs())
-    var expectedReport = (
-      "[..:..] Begining\n" +
+    var expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] Tests for whatever: failed\n" +
         "	KPI: pctOfWhatever\n" +
         "		Value: 0.06%\n" +
@@ -189,7 +181,6 @@ class MonitorTest extends FunSuite with SharedSparkContext {
         "		Value: 1235.0\n" +
         "		Must be equal to 1235.0\n" +
         "		Validated: true\n"
-    )
     assert(report === expectedReport)
 
     // 2: Single test:
@@ -199,17 +190,16 @@ class MonitorTest extends FunSuite with SharedSparkContext {
       "Tests for whatever")
 
     assert(success)
-    assert(Monitor.isSuccess())
+    assert(Monitor.isSuccess)
 
     report = removeTimeStamps(Monitor.logs())
-    expectedReport = (
-      "[..:..] Begining\n" +
+    expectedReport =
+      "[..:..] Beginning\n" +
         "[..:..-..:..] Tests for whatever: success\n" +
         "	KPI: someNbr\n" +
         "		Value: 5.5E7\n" +
         "		Must be superior than 5.0E7\n" +
         "		Validated: true\n"
-    )
     assert(report === expectedReport)
   }
 
@@ -235,15 +225,14 @@ class MonitorTest extends FunSuite with SharedSparkContext {
       .mkString("\n")
       .dropRight(2) + "00" // removes the seconds of the job duration
 
-    val expectedReport = (
+    val expectedReport =
       "					My Processing\n" +
         "\n" +
         "Point of contact: x.guihot@gmail.com\n" +
         "Documentation: https://github.com/xavierguihot/spark_helper\n" +
-        "[..:..] Begining\n" +
+        "[..:..] Beginning\n" +
         "[..:..-..:..] Doing something: success\n" +
         "[..:..] Duration: 00:00:00"
-    )
     assert(removeTimeStamps(reportStoredLines) === expectedReport)
   }
 
@@ -296,7 +285,7 @@ class MonitorTest extends FunSuite with SharedSparkContext {
           timeStampFreeLogs.substring(0, index) + "[..:..-..:..]" +
             timeStampFreeLogs.substring(index + 13)
 
-      index = timeStampFreeLogs.indexOf("[", index + 1);
+      index = timeStampFreeLogs.indexOf("[", index + 1)
     }
 
     timeStampFreeLogs
