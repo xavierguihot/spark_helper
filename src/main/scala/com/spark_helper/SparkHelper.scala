@@ -105,7 +105,7 @@ object SparkHelper extends Serializable {
       * {{{ RDD((1, "a"), (2, "b")).withKey(_._1) // RDD(1, (1, "a")), (2, (2, "b")) }}}
       *
       * @param toKey the function to apply to extract the key
-      * @return an rdd of (K, V) from an RDD of V where V is determined by
+      * @return an rdd of (K, V) from an RDD of V where K is determined by
       * applying toKey on V.
       */
     def withKey[K](toKey: T => K): RDD[(K, T)] = rdd.map(x => (toKey(x), x))
