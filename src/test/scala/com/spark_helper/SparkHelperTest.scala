@@ -399,10 +399,17 @@ class SparkHelperTest
   }
 
   test("Partial map") {
-
     val in = sc.parallelize(Array(1, 3, 2, 7, 8))
     val computedOut = in.partialMap { case a if a % 2 == 0 => 2 * a }
     val expectedOut = sc.parallelize(Array(1, 3, 4, 7, 16))
     assertRDDEquals(computedOut, expectedOut)
   }
+
+  test("With Key") {
+    val in = sc.parallelize(Array(A(1, "a"), A(2, "b")))
+    val out = sc.parallelize(Array((1, A(1, "a")), (2, A(2, "b"))))
+    assertRDDEquals(in.withKey(_.x), out)
+  }
 }
+
+case class A(x: Int, y: String)

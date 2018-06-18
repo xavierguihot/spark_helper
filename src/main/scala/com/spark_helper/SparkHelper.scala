@@ -96,6 +96,19 @@ object SparkHelper extends Serializable {
         case x if pf.isDefinedAt(x) => pf(x)
         case x                      => x
       }
+
+    /** Map an RDD of A to an RDD of (B, A) where B is determined from A.
+      *
+      * Replaces for example <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.map(x => (x.smthg, x))</code>
+      * with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.withKey(_.smthg)</code>.
+      *
+      * {{{ RDD((1, "a"), (2, "b")).withKey(_._1) // RDD(1, (1, "a")), (2, (2, "b")) }}}
+      *
+      * @param toKey the function to apply to extract the key
+      * @return an rdd of (K, V) from an RDD of V where V is determined by
+      * applying toKey on V.
+      */
+    def withKey[K](toKey: T => K): RDD[(K, T)] = rdd.map(x => (toKey(x), x))
   }
 
   implicit class StringRDDExtensions(val rdd: RDD[String]) extends AnyVal {

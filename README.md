@@ -119,6 +119,9 @@ rdd.saveAsTextFileByKey("/my/output/folder/path")
 // Concept mapper (the following example transforms RDD(1, 3, 2, 7, 8) into RDD(1, 3, 4, 7, 16)):
 rdd.partialMap { case a if a % 2 == 0 => 2 * a }
 
+// Concept mapper (the following example transforms RDD((1, "a"), (2, "b")) into RDD(1, (1, "a")), (2, (2, "b"))):
+rdd.withKey(_._1)
+
 // For when input files contain commas and textFile can't handle it:
 sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
 ```
@@ -298,7 +301,7 @@ With sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.0"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.1"
 ```
 
 With maven:
@@ -314,7 +317,7 @@ With maven:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>2.0.0</version>
+	<version>2.0.1</version>
 </dependency>
 ```
 
@@ -328,7 +331,7 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:2.0.0'
+	compile 'com.github.xavierguihot:spark_helper:2.0.1'
 }
 ```
 

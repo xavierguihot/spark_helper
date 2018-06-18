@@ -512,6 +512,25 @@ application of the partial function where defined or the identity.</p></dd></dl>
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.RDDExtensions#withKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="withKey[K](toKey:T=&gt;K):org.apache.spark.rdd.RDD[(K,T)]"></a>
+      <a id="withKey[K]((T)⇒K):RDD[(K,T)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withKey</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="toKey">toKey: (<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>) ⇒ <span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.withKey.K">K</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.withKey.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$RDDExtensions@withKey[K](toKey:T=&gt;K):org.apache.spark.rdd.RDD[(K,T)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Map an RDD of A to an RDD of (B, A) where B is determined from A.</p><div class="fullcomment"><div class="comment cmt"><p>Map an RDD of A to an RDD of (B, A) where B is determined from A.</p><p>Replaces for example <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.map(x => (x.smthg, x))</code>
+with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.withKey(_.smthg)</code>.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>)).withKey(_._1) <span class="cmt">// RDD(1, (1, "a")), (2, (2, "b"))</span></pre></div><dl class="paramcmts block"><dt class="param">toKey</dt><dd class="cmt"><p>the function to apply to extract the key</p></dd><dt>returns</dt><dd class="cmt"><p>an rdd of (K, V) from an RDD of V where V is determined by
+applying toKey on V.</p></dd></dl></div>
     </li></ol>
             </div>
 
