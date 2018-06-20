@@ -13,6 +13,8 @@ import org.apache.hadoop.mapred.{FileSplit, TextInputFormat => TextInputFormat2}
 
 import scala.reflect.ClassTag
 
+import scala.{PartialFunction => ~>}
+
 import scala.util.Random
 
 /** A facility to deal with RDD/file manipulations based on the Spark API.
@@ -91,7 +93,7 @@ object SparkHelper extends Serializable {
       * @return an rdd of the same type, for which each element is either the
       * application of the partial function where defined or the identity.
       */
-    def partialMap(pf: PartialFunction[T, T]): RDD[T] =
+    def partialMap(pf: T ~> T): RDD[T] =
       rdd.map {
         case x if pf.isDefinedAt(x) => pf(x)
         case x                      => x
@@ -105,7 +107,7 @@ object SparkHelper extends Serializable {
       * {{{ RDD((1, "a"), (2, "b")).withKey(_._1) // RDD(1, (1, "a")), (2, (2, "b")) }}}
       *
       * @param toKey the function to apply to extract the key
-      * @return an rdd of (K, V) from an RDD of V where K is determined by
+      * @return an RDD of (K, V) from an RDD of V where K is determined by
       * applying toKey on V.
       */
     def withKey[K](toKey: T => K): RDD[(K, T)] = rdd.map(x => (toKey(x), x))
