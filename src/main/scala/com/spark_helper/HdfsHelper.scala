@@ -108,7 +108,7 @@ object HdfsHelper extends Serializable {
     */
   def setFileSystem(fileSystem: FileSystem): Unit = hdfs = fileSystem
 
-  implicit class SeqExtensions[T <: Seq[String]: ClassTag](val seq: T) {
+  implicit class SeqExtensions[T <: Seq[String]: ClassTag](seq: T) {
 
     /** Saves list elements in a file on hdfs.
       *
@@ -129,7 +129,7 @@ object HdfsHelper extends Serializable {
       HdfsHelper.writeToHdfsFile(seq, filePath)
   }
 
-  implicit class StringExtensions(val string: String) {
+  implicit class StringExtensions(string: String) {
 
     /** Saves the String in a file on hdfs.
       *

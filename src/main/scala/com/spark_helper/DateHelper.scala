@@ -67,7 +67,7 @@ object DateHelper extends Serializable {
     */
   def setFormat(format: String): Unit = defaultFormat = format
 
-  implicit class IntExtensions(val int: Int) {
+  implicit class IntExtensions(int: Int) {
 
     /** Returns which date it was x days before today under the default format.
       *
@@ -127,7 +127,7 @@ object DateHelper extends Serializable {
     def daysAfter(date: String): String = DateHelper.nDaysAfterDate(int, date)
   }
 
-  implicit class StringExtensions(val string: String) {
+  implicit class StringExtensions(string: String) {
 
     /** Validates the formatted date is compliant with the provided format.
       *

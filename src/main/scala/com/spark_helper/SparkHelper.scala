@@ -71,7 +71,7 @@ import scala.util.Random
   */
 object SparkHelper extends Serializable {
 
-  implicit class RDDExtensions[T: ClassTag](val rdd: RDD[T]) {
+  implicit class RDDExtensions[T: ClassTag](rdd: RDD[T]) {
 
     /** Map an RDD to the same type, by applying a partial function and the
       * identity otherwise.
@@ -125,7 +125,7 @@ object SparkHelper extends Serializable {
     def filterNot(f: T => Boolean): RDD[T] = rdd.filter(x => !f(x))
   }
 
-  implicit class StringRDDExtensions(val rdd: RDD[String]) extends AnyVal {
+  implicit class StringRDDExtensions(rdd: RDD[String]) {
 
     /** Saves an RDD in exactly one file.
       *
@@ -306,7 +306,7 @@ object SparkHelper extends Serializable {
     }
   }
 
-  implicit class SeqRDDExtensions[T: ClassTag](val rdd: RDD[Seq[T]]) {
+  implicit class SeqRDDExtensions[T: ClassTag](rdd: RDD[Seq[T]]) {
 
     /** Flattens an RDD of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Seq[T]</code>
       * to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.
@@ -320,7 +320,7 @@ object SparkHelper extends Serializable {
     def flatten: RDD[T] = rdd.flatMap(identity)
   }
 
-  implicit class OptionRDDExtensions[T: ClassTag](val rdd: RDD[Option[T]]) {
+  implicit class OptionRDDExtensions[T: ClassTag](rdd: RDD[Option[T]]) {
 
     /** Flattens an RDD of <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">Option[T]</code>
       * to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">RDD[T]</code>.
@@ -334,8 +334,7 @@ object SparkHelper extends Serializable {
     def flatten: RDD[T] = rdd.flatMap(o => o)
   }
 
-  implicit class PairRDDExtensions(val rdd: RDD[(String, String)])
-      extends AnyVal {
+  implicit class PairRDDExtensions(rdd: RDD[(String, String)]) {
 
     /** Saves and repartitions a key/value RDD on files whose name is the key.
       *
@@ -429,7 +428,7 @@ object SparkHelper extends Serializable {
         .saveAsTextFileByKeyInternal(rdd, path, Some(keyNbr), Some(codec))
   }
 
-  implicit class SparkContextExtensions(val sc: SparkContext) extends AnyVal {
+  implicit class SparkContextExtensions(sc: SparkContext) {
 
     /** Equivalent to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">sparkContext.textFile()</code>
       * , but for a specific record delimiter.
