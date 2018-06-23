@@ -45,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">PairRDDExtensions</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">PairRDDExtensions</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4>
       
@@ -89,18 +89,18 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.spark_helper.SparkHelper.PairRDDExtensions#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(String,String)]):com.spark_helper.SparkHelper.PairRDDExtensions"></a>
-      <a id="&lt;init&gt;:PairRDDExtensions"></a>
+      <a id="&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(K,V)]):com.spark_helper.SparkHelper.PairRDDExtensions[K,V]"></a>
+      <a id="&lt;init&gt;:PairRDDExtensions[K,V]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PairRDDExtensions</span><span class="params">(<span name="rdd">rdd: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>)]</span>)</span>
+        <span class="name">PairRDDExtensions</span><span class="params">(<span name="rdd">rdd: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(String,String)]):com.spark_helper.SparkHelper.PairRDDExtensions" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(K,V)]):com.spark_helper.SparkHelper.PairRDDExtensions[K,V]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -239,6 +239,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#filterKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterKey(f:K=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]"></a>
+      <a id="filterKey((K)⇒Boolean):RDD[(K,V)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filterKey</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@filterKey(f:K=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Filters out elements of the RDD if their key doesn't match the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters out elements of the RDD if their key doesn't match the predicate.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">3</span>, <span class="lit">"c"</span>)).filterKey(_ % <span class="num">2</span> == <span class="num">1</span>) <span class="cmt">// RDD((1, "a"), (3, "c"))</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements whose key doesn't match the predicate</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#filterValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterValue(f:V=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]"></a>
+      <a id="filterValue((V)⇒Boolean):RDD[(K,V)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filterValue</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@filterValue(f:V=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Filters out elements of the RDD if their value doesn't match the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters out elements of the RDD if their value doesn't match the predicate.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">3</span>, <span class="lit">"c"</span>)).filterValue(v <span class="kw">=&gt;</span> <span class="std">Set</span>(<span class="lit">"b"</span>, <span class="lit">"c"</span>) <span class="cmt">// RDD((2, "b"), (3, "c"))</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements whose value doesn't match the predicate</p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -364,97 +398,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#saveAsTextFileByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="saveAsTextFileByKey(path:String,keyNbr:Int,codec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec]):Unit"></a>
-      <a id="saveAsTextFileByKey(String,Int,Class[_&lt;:CompressionCodec]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">saveAsTextFileByKey</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="keyNbr">keyNbr: <span class="extype" name="scala.Int">Int</span></span>, <span name="codec">codec: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="org.apache.hadoop.io.compress.CompressionCodec">CompressionCodec</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@saveAsTextFileByKey(path:String,keyNbr:Int,codec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec]):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Saves and repartitions a key/value RDD on files whose name is the key.</p><div class="fullcomment"><div class="comment cmt"><p>Saves and repartitions a key/value RDD on files whose name is the key.</p><p>Within the provided path, there will be one file per key in the given
-keyValueRDD. And within a file for a given key are only stored values
-for this key.</p><p>This is not scalable. This shouldn't be considered for any data flow
-with normal or big volumes.</p><pre>rdd.saveAsTextFileByKey(<span class="lit">"/my/output/folder/path"</span>, <span class="num">12</span>, classOf[BZip2Codec])</pre></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the folder where will be stored key files</p></dd><dt class="param">keyNbr</dt><dd class="cmt"><p>the nbr of expected keys (which is the nbr of output
-files)</p></dd><dt class="param">codec</dt><dd class="cmt"><p>the type of compression to use (for instance
-classOf[BZip2Codec] or classOf[GzipCodec]))</p></dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#saveAsTextFileByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="saveAsTextFileByKey(path:String,codec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec]):Unit"></a>
-      <a id="saveAsTextFileByKey(String,Class[_&lt;:CompressionCodec]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">saveAsTextFileByKey</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="codec">codec: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="org.apache.hadoop.io.compress.CompressionCodec">CompressionCodec</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@saveAsTextFileByKey(path:String,codec:Class[_&lt;:org.apache.hadoop.io.compress.CompressionCodec]):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Saves and repartitions a key/value RDD on files whose name is the key.</p><div class="fullcomment"><div class="comment cmt"><p>Saves and repartitions a key/value RDD on files whose name is the key.</p><p>Within the provided path, there will be one file per key in the given
-keyValueRDD. And within a file for a given key are only stored values
-for this key.</p><p>As this internally needs to know the nbr of keys, this will have to
-compute it. If this nbr of keys is known beforehand, it would spare
-resources to use
-<code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsTextFileByKey(path: String, keyNbr: Int, codec: Class[_ <: CompressionCodec])</code>
-instead.</p><p>This is not scalable. This shouldn't be considered for any data flow
-with normal or big volumes.</p><pre>rdd.saveAsTextFileByKey(<span class="lit">"/my/output/folder/path"</span>, classOf[BZip2Codec])</pre></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the folder where will be stored key files</p></dd><dt class="param">codec</dt><dd class="cmt"><p>the type of compression to use (for instance
-classOf[BZip2Codec] or classOf[GzipCodec]))</p></dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#saveAsTextFileByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="saveAsTextFileByKey(path:String,keyNbr:Int):Unit"></a>
-      <a id="saveAsTextFileByKey(String,Int):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">saveAsTextFileByKey</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="keyNbr">keyNbr: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@saveAsTextFileByKey(path:String,keyNbr:Int):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Saves and repartitions a key/value RDD on files whose name is the key.</p><div class="fullcomment"><div class="comment cmt"><p>Saves and repartitions a key/value RDD on files whose name is the key.</p><p>Within the provided path, there will be one file per key in the given
-keyValueRDD. And within a file for a given key are only stored values
-for this key.</p><p>This is not scalable. This shouldn't be considered for any data flow
-with normal or big volumes.</p><pre>rdd.saveAsTextFileByKey(<span class="lit">"/my/output/folder/path"</span>, <span class="num">12</span>)</pre></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the folder where will be stored key files</p></dd><dt class="param">keyNbr</dt><dd class="cmt"><p>the nbr of expected keys (which is the nbr of output
-files)</p></dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#saveAsTextFileByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="saveAsTextFileByKey(path:String):Unit"></a>
-      <a id="saveAsTextFileByKey(String):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">saveAsTextFileByKey</span><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@saveAsTextFileByKey(path:String):Unit" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Saves and repartitions a key/value RDD on files whose name is the key.</p><div class="fullcomment"><div class="comment cmt"><p>Saves and repartitions a key/value RDD on files whose name is the key.</p><p>Within the provided path, there will be one file per key in the given
-keyValueRDD. And within a file for a given key are only stored values
-for this key.</p><p>As this internally needs to know the nbr of keys, this will have to
-compute it. If this nbr of keys is known beforehand, it would spare
-resources to use <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">saveAsTextFileByKey(path: String, keyNbr: Int)</code>
-instead.</p><p>This is not scalable. This shouldn't be considered for any data flow
-with normal or big volumes.</p><pre>rdd.saveAsTextFileByKey(<span class="lit">"/my/output/folder/path"</span>)</pre></div><dl class="paramcmts block"><dt class="param">path</dt><dd class="cmt"><p>the folder where will be stored key files</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
