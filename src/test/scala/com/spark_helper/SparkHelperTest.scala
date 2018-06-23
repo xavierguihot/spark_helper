@@ -400,7 +400,7 @@ class SparkHelperTest
 
   test("Partial map") {
     val in = sc.parallelize(Array(1, 3, 2, 7, 8))
-    val computedOut = in.partialMap { case a if a % 2 == 0 => 2 * a }
+    val computedOut = in.update { case a if a % 2 == 0 => 2 * a }
     val expectedOut = sc.parallelize(Array(1, 3, 4, 7, 16))
     assertRDDEquals(computedOut, expectedOut)
   }

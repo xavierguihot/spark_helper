@@ -364,34 +364,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.RDDExtensions#partialMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="partialMap(pf:PartialFunction[T,T]):org.apache.spark.rdd.RDD[T]"></a>
-      <a id="partialMap(PartialFunction[T,T]):RDD[T]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">partialMap</span><span class="params">(<span name="pf">pf: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>, <span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$RDDExtensions@partialMap(pf:PartialFunction[T,T]):org.apache.spark.rdd.RDD[T]" title="Permalink" target="_top">
-        <img src="../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Map an RDD to the same type, by applying a partial function and the
-identity otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Map an RDD to the same type, by applying a partial function and the
-identity otherwise.</p><p>Avoids having <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">case x => x</code>.</p><p>Similar idea to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">.collect</code>,
-but instead of skipping non-matching items, it keeps them as-is.</p><pre>sc.parallelize(<span class="std">Array</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">8</span>)).partialMap { <span class="kw">case</span> a <span class="kw">if</span> a % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> <span class="num">2</span> * a }
-<span class="cmt">// is equivalent to:</span>
-sc.parallelize(<span class="std">Array</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">8</span>)).map {
-  <span class="kw">case</span> a <span class="kw">if</span> a % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> <span class="num">2</span> * a
-  <span class="kw">case</span> a               <span class="kw">=&gt;</span> a
-}
-<span class="cmt">// in order to map to:</span>
-sc.parallelize(<span class="std">Array</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">7</span>, <span class="num">16</span>))</pre></div><dl class="paramcmts block"><dt class="param">pf</dt><dd class="cmt"><p>the partial function to apply</p></dd><dt>returns</dt><dd class="cmt"><p>an rdd of the same type, for which each element is either the
-application of the partial function where defined or the identity.</p></dd></dl></div>
     </li><li name="com.spark_helper.SparkHelper.RDDExtensions#rdd" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="rdd:org.apache.spark.rdd.RDD[T]"></a>
       <a id="rdd:RDD[T]"></a>
@@ -443,6 +415,34 @@ application of the partial function where defined or the identity.</p></dd></dl>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.RDDExtensions#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(pf:PartialFunction[T,T]):org.apache.spark.rdd.RDD[T]"></a>
+      <a id="update(PartialFunction[T,T]):RDD[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="pf">pf: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>, <span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$RDDExtensions@update(pf:PartialFunction[T,T]):org.apache.spark.rdd.RDD[T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Map an RDD to the same type, by applying a partial function and the
+identity otherwise.</p><div class="fullcomment"><div class="comment cmt"><p>Map an RDD to the same type, by applying a partial function and the
+identity otherwise.</p><p>Avoids having <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">case x => x</code>.</p><p>Similar idea to <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">.collect</code>,
+but instead of skipping non-matching items, it keeps them as-is.</p><pre>sc.parallelize(<span class="std">Array</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">8</span>)).update { <span class="kw">case</span> a <span class="kw">if</span> a % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> <span class="num">2</span> * a }
+<span class="cmt">// is equivalent to:</span>
+sc.parallelize(<span class="std">Array</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">8</span>)).map {
+  <span class="kw">case</span> a <span class="kw">if</span> a % <span class="num">2</span> == <span class="num">0</span> <span class="kw">=&gt;</span> <span class="num">2</span> * a
+  <span class="kw">case</span> a               <span class="kw">=&gt;</span> a
+}
+<span class="cmt">// in order to map to:</span>
+sc.parallelize(<span class="std">Array</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">7</span>, <span class="num">16</span>))</pre></div><dl class="paramcmts block"><dt class="param">pf</dt><dd class="cmt"><p>the partial function to apply</p></dd><dt>returns</dt><dd class="cmt"><p>an rdd of the same type, for which each element is either the
+application of the partial function where defined or the identity.</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -529,7 +529,7 @@ application of the partial function where defined or the identity.</p></dd></dl>
       </a>
     </span>
       <p class="shortcomment cmt">Map an RDD of A to an RDD of (B, A) where B is determined from A.</p><div class="fullcomment"><div class="comment cmt"><p>Map an RDD of A to an RDD of (B, A) where B is determined from A.</p><p>Replaces for example <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.map(x => (x.smthg, x))</code>
-with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.withKey(_.smthg)</code>.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>)).withKey(_._1) <span class="cmt">// RDD(1, (1, "a")), (2, (2, "b"))</span></pre></div><dl class="paramcmts block"><dt class="param">toKey</dt><dd class="cmt"><p>the function to apply to extract the key</p></dd><dt>returns</dt><dd class="cmt"><p>an rdd of (K, V) from an RDD of V where K is determined by
+with <code style="background-color:#eff0f1;padding:1px 5px;font-size:12px">rdd.withKey(_.smthg)</code>.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>)).withKey(_._1) <span class="cmt">// RDD(1, (1, "a")), (2, (2, "b"))</span></pre></div><dl class="paramcmts block"><dt class="param">toKey</dt><dd class="cmt"><p>the function to apply to extract the key</p></dd><dt>returns</dt><dd class="cmt"><p>an RDD of (K, V) from an RDD of V where K is determined by
 applying toKey on V.</p></dd></dl></div>
     </li></ol>
             </div>

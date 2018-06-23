@@ -53,7 +53,7 @@ import scala.util.Random
   * rdd.saveAsTextFileByKey("/my/output/folder/path")
   *
   * // Concept mapper (the following example transforms RDD(1, 3, 2, 7, 8) into RDD(1, 3, 4, 7, 16)):
-  * rdd.partialMap { case a if a % 2 == 0 => 2 * a }
+  * rdd.update { case a if a % 2 == 0 => 2 * a }
   *
   * // For when input files contain commas and textFile can't handle it:
   * sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
@@ -79,7 +79,7 @@ object SparkHelper extends Serializable {
       * but instead of skipping non-matching items, it keeps them as-is.
       *
       * {{{
-      * sc.parallelize(Array(1, 3, 2, 7, 8)).partialMap { case a if a % 2 == 0 => 2 * a }
+      * sc.parallelize(Array(1, 3, 2, 7, 8)).update { case a if a % 2 == 0 => 2 * a }
       * // is equivalent to:
       * sc.parallelize(Array(1, 3, 2, 7, 8)).map {
       *   case a if a % 2 == 0 => 2 * a
@@ -93,7 +93,7 @@ object SparkHelper extends Serializable {
       * @return an rdd of the same type, for which each element is either the
       * application of the partial function where defined or the identity.
       */
-    def partialMap(pf: T ~> T): RDD[T] =
+    def update(pf: T ~> T): RDD[T] =
       rdd.map {
         case x if pf.isDefinedAt(x) => pf(x)
         case x                      => x
