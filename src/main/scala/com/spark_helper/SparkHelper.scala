@@ -62,7 +62,8 @@ import scala.util.Random
   * rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
   * rdd.filterKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
   * rdd.filterValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
-  * rdd.toList // equivalent to rdd.collect.toList
+  * rdd.toList // equivalent to rdd.collect.toList - alias: rdd.collectAsList
+  * rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")).toMap // Map((1, "a"), (2, "c"))
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -134,12 +135,26 @@ object SparkHelper extends Serializable {
       *
       * {{{ RDD(1, 3, 2, 7, 8).toList // List(1, 3, 7) }}}
       *
-      * Same as collect, one should consider memory implications when the size
-      * of the RDD to collect is too big to fit within driver's memory.
+      * One should consider memory implications when the size of the RDD to
+      * collect is too big to fit within driver's memory.
       *
       * @return the collected List version of the RDD on the driver
       */
     def toList: List[T] = rdd.collect().toList
+
+    /** Collects the RDD to the driver as a List.
+      *
+      * Equivalent to rdd.collect, but instead of creating an Array, creates a
+      * List.
+      *
+      * {{{ RDD(1, 3, 2, 7, 8).toList // List(1, 3, 7) }}}
+      *
+      * One should consider memory implications when the size of the RDD to
+      * collect is too big to fit within driver's memory.
+      *
+      * @return the collected List version of the RDD on the driver
+      */
+    def collectAsList(): List[T] = rdd.collect().toList
   }
 
   implicit class StringRDDExtensions(rdd: RDD[String]) {
@@ -370,6 +385,24 @@ object SparkHelper extends Serializable {
       * @return the RDD without elements whose value doesn't match the predicate
       */
     def filterValue(f: V => Boolean): RDD[(K, V)] = rdd.filter(x => f(x._2))
+
+    /** Collects the RDD to the driver as an immutable Map.
+      *
+      * Equivalent to rdd.collectAsMap, but instead of creating a mutable map,
+      * creates an immutable Map.
+      *
+      * {{{ RDD((1, "a"), (2, "b"), (2, "c")).toMap // Map((1, "a"), (2, "c")) }}}
+      *
+      * Warning: this doesn't return a multimap (so if you have multiple values
+      * to the same key, only one value per key is preserved in the map
+      * returned).
+      *
+      * One should consider memory implications when the size of the RDD to
+      * collect is too big to fit within driver's memory.
+      *
+      * @return the collected Map version of the RDD on the driver
+      */
+    def toMap: Map[K, V] = rdd.collect().toMap
   }
 
   implicit class StringPairRDDExtensions(rdd: RDD[(String, String)]) {

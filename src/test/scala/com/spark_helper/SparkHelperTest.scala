@@ -428,6 +428,12 @@ class SparkHelperTest
   test("Rdd to List") {
     val list = Array(1, 3, 2, 7, 8)
     assert(sc.parallelize(list).toList === list)
+    assert(sc.parallelize(list).collectAsList === list)
+  }
+
+  test("Key/value rdd to Map") {
+    val in = sc.parallelize(Array((1, "a"), (2, "b"), (2, "c")))
+    assert(in.toMap === Map((1, "a"), (2, "c")))
   }
 }
 

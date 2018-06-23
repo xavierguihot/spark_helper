@@ -415,6 +415,28 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#toMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toMap:Map[K,V]"></a>
+      <a id="toMap:Map[K,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toMap</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@toMap:Map[K,V]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Collects the RDD to the driver as an immutable Map.</p><div class="fullcomment"><div class="comment cmt"><p>Collects the RDD to the driver as an immutable Map.</p><p>Equivalent to rdd.collectAsMap, but instead of creating a mutable map,
+creates an immutable Map.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">2</span>, <span class="lit">"c"</span>)).toMap <span class="cmt">// Map((1, "a"), (2, "c"))</span></pre><p>Warning: this doesn't return a multimap (so if you have multiple values
+to the same key, only one value per key is preserved in the map
+returned).</p><p>One should consider memory implications when the size of the RDD to
+collect is too big to fit within driver's memory.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the collected Map version of the RDD on the driver</p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
