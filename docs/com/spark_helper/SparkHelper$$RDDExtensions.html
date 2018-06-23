@@ -239,6 +239,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.RDDExtensions#filterNot" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterNot(f:T=&gt;Boolean):org.apache.spark.rdd.RDD[T]"></a>
+      <a id="filterNot((T)⇒Boolean):RDD[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filterNot</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$RDDExtensions@filterNot(f:T=&gt;Boolean):org.apache.spark.rdd.RDD[T]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a new RDD containing only the elements that don't satisfy a predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Return a new RDD containing only the elements that don't satisfy a predicate.</p><pre>RDD(<span class="num">1</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">8</span>).filterNot(_ % <span class="num">2</span> == <span class="num">0</span>) <span class="cmt">// RDD(1, 3, 7)</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter out predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements matching the predicate</p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>

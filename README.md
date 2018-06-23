@@ -85,7 +85,7 @@ HdfsHelper.setFileSystem(whateverFileSystem)
 The full list of methods is available at
 [SparkHelper](http://xavierguihot.com/spark_helper/#com.spark_helper.SparkHelper$).
 
-Contains basic RRD-related methods.
+Contains basic RRD-related methods as well as RDD pimps replicating the List api.
 
 A non-exhaustive list of examples:
 
@@ -124,6 +124,10 @@ rdd.withKey(_._1)
 
 // For when input files contain commas and textFile can't handle it:
 sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
+
+// rdd pimps replicating the List api:
+rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
+
 ```
 
 ### DateHelper:

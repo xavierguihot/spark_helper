@@ -57,6 +57,9 @@ import scala.util.Random
   *
   * // For when input files contain commas and textFile can't handle it:
   * sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
+  *
+  * // rdd pimps replicating the List api:
+  * rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -111,6 +114,15 @@ object SparkHelper extends Serializable {
       * applying toKey on V.
       */
     def withKey[K](toKey: T => K): RDD[(K, T)] = rdd.map(x => (toKey(x), x))
+
+    /** Return a new RDD containing only the elements that don't satisfy a predicate.
+      *
+      * {{{ RDD(1, 3, 2, 7, 8).filterNot(_ % 2 == 0) // RDD(1, 3, 7) }}}
+      *
+      * @param f the filter out predicate
+      * @return the RDD without elements matching the predicate
+      */
+    def filterNot(f: T => Boolean): RDD[T] = rdd.filter(x => !f(x))
   }
 
   implicit class StringRDDExtensions(val rdd: RDD[String]) extends AnyVal {
