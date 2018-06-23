@@ -129,6 +129,7 @@ sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
 rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
 rdd.filterKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
 rdd.filterValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
+rdd.toList // equivalent to rdd.collect.toList
 
 ```
 

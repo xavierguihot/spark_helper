@@ -424,6 +424,11 @@ class SparkHelperTest
     val outV = sc.parallelize(Array((2, "b"), (3, "c")))
     assertRDDEquals(in.filterValue(v => Set("b", "c").contains(v)), outV)
   }
+
+  test("Rdd to List") {
+    val list = Array(1, 3, 2, 7, 8)
+    assert(sc.parallelize(list).toList === list)
+  }
 }
 
 case class A(x: Int, y: String)

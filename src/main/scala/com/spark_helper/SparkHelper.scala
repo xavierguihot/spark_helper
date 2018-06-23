@@ -62,6 +62,7 @@ import scala.util.Random
   * rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
   * rdd.filterKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
   * rdd.filterValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
+  * rdd.toList // equivalent to rdd.collect.toList
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -125,6 +126,20 @@ object SparkHelper extends Serializable {
       * @return the RDD without elements matching the predicate
       */
     def filterNot(f: T => Boolean): RDD[T] = rdd.filter(x => !f(x))
+
+    /** Collects the RDD to the driver as a List.
+      *
+      * Equivalent to rdd.collect, but instead of creating an Array, creates a
+      * List.
+      *
+      * {{{ RDD(1, 3, 2, 7, 8).toList // List(1, 3, 7) }}}
+      *
+      * Same as collect, one should consider memory implications when the size
+      * of the RDD to collect is too big to fit within driver's memory.
+      *
+      * @return the collected List version of the RDD on the driver
+      */
+    def toList: List[T] = rdd.collect().toList
   }
 
   implicit class StringRDDExtensions(rdd: RDD[String]) {
