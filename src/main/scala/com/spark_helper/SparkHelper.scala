@@ -63,7 +63,9 @@ import scala.util.Random
   * rdd.filterKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
   * rdd.filterValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
   * rdd.toList // equivalent to rdd.collect.toList - alias: rdd.collectAsList
-  * rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")).toMap // Map((1, "a"), (2, "c"))
+  * rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))
+  * rdd.duplicates // RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)
+  * rdd.reduceWithCount // RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1))
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -155,6 +157,24 @@ object SparkHelper extends Serializable {
       * @return the collected List version of the RDD on the driver
       */
     def collectAsList(): List[T] = rdd.collect().toList
+
+    /** Pair elements with their nbr of occurrence.
+      *
+      * {{{ RDD("a", "b", "c", "a", "d", "a", "c").reduceWithCount // RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1)) }}}
+      *
+      * @return the RDD reduced and paired with the duplication count
+      * */
+    def reduceWithCount(): RDD[(T, Long)] =
+      rdd.map(x => (x, 1L)).reduceByKey(_ + _)
+
+    /** Creates an RDD with only duplicates.
+      *
+      * {{{ RDD(1, 3, 2, 1, 7, 8, 8, 1, 2).duplicates // RDD(1, 2, 8) }}}
+      *
+      * @return the filtered RDD containing 1 of each duplicate
+      * */
+    def duplicates(): RDD[T] =
+      rdd.reduceWithCount().collect { case (x, count) if count != 1L => x }
   }
 
   implicit class StringRDDExtensions(rdd: RDD[String]) {

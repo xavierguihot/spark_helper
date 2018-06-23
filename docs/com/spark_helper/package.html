@@ -342,7 +342,9 @@ rdd.filterNot(_ % <span class="num">2</span> == <span class="num">0</span>) <spa
 rdd.filterKey(_ % <span class="num">2</span> == <span class="num">0</span>) <span class="cmt">// RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))</span>
 rdd.filterValue(_ % <span class="num">2</span> == <span class="num">0</span>) <span class="cmt">// RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))</span>
 rdd.toList <span class="cmt">// equivalent to rdd.collect.toList - alias: rdd.collectAsList</span>
-rdd.toMap <span class="cmt">// RDD((1, "a"), (2, "b"), (2, "c")).toMap // Map((1, "a"), (2, "c"))</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
+rdd.toMap <span class="cmt">// RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))</span>
+rdd.duplicates <span class="cmt">// RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)</span>
+rdd.reduceWithCount <span class="cmt">// RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1))</span></pre><p>Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
 /main/scala/com/spark_helper/SparkHelper.scala">SparkHelper</a>
 </p></div><dl class="attributes block"> <dt>Since</dt><dd><p>2017-02</p></dd><dt>To do</dt><dd><span class="cmt"><p>sc.parallelize[T](elmts: T*) instead of sc.parallelize[T](elmts: Array[T])</p></span></dd></dl></div>
     </li><li name="com.spark_helper.monitoring" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">

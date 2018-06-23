@@ -435,6 +435,18 @@ class SparkHelperTest
     val in = sc.parallelize(Array((1, "a"), (2, "b"), (2, "c")))
     assert(in.toMap === Map((1, "a"), (2, "c")))
   }
+
+  test("Reduce with count") {
+    val in = sc.parallelize(Array("a", "b", "c", "a", "d", "a", "c"))
+    val out = sc.parallelize(Array(("a", 3L), ("b", 1L), ("c", 2L), ("d", 1L)))
+    assertRDDEquals(in.reduceWithCount(), out)
+  }
+
+  test("Duplicates") {
+    val in = sc.parallelize(Array(1, 3, 2, 1, 7, 8, 8, 1, 2))
+    val out = sc.parallelize(Array(1, 2, 8))
+    assertRDDEquals(in.duplicates(), out)
+  }
 }
 
 case class A(x: Int, y: String)
