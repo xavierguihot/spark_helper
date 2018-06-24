@@ -316,6 +316,23 @@ collect is too big to fit within driver's memory.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.RDDExtensions#fraction" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fraction(p:T=&gt;Boolean):Double"></a>
+      <a id="fraction((T)⇒Boolean):Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fraction</span><span class="params">(<span name="p">p: (<span class="extype" name="com.spark_helper.SparkHelper.RDDExtensions.T">T</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$RDDExtensions@fraction(p:T=&gt;Boolean):Double" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Determines what fraction of the RDD passes the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Determines what fraction of the RDD passes the predicate.</p><pre>RDD(<span class="num">1</span>, <span class="num">0</span>, -<span class="num">2</span>, -<span class="num">1</span>, <span class="num">7</span>, -<span class="num">8</span>, <span class="num">8</span>, <span class="num">1</span>, -<span class="num">2</span>).fraction(_ &gt; <span class="num">0</span>) <span class="cmt">// 0.4444</span></pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the fraction elements in the RDD which passe the given predicate</p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>

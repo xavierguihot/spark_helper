@@ -483,6 +483,16 @@ class SparkHelperTest
     assert(Set((2, "c"), (4, "c")).contains(in.maxByValue()))
     assert(in.minByValue() === (1, "a"))
   }
+
+  test("Fraction") {
+    // 1:
+    val in = sc.parallelize(Array(1, 0, -2, -1, 7, -8, 8, 1, -2))
+    assert(in.fraction(_ > 0) === 4d / 9d)
+    // 2:
+    assert(sc.parallelize(Array(1, 7, 8, 1)).fraction(_ > 0) === 1d)
+    // 3:
+    assert(sc.parallelize(Array(-1, -7, 0, -1)).fraction(_ > 0) === 0d)
+  }
 }
 
 case class A(x: Int, y: String)

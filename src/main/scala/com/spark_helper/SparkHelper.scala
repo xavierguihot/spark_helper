@@ -69,6 +69,7 @@ import scala.util.Random
   * rdd.maxBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (2, "c") or (4, "c")
   * rdd.minBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (1, "a")
   * rdd.maxByKey; rdd.minByKey; rdd.maxByValue, ... // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey => (4, "c")
+  * rdd.fraction(_ > 0) // RDD(1, 0, -2, -1, 7, -8, 8, 1, -2) => 0.4444
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -198,6 +199,19 @@ object SparkHelper extends Serializable {
       * */
     def minBy[U](f: T => U)(implicit ord: Ordering[U]): T =
       rdd.reduce { case (x, y) => if (ord.compare(f(x), f(y)) > 0) y else x }
+
+    /** Determines what fraction of the RDD passes the predicate.
+      *
+      * {{{ RDD(1, 0, -2, -1, 7, -8, 8, 1, -2).fraction(_ > 0) // 0.4444 }}}
+      *
+      * @return the fraction elements in the RDD which passe the given predicate
+      * */
+    def fraction(p: T => Boolean): Double = {
+      val sides = rdd.map(x => p(x)).reduceWithCount().collect()
+      val fit = sides.find(_._1 == true).map(_._2).getOrElse(0L).toDouble
+      val rest = sides.find(_._1 == false).map(_._2).getOrElse(0L).toDouble
+      fit / (fit + rest)
+    }
   }
 
   implicit class StringRDDExtensions(rdd: RDD[String]) {

@@ -136,6 +136,7 @@ rdd.reduceWithCount // RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), (
 rdd.maxBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (2, "c") or (4, "c")
 rdd.minBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (1, "a")
 rdd.maxByKey; rdd.minByKey; rdd.maxByValue, ... // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey => (4, "c")
+rdd.fraction(_ > 0) // RDD(1, 0, -2, -1, 7, -8, 8, 1, -2) => 0.4444
 
 ```
 
@@ -314,7 +315,7 @@ With sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.2"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.3"
 ```
 
 With maven:
@@ -330,7 +331,7 @@ With maven:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 </dependency>
 ```
 
@@ -344,7 +345,7 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:2.0.2'
+	compile 'com.github.xavierguihot:spark_helper:2.0.3'
 }
 ```
 
