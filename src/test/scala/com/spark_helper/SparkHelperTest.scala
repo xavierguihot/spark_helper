@@ -422,9 +422,9 @@ class SparkHelperTest
   test("Filter key/value") {
     val in = sc.parallelize(Array((1, "a"), (2, "b"), (3, "c")))
     val outK = sc.parallelize(Array((1, "a"), (3, "c")))
-    assertRDDEquals(in.filterKey(_ % 2 == 1), outK)
+    assertRDDEquals(in.filterByKey(_ % 2 == 1), outK)
     val outV = sc.parallelize(Array((2, "b"), (3, "c")))
-    assertRDDEquals(in.filterValue(v => Set("b", "c").contains(v)), outV)
+    assertRDDEquals(in.filterByValue(v => Set("b", "c").contains(v)), outV)
   }
 
   test("Rdd to List") {

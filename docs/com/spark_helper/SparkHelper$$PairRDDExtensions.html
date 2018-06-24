@@ -239,40 +239,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#filterKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filterKey(f:K=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]"></a>
-      <a id="filterKey((K)⇒Boolean):RDD[(K,V)]"></a>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#filterByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterByKey(f:K=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]"></a>
+      <a id="filterByKey((K)⇒Boolean):RDD[(K,V)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filterKey</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>
+        <span class="name">filterByKey</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@filterKey(f:K=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@filterByKey(f:K=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Filters out elements of the RDD if their key doesn't match the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters out elements of the RDD if their key doesn't match the predicate.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">3</span>, <span class="lit">"c"</span>)).filterKey(_ % <span class="num">2</span> == <span class="num">1</span>) <span class="cmt">// RDD((1, "a"), (3, "c"))</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements whose key doesn't match the predicate</p></dd></dl></div>
-    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#filterValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filterValue(f:V=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]"></a>
-      <a id="filterValue((V)⇒Boolean):RDD[(K,V)]"></a>
+      <p class="shortcomment cmt">Filters out elements of the RDD if their key doesn't match the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters out elements of the RDD if their key doesn't match the predicate.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">3</span>, <span class="lit">"c"</span>)).filterByKey(_ % <span class="num">2</span> == <span class="num">1</span>) <span class="cmt">// RDD((1, "a"), (3, "c"))</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements whose key doesn't match the predicate</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#filterByValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filterByValue(f:V=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]"></a>
+      <a id="filterByValue((V)⇒Boolean):RDD[(K,V)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filterValue</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>
+        <span class="name">filterByValue</span><span class="params">(<span name="f">f: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@filterValue(f:V=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@filterByValue(f:V=&gt;Boolean):org.apache.spark.rdd.RDD[(K,V)]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Filters out elements of the RDD if their value doesn't match the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters out elements of the RDD if their value doesn't match the predicate.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">3</span>, <span class="lit">"c"</span>)).filterValue(v <span class="kw">=&gt;</span> <span class="std">Set</span>(<span class="lit">"b"</span>, <span class="lit">"c"</span>) <span class="cmt">// RDD((2, "b"), (3, "c"))</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements whose value doesn't match the predicate</p></dd></dl></div>
+      <p class="shortcomment cmt">Filters out elements of the RDD if their value doesn't match the predicate.</p><div class="fullcomment"><div class="comment cmt"><p>Filters out elements of the RDD if their value doesn't match the predicate.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">3</span>, <span class="lit">"c"</span>)).filterByValue(v <span class="kw">=&gt;</span> <span class="std">Set</span>(<span class="lit">"b"</span>, <span class="lit">"c"</span>) <span class="cmt">// RDD((2, "b"), (3, "c"))</span></pre></div><dl class="paramcmts block"><dt class="param">f</dt><dd class="cmt"><p>the filter predicate</p></dd><dt>returns</dt><dd class="cmt"><p>the RDD without elements whose value doesn't match the predicate</p></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>

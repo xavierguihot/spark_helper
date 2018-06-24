@@ -60,8 +60,8 @@ import scala.util.Random
   *
   * // rdd pimps replicating the List api:
   * rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
-  * rdd.filterKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
-  * rdd.filterValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
+  * rdd.filterByKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
+  * rdd.filterByValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
   * rdd.toList // equivalent to rdd.collect.toList - alias: rdd.collectAsList
   * rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))
   * rdd.duplicates // RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)
@@ -427,21 +427,21 @@ object SparkHelper extends Serializable {
 
     /** Filters out elements of the RDD if their key doesn't match the predicate.
       *
-      * {{{ RDD((1, "a"), (2, "b"), (3, "c")).filterKey(_ % 2 == 1) // RDD((1, "a"), (3, "c")) }}}
+      * {{{ RDD((1, "a"), (2, "b"), (3, "c")).filterByKey(_ % 2 == 1) // RDD((1, "a"), (3, "c")) }}}
       *
       * @param f the filter predicate
       * @return the RDD without elements whose key doesn't match the predicate
       */
-    def filterKey(f: K => Boolean): RDD[(K, V)] = rdd.filter(x => f(x._1))
+    def filterByKey(f: K => Boolean): RDD[(K, V)] = rdd.filter(x => f(x._1))
 
     /** Filters out elements of the RDD if their value doesn't match the predicate.
       *
-      * {{{ RDD((1, "a"), (2, "b"), (3, "c")).filterValue(v => Set("b", "c") // RDD((2, "b"), (3, "c")) }}}
+      * {{{ RDD((1, "a"), (2, "b"), (3, "c")).filterByValue(v => Set("b", "c") // RDD((2, "b"), (3, "c")) }}}
       *
       * @param f the filter predicate
       * @return the RDD without elements whose value doesn't match the predicate
       */
-    def filterValue(f: V => Boolean): RDD[(K, V)] = rdd.filter(x => f(x._2))
+    def filterByValue(f: V => Boolean): RDD[(K, V)] = rdd.filter(x => f(x._2))
 
     /** Collects the RDD to the driver as an immutable Map.
       *

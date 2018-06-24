@@ -127,8 +127,8 @@ sc.textFile(Seq("path/hello,world.txt", "path/hello_world.txt"))
 
 // rdd pimps replicating the List api:
 rdd.filterNot(_ % 2 == 0) // RDD(1, 3, 2, 7, 8) => RDD(1, 3, 7)
-rdd.filterKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
-rdd.filterValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
+rdd.filterByKey(_ % 2 == 0) // RDD((0, "a"), (1, "b"), (2, "c")) => RDD((0, "a"), (2, "c"))
+rdd.filterByValue(_ % 2 == 0) // RDD(("a", 0), ("b", 1), ("c", 2)) => RDD(("a", 0), ("c", 2))
 rdd.toList // equivalent to rdd.collect.toList - alias: rdd.collectAsList
 rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))
 rdd.duplicates // RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)
