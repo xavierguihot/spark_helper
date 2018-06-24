@@ -347,6 +347,82 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#maxByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="maxByKey()(implicitord:Ordering[K]):(K,V)"></a>
+      <a id="maxByKey()(Ordering[K]):(K,V)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxByKey</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <span class="extype" name="scala.Ordering">Ordering</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>]</span>)</span><span class="result">: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@maxByKey()(implicitord:Ordering[K]):(K,V)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the element of this RDD with the largest key as defined by the
+implicit Ordering[K].</p><div class="fullcomment"><div class="comment cmt"><p>Returns the element of this RDD with the largest key as defined by the
+implicit Ordering[K].</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"c"</span>), (<span class="num">3</span>, <span class="lit">"b"</span>), (<span class="num">4</span>, <span class="lit">"c"</span>)).maxByKey <span class="cmt">// (4, "c")</span></pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the element with the largest key</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#maxByValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="maxByValue()(implicitord:Ordering[V]):(K,V)"></a>
+      <a id="maxByValue()(Ordering[V]):(K,V)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">maxByValue</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <span class="extype" name="scala.Ordering">Ordering</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>]</span>)</span><span class="result">: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@maxByValue()(implicitord:Ordering[V]):(K,V)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the element of this RDD with the largest value as defined by the
+implicit Ordering[V].</p><div class="fullcomment"><div class="comment cmt"><p>Returns the element of this RDD with the largest value as defined by the
+implicit Ordering[V].</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"c"</span>), (<span class="num">3</span>, <span class="lit">"b"</span>), (<span class="num">4</span>, <span class="lit">"c"</span>)).maxByValue <span class="cmt">// (2, "c") or (4, "c")</span></pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the element with the largest value</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#minByKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="minByKey()(implicitord:Ordering[K]):(K,V)"></a>
+      <a id="minByKey()(Ordering[K]):(K,V)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minByKey</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <span class="extype" name="scala.Ordering">Ordering</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>]</span>)</span><span class="result">: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@minByKey()(implicitord:Ordering[K]):(K,V)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the element of this RDD with the smallest key as defined by the
+implicit Ordering[T].</p><div class="fullcomment"><div class="comment cmt"><p>Returns the element of this RDD with the smallest key as defined by the
+implicit Ordering[T].</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"c"</span>), (<span class="num">3</span>, <span class="lit">"b"</span>), (<span class="num">4</span>, <span class="lit">"c"</span>)).minByKey <span class="cmt">// (1, "a")</span></pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the element with the smallest key</p></dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#minByValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="minByValue()(implicitord:Ordering[V]):(K,V)"></a>
+      <a id="minByValue()(Ordering[V]):(K,V)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">minByValue</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="ord">ord: <span class="extype" name="scala.Ordering">Ordering</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>]</span>)</span><span class="result">: (<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@minByValue()(implicitord:Ordering[V]):(K,V)" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the element of this RDD with the smallest value as defined by
+the implicit Ordering[V].</p><div class="fullcomment"><div class="comment cmt"><p>Returns the element of this RDD with the smallest value as defined by
+the implicit Ordering[V].</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"c"</span>), (<span class="num">3</span>, <span class="lit">"b"</span>), (<span class="num">4</span>, <span class="lit">"c"</span>)).minByValue <span class="cmt">// (1, "a")</span></pre></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the element with the smallest value</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>

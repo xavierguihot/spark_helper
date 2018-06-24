@@ -66,6 +66,9 @@ import scala.util.Random
   * rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))
   * rdd.duplicates // RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)
   * rdd.reduceWithCount // RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1))
+  * rdd.maxBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (2, "c") or (4, "c")
+  * rdd.minBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (1, "a")
+  * rdd.maxByKey; rdd.minByKey; rdd.maxByValue, ... // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey => (4, "c")
   * }}}
   *
   * Source <a href="https://github.com/xavierguihot/spark_helper/blob/master/src
@@ -175,6 +178,26 @@ object SparkHelper extends Serializable {
       * */
     def duplicates(): RDD[T] =
       rdd.reduceWithCount().collect { case (x, count) if count != 1L => x }
+
+    /** Returns the max of this RDD by the given predicate as defined by the
+      * implicit Ordering[T].
+      *
+      * {{{ RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxBy(_._2) // (2, "c") or (4, "c") }}}
+      *
+      * @return the max of this RDD by the given predicate
+      * */
+    def maxBy[U](f: T => U)(implicit ord: Ordering[U]): T =
+      rdd.reduce { case (x, y) => if (ord.compare(f(x), f(y)) > 0) x else y }
+
+    /** Returns the min of this RDD by the given predicate as defined by the
+      * implicit Ordering[T].
+      *
+      * {{{ RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).minBy(_._2) // (1, "a") }}}
+      *
+      * @return the min of this RDD by the given predicate
+      * */
+    def minBy[U](f: T => U)(implicit ord: Ordering[U]): T =
+      rdd.reduce { case (x, y) => if (ord.compare(f(x), f(y)) > 0) y else x }
   }
 
   implicit class StringRDDExtensions(rdd: RDD[String]) {
@@ -423,6 +446,42 @@ object SparkHelper extends Serializable {
       * @return the collected Map version of the RDD on the driver
       */
     def toMap: Map[K, V] = rdd.collect().toMap
+
+    /** Returns the element of this RDD with the largest key as defined by the
+      * implicit Ordering[K].
+      *
+      * {{{ RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey // (4, "c") }}}
+      *
+      * @return the element with the largest key
+      */
+    def maxByKey()(implicit ord: Ordering[K]): (K, V) = rdd.maxBy(_._1)(ord)
+
+    /** Returns the element of this RDD with the smallest key as defined by the
+      * implicit Ordering[T].
+      *
+      * {{{ RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).minByKey // (1, "a") }}}
+      *
+      * @return the element with the smallest key
+      */
+    def minByKey()(implicit ord: Ordering[K]): (K, V) = rdd.minBy(_._1)(ord)
+
+    /** Returns the element of this RDD with the largest value as defined by the
+      * implicit Ordering[V].
+      *
+      * {{{ RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByValue // (2, "c") or (4, "c") }}}
+      *
+      * @return the element with the largest value
+      */
+    def maxByValue()(implicit ord: Ordering[V]): (K, V) = rdd.maxBy(_._2)(ord)
+
+    /** Returns the element of this RDD with the smallest value as defined by
+      * the implicit Ordering[V].
+      *
+      * {{{ RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).minByValue // (1, "a") }}}
+      *
+      * @return the element with the smallest value
+      */
+    def minByValue()(implicit ord: Ordering[V]): (K, V) = rdd.minBy(_._2)(ord)
   }
 
   implicit class StringPairRDDExtensions(rdd: RDD[(String, String)]) {

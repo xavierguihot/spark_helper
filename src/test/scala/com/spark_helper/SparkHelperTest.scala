@@ -4,6 +4,8 @@ import com.spark_helper.SparkHelper._
 
 import org.apache.hadoop.io.compress.GzipCodec
 
+import scala.math.Ordering.{String => StringOrdering}
+
 import com.holdenkarau.spark.testing.{SharedSparkContext, RDDComparisons}
 
 import org.scalatest.FunSuite
@@ -447,6 +449,47 @@ class SparkHelperTest
     val out = sc.parallelize(Array(1, 2, 8))
     assertRDDEquals(in.duplicates(), out)
   }
+
+  test("Max by") {
+    // 1:
+    val in = sc.parallelize(Array((1, "a"), (2, "c"), (3, "b"), (4, "c")))
+    assert(Set((2, "c"), (4, "c")).contains(in.maxBy(_._2)))
+    // 2:
+    assert(in.maxBy(_._2)(WeirdOrdering) === (3, "b"))
+    // 3:
+    val message = intercept[UnsupportedOperationException] {
+      sc.emptyRDD[(String, Int)].maxBy(_._2)
+    }.getMessage
+    assert(message === "empty collection")
+  }
+
+  test("Min by") {
+    // 1:
+    val in = sc.parallelize(Array((1, "a"), (2, "c"), (3, "b"), (4, "c")))
+    assert(in.minBy(_._2) === (1, "a"))
+    // 2:
+    assert(in.minBy(_._2)(WeirdOrdering) === (1, "a"))
+    // 3:
+    val message = intercept[UnsupportedOperationException] {
+      sc.emptyRDD[(String, Int)].minBy(_._2)
+    }.getMessage
+    assert(message === "empty collection")
+  }
+
+  test("Min/max by key/value") {
+    val in = sc.parallelize(Array((1, "a"), (2, "c"), (3, "b"), (4, "c")))
+    assert(in.maxByKey() === (4, "c"))
+    assert(in.minByKey() === (1, "a"))
+    assert(Set((2, "c"), (4, "c")).contains(in.maxByValue()))
+    assert(in.minByValue() === (1, "a"))
+  }
 }
 
 case class A(x: Int, y: String)
+
+object WeirdOrdering extends Ordering[String] {
+  def compare(a: String, b: String): Int =
+    if (a == "b") Int.MaxValue
+    else if (b == "b") -Int.MaxValue
+    else StringOrdering.compare(a, b)
+}
