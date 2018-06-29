@@ -133,6 +133,7 @@ rdd.toList // equivalent to rdd.collect.toList - alias: rdd.collectAsList
 rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))
 rdd.duplicates // RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)
 rdd.reduceWithCount // RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1))
+rdd.aggregateByKeyAsLists() // RDD((1, "a"), (2, "b"), (1, "c"), (3, "d")) => RDD((1, List("a", "c")), (2, List("b")), (3, List("d"))
 rdd.maxBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (2, "c") or (4, "c")
 rdd.minBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (1, "a")
 rdd.maxByKey; rdd.minByKey; rdd.maxByValue, ... // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey => (4, "c")
@@ -315,7 +316,7 @@ With sbt:
 ```scala
 resolvers += "jitpack" at "https://jitpack.io"
 
-libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.3"
+libraryDependencies += "com.github.xavierguihot" % "spark_helper" % "2.0.4"
 ```
 
 With maven:
@@ -331,7 +332,7 @@ With maven:
 <dependency>
 	<groupId>com.github.xavierguihot</groupId>
 	<artifactId>spark_helper</artifactId>
-	<version>2.0.3</version>
+	<version>2.0.4</version>
 </dependency>
 ```
 
@@ -345,7 +346,7 @@ allprojects {
 }
 
 dependencies {
-	compile 'com.github.xavierguihot:spark_helper:2.0.3'
+	compile 'com.github.xavierguihot:spark_helper:2.0.4'
 }
 ```
 

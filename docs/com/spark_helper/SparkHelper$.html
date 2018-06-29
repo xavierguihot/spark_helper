@@ -91,6 +91,7 @@ rdd.toList <span class="cmt">// equivalent to rdd.collect.toList - alias: rdd.co
 rdd.toMap <span class="cmt">// RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))</span>
 rdd.duplicates <span class="cmt">// RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)</span>
 rdd.reduceWithCount <span class="cmt">// RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1))</span>
+rdd.aggregateByKeyAsLists() <span class="cmt">// RDD((1, "a"), (2, "b"), (1, "c"), (3, "d")) => RDD((1, List("a", "c")), (2, List("b")), (3, List("d"))</span>
 rdd.maxBy(_._2) <span class="cmt">// RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (2, "c") or (4, "c")</span>
 rdd.minBy(_._2) <span class="cmt">// RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (1, "a")</span>
 rdd.maxByKey; rdd.minByKey; rdd.maxByValue, ... <span class="cmt">// RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey => (4, "c")</span>

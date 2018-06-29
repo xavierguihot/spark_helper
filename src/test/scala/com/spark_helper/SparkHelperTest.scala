@@ -484,6 +484,15 @@ class SparkHelperTest
     assert(in.minByValue() === (1, "a"))
   }
 
+  test("Aggregate by key, reducing values as Lists") {
+    val in = sc.parallelize(
+      Array((1, "a"), (2, "b"), (1, "c"), (1, "a"), (3, "d"), (3, "e")))
+    val out = in.aggregateByKeyAsLists()
+    val expected =
+      Array((1, List("a", "a", "c")), (2, List("b")), (3, List("d", "e")))
+    assert(out.mapValues(_.sorted).collect().sortBy(_._1) === expected)
+  }
+
   test("Fraction") {
     // 1:
     val in = sc.parallelize(Array(1, 0, -2, -1, 7, -8, 8, 1, -2))

@@ -66,6 +66,7 @@ import scala.util.Random
   * rdd.toMap // RDD((1, "a"), (2, "b"), (2, "c")) => Map((1, "a"), (2, "c"))
   * rdd.duplicates // RDD(1, 3, 2, 1, 7, 8, 8, 1, 2) => RDD(1, 2, 8)
   * rdd.reduceWithCount // RDD("a", "b", "c", "a", "d", "a", "c") => RDD(("a", 3), ("b", 1), ("c", 2), ("d", 1))
+  * rdd.aggregateByKeyAsLists() // RDD((1, "a"), (2, "b"), (1, "c"), (3, "d")) => RDD((1, List("a", "c")), (2, List("b")), (3, List("d"))
   * rdd.maxBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (2, "c") or (4, "c")
   * rdd.minBy(_._2) // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")) => (1, "a")
   * rdd.maxByKey; rdd.minByKey; rdd.maxByValue, ... // RDD((1, "a"), (2, "c"), (3, "b"), (4, "c")).maxByKey => (4, "c")
@@ -423,7 +424,7 @@ object SparkHelper extends Serializable {
     def flatten: RDD[T] = rdd.flatMap(o => o)
   }
 
-  implicit class PairRDDExtensions[K, V](rdd: RDD[(K, V)]) {
+  implicit class PairRDDExtensions[K: ClassTag, V: ClassTag](rdd: RDD[(K, V)]) {
 
     /** Filters out elements of the RDD if their key doesn't match the predicate.
       *
@@ -496,6 +497,19 @@ object SparkHelper extends Serializable {
       * @return the element with the smallest value
       */
     def minByValue()(implicit ord: Ordering[V]): (K, V) = rdd.minBy(_._2)(ord)
+
+    /** Aggregates a pair RDD per key while reducing values into Lists.
+      *
+      * {{{RDD((1, "a"), (2, "b"), (1, "c"), (1, "a"), (3, "d"), (3, "e")).aggregateByKeyAsLists()
+      * // RDD((1, List("a", "a", "c")), (2, List("b")), (3, List("d", "e"))
+      * }}}
+      *
+      * Produced Lists are not ordered by any means
+      *
+      * @return the RDD of grouped values per key as Lists
+      */
+    def aggregateByKeyAsLists(): RDD[(K, List[V])] =
+      rdd.mapValues(List(_)).reduceByKey(_ ++ _)
   }
 
   implicit class StringPairRDDExtensions(rdd: RDD[(String, String)]) {

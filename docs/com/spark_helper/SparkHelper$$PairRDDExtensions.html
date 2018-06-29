@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.spark_helper.SparkHelper.PairRDDExtensions#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(K,V)]):com.spark_helper.SparkHelper.PairRDDExtensions[K,V]"></a>
+      <a id="&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(K,V)])(implicitevidence$4:scala.reflect.ClassTag[K],implicitevidence$5:scala.reflect.ClassTag[V]):com.spark_helper.SparkHelper.PairRDDExtensions[K,V]"></a>
       <a id="&lt;init&gt;:PairRDDExtensions[K,V]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">PairRDDExtensions</span><span class="params">(<span name="rdd">rdd: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>)</span>
+        <span class="name">PairRDDExtensions</span><span class="params">(<span name="rdd">rdd: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>)]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>]</span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(K,V)]):com.spark_helper.SparkHelper.PairRDDExtensions[K,V]" title="Permalink" target="_top">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@&lt;init&gt;(rdd:org.apache.spark.rdd.RDD[(K,V)])(implicitevidence$4:scala.reflect.ClassTag[K],implicitevidence$5:scala.reflect.ClassTag[V]):com.spark_helper.SparkHelper.PairRDDExtensions[K,V]" title="Permalink" target="_top">
         <img src="../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -165,6 +165,25 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.spark_helper.SparkHelper.PairRDDExtensions#aggregateByKeyAsLists" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="aggregateByKeyAsLists():org.apache.spark.rdd.RDD[(K,List[V])]"></a>
+      <a id="aggregateByKeyAsLists():RDD[(K,List[V])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">aggregateByKeyAsLists</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[(<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.K">K</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="com.spark_helper.SparkHelper.PairRDDExtensions.V">V</span>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../index.html#com.spark_helper.SparkHelper$$PairRDDExtensions@aggregateByKeyAsLists():org.apache.spark.rdd.RDD[(K,List[V])]" title="Permalink" target="_top">
+        <img src="../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Aggregates a pair RDD per key while reducing values into Lists.</p><div class="fullcomment"><div class="comment cmt"><p>Aggregates a pair RDD per key while reducing values into Lists.</p><pre>RDD((<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">2</span>, <span class="lit">"b"</span>), (<span class="num">1</span>, <span class="lit">"c"</span>), (<span class="num">1</span>, <span class="lit">"a"</span>), (<span class="num">3</span>, <span class="lit">"d"</span>), (<span class="num">3</span>, <span class="lit">"e"</span>)).aggregateByKeyAsLists()
+<span class="cmt">// RDD((1, List("a", "a", "c")), (2, List("b")), (3, List("d", "e"))</span></pre><p>Produced Lists are not ordered by any means
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the RDD of grouped values per key as Lists</p></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
